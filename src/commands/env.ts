@@ -45,23 +45,20 @@ export default class Env extends Command {
         }
       });
       const res: Databases = await response.json();
-      if (res.success) {
+      if (res.databases.length > 0) {
         cli.action.stop('success!');
       } else {
         cli.action.stop('fail');
         return;
       }
       if (res.databases.length > 1) {
-
-        let responses: any = await inquirer.prompt([{
-          name: 'stage',
+        let response: any = await inquirer.prompt([{
+          name: 'db',
           message: 'select a database',
           type: 'list',
-          choices: [{name: 'development'}, {name: 'staging'}, {name: 'production'}],
+          choices: res.databases.map((v) => { return { 'name': v.parentdb } })
         }])
-
-        cli.table(res.databases, { parentdb: {} })
-        database = await cli.prompt('Which database?');
+        database = response.db;
       } else {
         database = res.databases[0].parentdb ? res.databases[0].parentdb : res.databases[0].screenname;
       }
