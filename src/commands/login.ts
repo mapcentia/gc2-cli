@@ -16,7 +16,8 @@ export default class Login extends Command {
     interface Response {
       success: string,
       data: {
-        screen_name: string
+        screen_name: string,
+        token: string
       }
     }
 
@@ -41,7 +42,7 @@ export default class Login extends Command {
     }
 
     if (!instanceOfResponse(obj, 'user')) {
-      obj = { database: '', user: '', host: '' };
+      obj = { database: '', user: '', host: '', token: '' };
     }
 
     if (obj.host === '') {
@@ -88,10 +89,12 @@ export default class Login extends Command {
     });
     const data: Response = await response.json();
 
-    console.log(data);
+    console.log(data.data.token);
 
     if (data.success) {
-      cli.action.stop('success!')
+      cli.action.stop('success!');
+      config.set({ 'token': data.data.token });
+
     } else {
       cli.action.stop('failed. Check your user name and password')
     }
