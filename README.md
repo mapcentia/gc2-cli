@@ -19,7 +19,7 @@ $ npm install -g gc2-cli
 $ gc2 COMMAND
 running command...
 $ gc2 (-v|--version|version)
-gc2-cli/0.0.0 linux-x64 node-v12.4.0
+gc2-cli/2020.3.0 darwin-x64 node-v12.15.0
 $ gc2 --help [COMMAND]
 USAGE
   $ gc2 COMMAND
@@ -29,11 +29,12 @@ USAGE
 # Commands
 <!-- commands -->
 * [`gc2 build:mapfiles [FILE]`](#gc2-buildmapfiles-file)
-* [`gc2 config [FILE]`](#gc2-config-file)
+* [`gc2 env [OPTIONS]`](#gc2-env-options)
 * [`gc2 help [COMMAND]`](#gc2-help-command)
 * [`gc2 import [FILE]`](#gc2-import-file)
 * [`gc2 login`](#gc2-login)
-* [`gc2 seed [FILE]`](#gc2-seed-file)
+* [`gc2 seed:start`](#gc2-seedstart)
+* [`gc2 update [CHANNEL]`](#gc2-update-channel)
 
 ## `gc2 build:mapfiles [FILE]`
 
@@ -49,23 +50,21 @@ OPTIONS
   -n, --name=name  name to print
 ```
 
-_See code: [src/commands/build/mapfiles.ts](https://github.com/mapcentia/gc2-cli/blob/v0.0.0/src/commands/build/mapfiles.ts)_
+_See code: [src/commands/build/mapfiles.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.3.0/src/commands/build/mapfiles.ts)_
 
-## `gc2 config [FILE]`
+## `gc2 env [OPTIONS]`
 
-describe the command here
+Set user and host
 
 ```
 USAGE
-  $ gc2 config [FILE]
+  $ gc2 env [OPTIONS]
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -h, --help  show CLI help
 ```
 
-_See code: [src/commands/config.ts](https://github.com/mapcentia/gc2-cli/blob/v0.0.0/src/commands/config.ts)_
+_See code: [src/commands/env.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.3.0/src/commands/env.ts)_
 
 ## `gc2 help [COMMAND]`
 
@@ -98,7 +97,7 @@ OPTIONS
   -n, --name=name  name to print
 ```
 
-_See code: [src/commands/import.ts](https://github.com/mapcentia/gc2-cli/blob/v0.0.0/src/commands/import.ts)_
+_See code: [src/commands/import.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.3.0/src/commands/import.ts)_
 
 ## `gc2 login`
 
@@ -112,21 +111,36 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/login.ts](https://github.com/mapcentia/gc2-cli/blob/v0.0.0/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.3.0/src/commands/login.ts)_
 
-## `gc2 seed [FILE]`
+## `gc2 seed:start`
 
-describe the command here
+Starts a seed job
 
 ```
 USAGE
-  $ gc2 seed [FILE]
+  $ gc2 seed:start
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -e, --end=end        (required) End zoom level (the higher number)
+  -f, --force          Force seed job - overwrites existing tiles
+  -h, --help           show CLI help
+  -l, --layer=layer    (required) Layer to seed [schema].[relation]
+  -n, --name=name      (required) Name of seed job
+  -s, --start=start    (required) Start zoom level (the lower number)
+  -x, --extent=extent  (required) Polygon layer which set the extent for the seeding [schema].[relation]
 ```
 
-_See code: [src/commands/seed.ts](https://github.com/mapcentia/gc2-cli/blob/v0.0.0/src/commands/seed.ts)_
+_See code: [src/commands/seed/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.3.0/src/commands/seed/start.ts)_
+
+## `gc2 update [CHANNEL]`
+
+update the gc2 CLI
+
+```
+USAGE
+  $ gc2 update [CHANNEL]
+```
+
+_See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v1.3.9/src/commands/update.ts)_
 <!-- commandsstop -->

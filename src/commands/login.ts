@@ -14,11 +14,12 @@ export default class Login extends Command {
 
   async run() {
     interface Response {
-      success: string,
-      data: {
-        screen_name: string,
-        token: string
-      }
+      access_token: string,
+      token_type: string,
+      expires_in: number,
+      refresh_token: string,
+      scope: string,
+      error: string
     }
 
     interface Database {
@@ -75,28 +76,27 @@ export default class Login extends Command {
         obj.database = res.databases[0].parentdb ? res.databases[0].parentdb : res.databases[0].screenname;
       }
     }
-    
+
     const password: string = await cli.prompt('Your password?', { type: 'hide' });
 
     cli.action.start('Loggin in');
 
-    const response = await fetch(obj.host + '/api/v2/session/start', {
+    const response = await fetch(obj.host + '/api/v3/oauth/token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ user: obj.user, password: password, schema: "public", database: obj.database })
+      body: JSON.stringify({ grant_type: "password", username: obj.user, password: password, database: obj.database })
     });
     const data: Response = await response.json();
 
-    console.log(data.data.token);
+    console.log(data);
 
-    if (data.success) {
+    if (response.status === 200) {
       cli.action.stop('success!');
-      config.set({ 'token': data.data.token });
-
+      config.set({ 'token': data.access_token });
     } else {
-      cli.action.stop('failed. Check your user name and password')
+      cli.action.stop(data.error)
     }
   }
 }
