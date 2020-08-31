@@ -28,29 +28,30 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`gc2 build:mapfiles [FILE]`](#gc2-buildmapfiles-file)
+* [`gc2 admin`](#gc2-admin)
 * [`gc2 env [OPTIONS]`](#gc2-env-options)
 * [`gc2 help [COMMAND]`](#gc2-help-command)
-* [`gc2 import [FILE]`](#gc2-import-file)
 * [`gc2 login`](#gc2-login)
+* [`gc2 scheduler:start [ID]`](#gc2-schedulerstart-id)
 * [`gc2 seed:start`](#gc2-seedstart)
 * [`gc2 update [CHANNEL]`](#gc2-update-channel)
 
-## `gc2 build:mapfiles [FILE]`
+## `gc2 admin`
 
-describe the command here
+Run administration task on the GC2 installation.
 
 ```
 USAGE
-  $ gc2 build:mapfiles [FILE]
+  $ gc2 admin
 
 OPTIONS
-  -f, --force
   -h, --help       show CLI help
-  -n, --name=name  name to print
+
+  -t, --task=task  (required) The task to run: mapfiles, mapcachefile, qgisfiles, schema, migrations, diskcleanup,
+                   cachestats, cachecleanup
 ```
 
-_See code: [src/commands/build/mapfiles.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.3.0/src/commands/build/mapfiles.ts)_
+_See code: [src/commands/admin.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.3.0/src/commands/admin.ts)_
 
 ## `gc2 env [OPTIONS]`
 
@@ -83,22 +84,6 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.1/src/commands/help.ts)_
 
-## `gc2 import [FILE]`
-
-describe the command here
-
-```
-USAGE
-  $ gc2 import [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-```
-
-_See code: [src/commands/import.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.3.0/src/commands/import.ts)_
-
 ## `gc2 login`
 
 Login to GC2
@@ -112,6 +97,20 @@ OPTIONS
 ```
 
 _See code: [src/commands/login.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.3.0/src/commands/login.ts)_
+
+## `gc2 scheduler:start [ID]`
+
+Starts a seed job
+
+```
+USAGE
+  $ gc2 scheduler:start [ID]
+
+OPTIONS
+  -h, --help  show CLI help
+```
+
+_See code: [src/commands/scheduler/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.3.0/src/commands/scheduler/start.ts)_
 
 ## `gc2 seed:start`
 
