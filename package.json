@@ -17,6 +17,7 @@
     "@types/node-fetch": "^2.5.3",
     "@types/through2": "^2.0.34",
     "@types/url-parse": "^1.4.3",
+    "chalk": "^4.1.0",
     "cli-ux": "^5.3.3",
     "configstore": "^5.0.0",
     "inquirer": "^7.0.0",
