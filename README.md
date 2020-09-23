@@ -19,7 +19,7 @@ $ npm install -g gc2-cli
 $ gc2 COMMAND
 running command...
 $ gc2 (-v|--version|version)
-gc2-cli/2020.3.0 darwin-x64 node-v12.15.0
+gc2-cli/2021.0.0 linux-x64 node-v14.10.1
 $ gc2 --help [COMMAND]
 USAGE
   $ gc2 COMMAND
@@ -48,10 +48,10 @@ OPTIONS
   -h, --help       show CLI help
 
   -t, --task=task  (required) The task to run: mapfiles, mapcachefile, qgisfiles, schema, migrations, diskcleanup,
-                   cachestats, cachecleanup
+                   cachestats, cachecleanup, qgisfromfiles
 ```
 
-_See code: [src/commands/admin.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.3.0/src/commands/admin.ts)_
+_See code: [src/commands/admin.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.0.0/src/commands/admin.ts)_
 
 ## `gc2 env [OPTIONS]`
 
@@ -65,7 +65,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/env.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.3.0/src/commands/env.ts)_
+_See code: [src/commands/env.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.0.0/src/commands/env.ts)_
 
 ## `gc2 help [COMMAND]`
 
@@ -96,7 +96,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/login.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.3.0/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.0.0/src/commands/login.ts)_
 
 ## `gc2 scheduler:start [ID]`
 
@@ -110,7 +110,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/scheduler/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.3.0/src/commands/scheduler/start.ts)_
+_See code: [src/commands/scheduler/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.0.0/src/commands/scheduler/start.ts)_
 
 ## `gc2 seed:start`
 
@@ -130,7 +130,7 @@ OPTIONS
   -x, --extent=extent  (required) Polygon layer which set the extent for the seeding [schema].[relation]
 ```
 
-_See code: [src/commands/seed/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.3.0/src/commands/seed/start.ts)_
+_See code: [src/commands/seed/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.0.0/src/commands/seed/start.ts)_
 
 ## `gc2 update [CHANNEL]`
 
