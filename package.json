@@ -1,7 +1,7 @@
 {
   "name": "gc2-cli",
   "description": "CLI tool for GC2",
-  "version": "2020.9.0",
+  "version": "2020.10.5",
   "author": "Martin Høgh @mapcentia",
   "bin": {
     "gc2": "./bin/run"
@@ -33,7 +33,7 @@
     "@types/chai": "^4.2.5",
     "@types/mocha": "^5.2.7",
     "@types/node": "^10.17.5",
-    "aws-sdk": "^2.632.0",
+    "aws-sdk": "^2.789.0",
     "chai": "^4.2.0",
     "globby": "^10.0.1",
     "mocha": "^5.2.0",

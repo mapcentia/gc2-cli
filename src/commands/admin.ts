@@ -37,6 +37,7 @@ export default class Admin extends Command {
       }
     })
     const data: Response = await response.json()
+    cli.action.stop('')
     console.log(data)
   }
 }

@@ -93,7 +93,7 @@ export default class Login extends Command {
 
     if (response.status === 200) {
       cli.action.stop('success!')
-      config.set({'token': data.access_token})
+      config.set({token: data.access_token})
     } else {
       cli.action.stop(data.error)
     }

@@ -19,7 +19,7 @@ $ npm install -g gc2-cli
 $ gc2 COMMAND
 running command...
 $ gc2 (-v|--version|version)
-gc2-cli/2020.9.0 linux-x64 node-v14.10.1
+gc2-cli/2020.10.5 linux-x64 node-v14.10.1
 $ gc2 --help [COMMAND]
 USAGE
   $ gc2 COMMAND
@@ -33,6 +33,8 @@ USAGE
 * [`gc2 help [COMMAND]`](#gc2-help-command)
 * [`gc2 login`](#gc2-login)
 * [`gc2 scheduler:start [ID]`](#gc2-schedulerstart-id)
+* [`gc2 seed:list`](#gc2-seedlist)
+* [`gc2 seed:log`](#gc2-seedlog)
 * [`gc2 seed:start`](#gc2-seedstart)
 * [`gc2 update [CHANNEL]`](#gc2-update-channel)
 
@@ -51,7 +53,7 @@ OPTIONS
                    cachestats, cachecleanup, qgisfromfiles
 ```
 
-_See code: [src/commands/admin.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.9.0/src/commands/admin.ts)_
+_See code: [src/commands/admin.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.10.5/src/commands/admin.ts)_
 
 ## `gc2 env [OPTIONS]`
 
@@ -65,7 +67,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/env.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.9.0/src/commands/env.ts)_
+_See code: [src/commands/env.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.10.5/src/commands/env.ts)_
 
 ## `gc2 help [COMMAND]`
 
@@ -96,7 +98,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/login.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.9.0/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.10.5/src/commands/login.ts)_
 
 ## `gc2 scheduler:start [ID]`
 
@@ -110,7 +112,36 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/scheduler/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.9.0/src/commands/scheduler/start.ts)_
+_See code: [src/commands/scheduler/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.10.5/src/commands/scheduler/start.ts)_
+
+## `gc2 seed:list`
+
+List running seed jobs
+
+```
+USAGE
+  $ gc2 seed:list
+
+OPTIONS
+  -h, --help  show CLI help
+```
+
+_See code: [src/commands/seed/list.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.10.5/src/commands/seed/list.ts)_
+
+## `gc2 seed:log`
+
+Logs
+
+```
+USAGE
+  $ gc2 seed:log
+
+OPTIONS
+  -h, --help       show CLI help
+  -u, --uuid=uuid  (required) UUID of seed job
+```
+
+_See code: [src/commands/seed/log.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.10.5/src/commands/seed/log.ts)_
 
 ## `gc2 seed:start`
 
@@ -121,16 +152,18 @@ USAGE
   $ gc2 seed:start
 
 OPTIONS
-  -e, --end=end        (required) End zoom level (the higher number)
-  -f, --force          Force seed job - overwrites existing tiles
-  -h, --help           show CLI help
-  -l, --layer=layer    (required) Layer to seed [schema].[relation]
-  -n, --name=name      (required) Name of seed job
-  -s, --start=start    (required) Start zoom level (the lower number)
-  -x, --extent=extent  (required) Polygon layer which set the extent for the seeding [schema].[relation]
+  -e, --end=end          (required) End zoom level (the higher number)
+  -f, --force            Force seed job - overwrites existing tiles
+  -g, --grid=grid        (required) Grid to use
+  -h, --help             show CLI help
+  -l, --layer=layer      (required) Layer to seed [schema].[relation]
+  -n, --name=name        (required) Name of seed job
+  -s, --start=start      (required) Start zoom level (the lower number)
+  -t, --threads=threads  Number of parallel threads that should be used to request tiles from the WMS source
+  -x, --extent=extent    (required) Polygon layer which set the extent for the seeding [schema].[relation]
 ```
 
-_See code: [src/commands/seed/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.9.0/src/commands/seed/start.ts)_
+_See code: [src/commands/seed/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.10.5/src/commands/seed/start.ts)_
 
 ## `gc2 update [CHANNEL]`
 
