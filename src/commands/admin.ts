@@ -1,9 +1,10 @@
 import {Command, flags} from '@oclif/command'
 import chalk from 'chalk'
 import cli from 'cli-ux'
+import Configstore from 'configstore'
 import fetch from 'node-fetch'
+
 import {User} from '../interfaces/User'
-import * as Configstore from 'configstore'
 
 const tasks: string[] = ['mapfiles', 'mapcachefile', 'qgisfiles', 'schema', 'migrations', 'diskcleanup', 'cachestats', 'cachecleanup', 'qgisfromfiles']
 
@@ -16,6 +17,7 @@ export default class Admin extends Command {
   }
 
   async run() {
+    // tslint:disable-next-line:no-unused
     const {args, flags} = this.parse(Admin)
 
     if (!tasks.includes(flags.task)) {

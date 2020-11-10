@@ -1,6 +1,6 @@
 export interface User {
-    user: string,
-    host: string,
-    database: string,
-    token: string
-  }
+  user: string,
+  host: string,
+  database: string,
+  token: string
+}

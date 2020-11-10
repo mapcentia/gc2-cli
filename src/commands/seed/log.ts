@@ -1,34 +1,30 @@
 import {Command, flags} from '@oclif/command'
 import chalk from 'chalk'
-import cli from 'cli-ux'
 import Configstore from 'configstore'
 import * as http from 'http'
 import * as https from 'https'
 import parse from 'url-parse'
 
-import {User} from '../../interfaces/User'
+import {User} from './../../interfaces/User'
 
-export default class Start extends Command {
-  static description = 'Starts a scheduler job'
-  static args = [
-    {name: 'id'}
-  ]
+export default class Log extends Command {
+  static description = 'Logs'
+
   static flags = {
     help: flags.help({char: 'h'}),
+    uuid: flags.string({char: 'u', description: 'UUID of seed job', required: true}),
   }
 
   async run() {
-    const {args} = this.parse(Start)
+    const {flags} = this.parse(Log)
     const config: Configstore = new Configstore('gc2-env')
     let user: User = config.all
-    cli.action.start('Running job ' + args.id)
+    const url = user.host + '/api/v3/tileseeder/log/?uuid=' + flags.uuid
 
     let adapters: any = {
       'http:': http,
       'https:': https,
     }
-    let url: string = user.host + '/api/v3/scheduler/' + args.id
-
     adapters[parse(url).protocol].get(url,
       {
         headers: {
@@ -42,17 +38,7 @@ export default class Start extends Command {
           // We trim the strings because the server pads them to get them flushed
           let str: string = data.replace(/[\w\s]$/gi, '').trim()
           if (str !== '') {
-            if (str.startsWith('Info') || str.startsWith('Notice')) {
-              this.log(chalk.green(str))
-            } else if (str.startsWith('Warning')) {
-              this.log(chalk.yellow(str))
-            } else if (str.startsWith('Error')) {
-              this.log(chalk.yellow(str))
-            } else if (str.startsWith('Processing')) {
-              this.log(chalk.gray(str))
-            } else {
-              this.log(str)
-            }
+            this.log(chalk.green(str))
           }
         })
         res.on('end', () => {
