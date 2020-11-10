@@ -2,7 +2,7 @@ import {Command, flags} from '@oclif/command'
 import Configstore from 'configstore'
 import fetch from 'node-fetch'
 
-import {User} from './../../interfaces/User'
+import {User} from '../../interfaces/User'
 
 export default class Start extends Command {
   static description = 'Starts a seed job'

@@ -5,7 +5,7 @@ import cli from 'cli-ux'
 import Configstore from 'configstore'
 import fetch from 'node-fetch'
 
-import {User} from './../interfaces/User'
+import {User} from '../interfaces/User'
 
 export default class Login extends Command {
   static description = 'Login to GC2'
