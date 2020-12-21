@@ -1,8 +1,10 @@
 'use strict'
 
 import {Command, flags} from '@oclif/command'
+import chalk from 'chalk'
 import cli from 'cli-ux'
 import Configstore from 'configstore'
+import inquirer from 'inquirer'
 import fetch from 'node-fetch'
 
 import {User} from '../interfaces/User'
@@ -46,11 +48,11 @@ export default class Login extends Command {
     }
 
     if (obj.host === '') {
-      obj.host = await cli.prompt('Host?')
+      obj.host = await cli.prompt('Host')
     }
 
     if (obj.user === '') {
-      obj.user = await cli.prompt('User?')
+      obj.user = await cli.prompt('User')
     }
 
     if (obj.database === '') {
@@ -63,22 +65,36 @@ export default class Login extends Command {
       })
       const res: Databases = await response.json()
       if (res.success) {
-        cli.action.stop('success!')
+        cli.action.stop(chalk.green('success'))
       } else {
-        cli.action.stop('fail')
+        cli.action.stop(chalk.green('fail'))
         return
       }
+      // if (res.databases.length > 1) {
+      //   cli.table(res.databases, {parentdb: {}})
+      //   obj.database = await cli.prompt('Database')
+      // } else {
+      //   obj.database = res.databases[0].parentdb ? res.databases[0].parentdb : res.databases[0].screenname
+      // }
       if (res.databases.length > 1) {
-        cli.table(res.databases, {parentdb: {}})
-        obj.database = await cli.prompt('Which database?')
+        let response: any = await inquirer.prompt([{
+          name: 'db',
+          message: 'Database',
+          type: 'list',
+          default: config.all.database,
+          choices: res.databases.map(v => {
+            return {name: v.parentdb}
+          })
+        }])
+        obj.database = response.db
       } else {
         obj.database = res.databases[0].parentdb ? res.databases[0].parentdb : res.databases[0].screenname
       }
     }
 
-    const password: string = await cli.prompt('Your password?', {type: 'hide'})
+    const password: string = await cli.prompt('Password', {type: 'hide'})
 
-    cli.action.start('Loggin in')
+    cli.action.start(`Loggin into ${chalk.yellow(obj.host)} with ${chalk.yellow(obj.user)}`)
 
     const response = await fetch(obj.host + '/api/v3/oauth/token', {
       method: 'POST',
@@ -89,13 +105,11 @@ export default class Login extends Command {
     })
     const data: Response = await response.json()
 
-    console.log(data)
-
     if (response.status === 200) {
-      cli.action.stop('success!')
+      cli.action.stop(chalk.green('success'))
       config.set({token: data.access_token})
     } else {
-      cli.action.stop(data.error)
+      cli.action.stop(chalk.red(data.error))
     }
   }
 }
