@@ -3,10 +3,12 @@ import chalk from 'chalk'
 import cli from 'cli-ux'
 import Configstore from 'configstore'
 import fetch from 'node-fetch'
+import {types} from 'util'
 
 import {User} from '../interfaces/User'
+import isArgumentsObject = module
 
-const tasks: string[] = ['mapfiles', 'mapcachefile', 'qgisfiles', 'schema', 'migrations', 'diskcleanup', 'cachestats', 'cachecleanup', 'qgisfromfiles']
+const tasks: string[] = ['mapfiles', 'mapcachefile', 'qgisfiles', 'schema', 'migrations', 'diskcleanup', 'cachestats', 'cachecleanup' /*, 'qgisfromfiles' */]
 
 export default class Admin extends Command {
   static description = 'Run administration task on the GC2 installation.'
@@ -18,7 +20,7 @@ export default class Admin extends Command {
 
   async run() {
     // tslint:disable-next-line:no-unused
-    const {args, flags} = this.parse(Admin)
+    const {flags} = this.parse(Admin)
 
     if (!tasks.includes(flags.task)) {
       this.log(chalk.red('Invalid task'))
@@ -36,8 +38,40 @@ export default class Admin extends Command {
         Authorization: 'Bearer ' + user.token
       }
     })
-    const data: Response = await response.json()
+    const data: { 'data': any, '_execution_time': number } = await response.json()
     cli.action.stop('')
-    console.log(data)
+    // report
+    switch (flags.task) {
+    case tasks[0]:
+      data.data.forEach((e: Array<string>) => {
+        this.log(chalk.green(e[0]))
+        this.log(chalk.green(e[1]))
+      })
+      this.log(`time ${data._execution_time}`)
+      break
+    case tasks[1]:
+    case tasks[2]:
+      this.log(chalk.green(data.data))
+      this.log(`time ${data._execution_time}`)
+      break
+    case tasks[3]:
+      this.log(chalk.green(data.data.message))
+      this.log(`time ${data._execution_time}`)
+      break
+    case tasks[4]:
+      Object.keys(data.data).forEach(key => {
+        let value = data.data[key]
+        this.log(key + ': ' + chalk.green(value))
+      })
+      this.log(`time ${data._execution_time}`)
+      break
+    case tasks[5]:
+      data.data.forEach((e: Array<string>) => {
+        this.log(chalk.green(e))
+      })
+      break
+    default:
+      console.log(data)
+    }
   }
 }
