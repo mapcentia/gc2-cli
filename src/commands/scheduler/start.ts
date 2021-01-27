@@ -47,7 +47,7 @@ export default class Start extends Command {
             } else if (str.startsWith('Warning')) {
               this.log(chalk.yellow(str))
             } else if (str.startsWith('Error')) {
-              this.log(chalk.yellow(str))
+              this.log(chalk.red(str))
             } else if (str.startsWith('Processing')) {
               this.log(chalk.gray(str))
             } else {
