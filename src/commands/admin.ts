@@ -3,10 +3,8 @@ import chalk from 'chalk'
 import cli from 'cli-ux'
 import Configstore from 'configstore'
 import fetch from 'node-fetch'
-import {types} from 'util'
 
 import {User} from '../interfaces/User'
-import isArgumentsObject = module
 
 const tasks: string[] = ['mapfiles', 'mapcachefile', 'qgisfiles', 'schema', 'migrations', 'diskcleanup', 'cachestats', 'cachecleanup' /*, 'qgisfromfiles' */]
 
@@ -50,8 +48,12 @@ export default class Admin extends Command {
       this.log(`time ${data._execution_time}`)
       break
     case tasks[1]:
-    case tasks[2]:
       this.log(chalk.green(data.data))
+      break
+    case tasks[2]:
+      data.data.forEach((e: Array<string>) => {
+        this.log(chalk.green(e))
+      })
       this.log(`time ${data._execution_time}`)
       break
     case tasks[3]:
