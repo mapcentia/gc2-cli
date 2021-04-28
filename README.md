@@ -15,11 +15,11 @@ CLI tool for GC2
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g gc2-cli
+$ npm install -g gc2
 $ gc2 COMMAND
 running command...
 $ gc2 (-v|--version|version)
-gc2-cli/2021.1.1 linux-x64 node-v14.15.3
+gc2/2021.1.3 linux-x64 node-v14.15.5
 $ gc2 --help [COMMAND]
 USAGE
   $ gc2 COMMAND
@@ -55,7 +55,7 @@ OPTIONS
                    cachestats, cachecleanup
 ```
 
-_See code: [src/commands/admin.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.1.1/src/commands/admin.ts)_
+_See code: [src/commands/admin.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.1.3/src/commands/admin.ts)_
 
 ## `gc2 connect [OPTIONS]`
 
@@ -72,7 +72,7 @@ OPTIONS
   -r, --reset  Reset connection
 ```
 
-_See code: [src/commands/connect.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.1.1/src/commands/connect.ts)_
+_See code: [src/commands/connect.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.1.3/src/commands/connect.ts)_
 
 ## `gc2 help [COMMAND]`
 
@@ -107,7 +107,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/login.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.1.1/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.1.3/src/commands/login.ts)_
 
 ## `gc2 scheduler:start [ID]`
 
@@ -123,7 +123,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/scheduler/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.1.1/src/commands/scheduler/start.ts)_
+_See code: [src/commands/scheduler/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.1.3/src/commands/scheduler/start.ts)_
 
 ## `gc2 seed:list`
 
@@ -139,7 +139,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/seed/list.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.1.1/src/commands/seed/list.ts)_
+_See code: [src/commands/seed/list.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.1.3/src/commands/seed/list.ts)_
 
 ## `gc2 seed:log`
 
@@ -156,7 +156,7 @@ OPTIONS
   -u, --uuid=uuid  (required) UUID of seed job
 ```
 
-_See code: [src/commands/seed/log.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.1.1/src/commands/seed/log.ts)_
+_See code: [src/commands/seed/log.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.1.3/src/commands/seed/log.ts)_
 
 ## `gc2 seed:start`
 
@@ -180,7 +180,7 @@ OPTIONS
   -x, --extent=extent    (required) Polygon layer which set the extent for the seeding [schema].[relation]
 ```
 
-_See code: [src/commands/seed/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.1.1/src/commands/seed/start.ts)_
+_See code: [src/commands/seed/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.1.3/src/commands/seed/start.ts)_
 
 ## `gc2 update [CHANNEL]`
 
