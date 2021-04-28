@@ -19,7 +19,7 @@ $ npm install -g gc2-cli
 $ gc2 COMMAND
 running command...
 $ gc2 (-v|--version|version)
-gc2-cli/2020.10.5 linux-x64 node-v14.10.1
+gc2-cli/2021.1.1 linux-x64 node-v14.15.3
 $ gc2 --help [COMMAND]
 USAGE
   $ gc2 COMMAND
@@ -29,7 +29,7 @@ USAGE
 # Commands
 <!-- commands -->
 * [`gc2 admin`](#gc2-admin)
-* [`gc2 env [OPTIONS]`](#gc2-env-options)
+* [`gc2 connect [OPTIONS]`](#gc2-connect-options)
 * [`gc2 help [COMMAND]`](#gc2-help-command)
 * [`gc2 login`](#gc2-login)
 * [`gc2 scheduler:start [ID]`](#gc2-schedulerstart-id)
@@ -43,6 +43,8 @@ USAGE
 Run administration task on the GC2 installation.
 
 ```
+Run administration task on the GC2 installation.
+
 USAGE
   $ gc2 admin
 
@@ -50,30 +52,35 @@ OPTIONS
   -h, --help       show CLI help
 
   -t, --task=task  (required) The task to run: mapfiles, mapcachefile, qgisfiles, schema, migrations, diskcleanup,
-                   cachestats, cachecleanup, qgisfromfiles
+                   cachestats, cachecleanup
 ```
 
-_See code: [src/commands/admin.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.10.5/src/commands/admin.ts)_
+_See code: [src/commands/admin.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.1.1/src/commands/admin.ts)_
 
-## `gc2 env [OPTIONS]`
+## `gc2 connect [OPTIONS]`
 
-Set user and host
+Set connection
 
 ```
+Set connection
+
 USAGE
-  $ gc2 env [OPTIONS]
+  $ gc2 connect [OPTIONS]
 
 OPTIONS
-  -h, --help  show CLI help
+  -h, --help   show CLI help
+  -r, --reset  Reset connection
 ```
 
-_See code: [src/commands/env.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.10.5/src/commands/env.ts)_
+_See code: [src/commands/connect.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.1.1/src/commands/connect.ts)_
 
 ## `gc2 help [COMMAND]`
 
 display help for gc2
 
 ```
+display help for <%= config.bin %>
+
 USAGE
   $ gc2 help [COMMAND]
 
@@ -84,13 +91,15 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.1/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src/commands/help.ts)_
 
 ## `gc2 login`
 
 Login to GC2
 
 ```
+Login to GC2
+
 USAGE
   $ gc2 login
 
@@ -98,13 +107,15 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/login.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.10.5/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.1.1/src/commands/login.ts)_
 
 ## `gc2 scheduler:start [ID]`
 
 Starts a scheduler job
 
 ```
+Starts a scheduler job
+
 USAGE
   $ gc2 scheduler:start [ID]
 
@@ -112,13 +123,15 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/scheduler/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.10.5/src/commands/scheduler/start.ts)_
+_See code: [src/commands/scheduler/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.1.1/src/commands/scheduler/start.ts)_
 
 ## `gc2 seed:list`
 
 List running seed jobs
 
 ```
+List running seed jobs
+
 USAGE
   $ gc2 seed:list
 
@@ -126,13 +139,15 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/seed/list.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.10.5/src/commands/seed/list.ts)_
+_See code: [src/commands/seed/list.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.1.1/src/commands/seed/list.ts)_
 
 ## `gc2 seed:log`
 
 Logs
 
 ```
+Logs
+
 USAGE
   $ gc2 seed:log
 
@@ -141,13 +156,15 @@ OPTIONS
   -u, --uuid=uuid  (required) UUID of seed job
 ```
 
-_See code: [src/commands/seed/log.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.10.5/src/commands/seed/log.ts)_
+_See code: [src/commands/seed/log.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.1.1/src/commands/seed/log.ts)_
 
 ## `gc2 seed:start`
 
 Starts a seed job
 
 ```
+Starts a seed job
+
 USAGE
   $ gc2 seed:start
 
@@ -163,16 +180,18 @@ OPTIONS
   -x, --extent=extent    (required) Polygon layer which set the extent for the seeding [schema].[relation]
 ```
 
-_See code: [src/commands/seed/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2020.10.5/src/commands/seed/start.ts)_
+_See code: [src/commands/seed/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.1.1/src/commands/seed/start.ts)_
 
 ## `gc2 update [CHANNEL]`
 
 update the gc2 CLI
 
 ```
+update the <%= config.bin %> CLI
+
 USAGE
   $ gc2 update [CHANNEL]
 ```
 
-_See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v1.3.9/src/commands/update.ts)_
+_See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v1.3.10/src/commands/update.ts)_
 <!-- commandsstop -->
