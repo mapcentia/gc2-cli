@@ -27,6 +27,7 @@ export default class Admin extends Command {
 
     const config: Configstore = new Configstore('gc2-env')
     let user: User = config.all
+    cli.action.start('Running task ')
 
     const response = await fetch(user.host + '/api/v3/admin/' + flags.task, {
       method: 'GET',
@@ -40,7 +41,6 @@ export default class Admin extends Command {
       this.log(data.message)
       this.exit(1)
     }
-    cli.action.start('Running task ')
     cli.action.stop('')
     // report
     switch (flags.task) {
