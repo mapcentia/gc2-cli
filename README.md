@@ -19,7 +19,7 @@ $ npm install -g gc2
 $ gc2 COMMAND
 running command...
 $ gc2 (-v|--version|version)
-gc2/2021.5.0 linux-x64 node-v14.15.5
+gc2/2021.10.1 linux-x64 node-v14.18.1
 $ gc2 --help [COMMAND]
 USAGE
   $ gc2 COMMAND
@@ -37,6 +37,7 @@ USAGE
 * [`gc2 seed:list`](#gc2-seedlist)
 * [`gc2 seed:log`](#gc2-seedlog)
 * [`gc2 seed:start`](#gc2-seedstart)
+* [`gc2 seed:stop`](#gc2-seedstop)
 * [`gc2 update [CHANNEL]`](#gc2-update-channel)
 
 ## `gc2 admin`
@@ -56,7 +57,7 @@ OPTIONS
                    cachestats, cachecleanup
 ```
 
-_See code: [src/commands/admin.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.5.0/src/commands/admin.ts)_
+_See code: [src/commands/admin.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.10.1/src/commands/admin.ts)_
 
 ## `gc2 connect [OPTIONS]`
 
@@ -73,7 +74,7 @@ OPTIONS
   -r, --reset  Reset connection
 ```
 
-_See code: [src/commands/connect.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.5.0/src/commands/connect.ts)_
+_See code: [src/commands/connect.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.10.1/src/commands/connect.ts)_
 
 ## `gc2 grid`
 
@@ -92,7 +93,7 @@ OPTIONS
   -t, --table=table    (required) Name of the new fishnet table
 ```
 
-_See code: [src/commands/grid.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.5.0/src/commands/grid.ts)_
+_See code: [src/commands/grid.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.10.1/src/commands/grid.ts)_
 
 ## `gc2 help [COMMAND]`
 
@@ -127,7 +128,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/login.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.5.0/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.10.1/src/commands/login.ts)_
 
 ## `gc2 scheduler:start [ID]`
 
@@ -143,7 +144,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/scheduler/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.5.0/src/commands/scheduler/start.ts)_
+_See code: [src/commands/scheduler/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.10.1/src/commands/scheduler/start.ts)_
 
 ## `gc2 seed:list`
 
@@ -159,7 +160,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/seed/list.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.5.0/src/commands/seed/list.ts)_
+_See code: [src/commands/seed/list.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.10.1/src/commands/seed/list.ts)_
 
 ## `gc2 seed:log`
 
@@ -176,7 +177,7 @@ OPTIONS
   -u, --uuid=uuid  (required) UUID of seed job
 ```
 
-_See code: [src/commands/seed/log.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.5.0/src/commands/seed/log.ts)_
+_See code: [src/commands/seed/log.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.10.1/src/commands/seed/log.ts)_
 
 ## `gc2 seed:start`
 
@@ -200,7 +201,24 @@ OPTIONS
   -x, --extent=extent    (required) Polygon layer which set the extent for the seeding [schema].[relation]
 ```
 
-_See code: [src/commands/seed/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.5.0/src/commands/seed/start.ts)_
+_See code: [src/commands/seed/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.10.1/src/commands/seed/start.ts)_
+
+## `gc2 seed:stop`
+
+Stops a seed job
+
+```
+Stops a seed job
+
+USAGE
+  $ gc2 seed:stop
+
+OPTIONS
+  -h, --help       show CLI help
+  -u, --uuid=uuid  (required) UUID of seed job
+```
+
+_See code: [src/commands/seed/stop.ts](https://github.com/mapcentia/gc2-cli/blob/v2021.10.1/src/commands/seed/stop.ts)_
 
 ## `gc2 update [CHANNEL]`
 

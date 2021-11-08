@@ -6,7 +6,7 @@ import fetch from 'node-fetch'
 import {User} from '../../interfaces/User'
 
 export default class Stop extends Command {
-  static description = 'Starts a seed job'
+  static description = 'Stops a seed job'
 
   static flags = {
     help: flags.help({char: 'h'}),
