@@ -10,12 +10,16 @@ import fetch from 'node-fetch'
 import {User} from '../interfaces/User'
 
 export default class Login extends Command {
-  static description = 'Login to GC2'
+  static description = 'Sign in to GC2. You can set the connect options beforehand using the `connect` command. Providing the password on the commandline is considered insecure. It\'s better to be prompt for the password'
   static flags = {
     help: flags.help({char: 'h'}),
+    password: flags.string({char: 'p', description: 'Password'}),
   }
+  static args = [{name: 'options'}]
 
   async run() {
+    const {flags} = this.parse(Login)
+
     interface Response {
       access_token: string,
       token_type: string,
@@ -70,12 +74,6 @@ export default class Login extends Command {
         cli.action.stop(chalk.green('fail'))
         return
       }
-      // if (res.databases.length > 1) {
-      //   cli.table(res.databases, {parentdb: {}})
-      //   obj.database = await cli.prompt('Database')
-      // } else {
-      //   obj.database = res.databases[0].parentdb ? res.databases[0].parentdb : res.databases[0].screenname
-      // }
       if (res.databases.length > 1) {
         let response: any = await inquirer.prompt([{
           name: 'db',
@@ -92,7 +90,12 @@ export default class Login extends Command {
       }
     }
 
-    const password: string = await cli.prompt('Password', {type: 'hide'})
+    const password: string = flags?.password ? flags.password : await cli.prompt('Password', {type: 'hide'})
+
+    // Warn about using pwd on the command line
+    if (flags?.password) {
+      this.log(chalk.yellow('Warning: Using a password on the command line interface can be insecure.'))
+    }
 
     cli.action.start(`Loggin into ${chalk.yellow(obj.host)} with ${chalk.yellow(obj.user)}`)
 
