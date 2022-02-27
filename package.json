@@ -24,7 +24,7 @@
     "node-fetch": "^2.6.1",
     "through2": "^3.0.2",
     "tslib": "^1.14.1",
-    "url-parse": "^1.4.7"
+    "url-parse": "^1.5.8"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1.26.0",
