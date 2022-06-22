@@ -1,6 +1,5 @@
-import {Command, flags} from '@oclif/command'
+import {Command, Flags as flags, CliUx as cli} from '@oclif/core'
 import chalk from 'chalk'
-import cli from 'cli-ux'
 import Configstore from 'configstore'
 import fetch from 'node-fetch'
 
@@ -12,13 +11,11 @@ export default class Admin extends Command {
   static description = 'Run administration task on the GC2 installation.'
 
   static flags = {
-    help: flags.help({char: 'h'}),
     task: flags.string({char: 't', description: 'The task to run: ' + tasks.join(', '), required: true}),
   }
 
   async run() {
-    // tslint:disable-next-line:no-unused
-    const {flags} = this.parse(Admin)
+    const {flags} = await this.parse(Admin)
 
     if (!tasks.includes(flags.task)) {
       this.log(chalk.red('Invalid task'))
@@ -27,7 +24,7 @@ export default class Admin extends Command {
 
     const config: Configstore = new Configstore('gc2-env')
     let user: User = config.all
-    cli.action.start('Running task ')
+    cli.ux.action.start('Running task')
 
     const response = await fetch(user.host + '/api/v3/admin/' + flags.task, {
       method: 'GET',
@@ -41,7 +38,7 @@ export default class Admin extends Command {
       this.log(data.message)
       this.exit(1)
     }
-    cli.action.stop('')
+    cli.ux.action.stop('')
     // report
     switch (flags.task) {
     case tasks[0]:
