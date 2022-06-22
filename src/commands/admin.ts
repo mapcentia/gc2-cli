@@ -1,4 +1,4 @@
-import {Command, Flags as flags, CliUx as cli} from '@oclif/core'
+import {CliUx as cli, Command, Flags as flags} from '@oclif/core'
 import chalk from 'chalk'
 import Configstore from 'configstore'
 import fetch from 'node-fetch'
