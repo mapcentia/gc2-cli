@@ -61,7 +61,7 @@ export default class Admin extends Command {
       this.log(`time ${data._execution_time}`)
       break
     case tasks[3]:
-      this.log(chalk.green(data.data.message))
+      this.log(chalk.green(data.message))
       this.log(`time ${data._execution_time}`)
       break
     case tasks[4]:
@@ -75,6 +75,9 @@ export default class Admin extends Command {
       data.data.forEach((e: Array<string>) => {
         this.log(chalk.green(e))
       })
+      break
+    case tasks[7]:
+      this.log(`time ${data._execution_time}`)
       break
     default:
       console.log(data)

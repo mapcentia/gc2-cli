@@ -24,6 +24,7 @@ export default class Start extends Command {
     cli.action.start('Running job ' + args.id)
 
     let adapters: any = {
+      // tslint:disable-next-line:no-http-string
       'http:': http,
       'https:': https,
     }
