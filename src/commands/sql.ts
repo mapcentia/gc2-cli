@@ -60,6 +60,14 @@ export default class Sql extends Command {
         this.log(chalk.red(data.message))
         return
       }
+      // If we get JSON, when affected rows
+      if (res.headers.get('content-type')?.startsWith('application/json')) {
+        const data = await res.json()
+        this.log(chalk.green('Affected rows: ' + data.affected_rows))
+        return
+      }
+
+      // We get a file
       const fileName = res.headers.get('content-disposition')?.split('=')[1].replace(/"/g, '')
       const fileStream = fs.createWriteStream(flags.path || './' + fileName)
       await new Promise((resolve, reject) => {
