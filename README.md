@@ -4,8 +4,8 @@ gc2-cli
 CLI tool for GC2
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/gc2-cli.svg)](https://npmjs.org/package/gc2-cli)
-[![Downloads/week](https://img.shields.io/npm/dw/gc2-cli.svg)](https://npmjs.org/package/gc2-cli)
+[![Version](https://img.shields.io/npm/v/gc2-cli.svg)](https://npmjs.org/package/gc2)
+[![Downloads/week](https://img.shields.io/npm/dw/gc2-cli.svg)](https://npmjs.org/package/gc2)
 [![License](https://img.shields.io/npm/l/gc2-cli.svg)](https://github.com/mapcentia/gc2-cli/blob/master/package.json)
 
 <!-- toc -->
