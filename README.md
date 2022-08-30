@@ -19,7 +19,7 @@ $ npm install -g gc2
 $ gc2 COMMAND
 running command...
 $ gc2 (-v|--version|version)
-gc2/2022.6.0 linux-x64 node-v14.15.5
+gc2/2022.6.0 linux-x64 node-v14.20.0
 $ gc2 --help [COMMAND]
 USAGE
   $ gc2 COMMAND
@@ -46,14 +46,10 @@ USAGE
 Run administration task on the GC2 installation.
 
 ```
-Run administration task on the GC2 installation.
-
 USAGE
   $ gc2 admin
 
 OPTIONS
-  -h, --help       show CLI help
-
   -t, --task=task  (required) The task to run: mapfiles, mapcachefile, qgisfiles, schema, migrations, diskcleanup,
                    cachestats, cachecleanup
 ```
@@ -65,8 +61,6 @@ _See code: [src/commands/admin.ts](https://github.com/mapcentia/gc2-cli/blob/v20
 Set connection. You can use flags to set host, database and user. If one or more flags are missing, you will be prompted instead.
 
 ```
-Set connection. You can use flags to set host, database and user. If one or more flags are missing, you will be prompted instead.
-
 USAGE
   $ gc2 connect [OPTIONS]
 
@@ -85,8 +79,6 @@ _See code: [src/commands/connect.ts](https://github.com/mapcentia/gc2-cli/blob/v
 Create a fishnet grid from an input polygon.
 
 ```
-Create a fishnet grid from an input polygon.
-
 USAGE
   $ gc2 grid
 
@@ -104,8 +96,6 @@ _See code: [src/commands/grid.ts](https://github.com/mapcentia/gc2-cli/blob/v202
 display help for gc2
 
 ```
-display help for <%= config.bin %>
-
 USAGE
   $ gc2 help [COMMAND]
 
@@ -123,8 +113,6 @@ _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3
 Sign in to GC2. You can set the connect options beforehand using the `connect` command. Providing the password on the commandline is considered insecure. It's better to be prompt for the password
 
 ```
-Sign in to GC2. You can set the connect options beforehand using the `connect` command. Providing the password on the commandline is considered insecure. It's better to be prompt for the password
-
 USAGE
   $ gc2 login [OPTIONS]
 
@@ -140,8 +128,6 @@ _See code: [src/commands/login.ts](https://github.com/mapcentia/gc2-cli/blob/v20
 Starts a scheduler job
 
 ```
-Starts a scheduler job
-
 USAGE
   $ gc2 scheduler:start [ID]
 
@@ -156,8 +142,6 @@ _See code: [src/commands/scheduler/start.ts](https://github.com/mapcentia/gc2-cl
 List running seed jobs
 
 ```
-List running seed jobs
-
 USAGE
   $ gc2 seed:list
 
@@ -172,8 +156,6 @@ _See code: [src/commands/seed/list.ts](https://github.com/mapcentia/gc2-cli/blob
 Logs
 
 ```
-Logs
-
 USAGE
   $ gc2 seed:log
 
@@ -189,8 +171,6 @@ _See code: [src/commands/seed/log.ts](https://github.com/mapcentia/gc2-cli/blob/
 Starts a seed job
 
 ```
-Starts a seed job
-
 USAGE
   $ gc2 seed:start
 
@@ -213,8 +193,6 @@ _See code: [src/commands/seed/start.ts](https://github.com/mapcentia/gc2-cli/blo
 Stops a seed job
 
 ```
-Stops a seed job
-
 USAGE
   $ gc2 seed:stop
 
@@ -227,11 +205,9 @@ _See code: [src/commands/seed/stop.ts](https://github.com/mapcentia/gc2-cli/blob
 
 ## `gc2 sql [OPTIONS]`
 
-Sign in to GC2. You can set the connect options beforehand using the `connect` command. Providing the password on the commandline is considered insecure. It's better to be prompt for the password
+Run SQL statements
 
 ```
-Sign in to GC2. You can set the connect options beforehand using the `connect` command. Providing the password on the commandline is considered insecure. It's better to be prompt for the password
-
 USAGE
   $ gc2 sql [OPTIONS]
 
@@ -246,11 +222,21 @@ _See code: [src/commands/sql.ts](https://github.com/mapcentia/gc2-cli/blob/v2022
 update the gc2 CLI
 
 ```
-update the <%= config.bin %> CLI
-
 USAGE
   $ gc2 update [CHANNEL]
+
+OPTIONS
+  -a, --available        Install a specific version.
+  -i, --interactive      Interactively select version to install. This is ignored if a channel is provided.
+  -v, --version=version  Install a specific version.
+  --force                Force a re-download of the requested version.
+
+EXAMPLES
+  [object Object]
+  [object Object]
+  [object Object]
+  [object Object]
 ```
 
-_See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v1.3.10/src/commands/update.ts)_
+_See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v3.0.0/src/commands/update.ts)_
 <!-- commandsstop -->
