@@ -205,14 +205,18 @@ _See code: [src/commands/seed/stop.ts](https://github.com/mapcentia/gc2-cli/blob
 
 ## `gc2 sql [OPTIONS]`
 
-Run SQL statements
+Run SQL statements. If run without --statement inactive mode will be enabled.
 
 ```
 USAGE
   $ gc2 sql [OPTIONS]
 
 OPTIONS
-  -h, --help  show CLI help
+  -c, --srs=srs              [default: 4326] Output spatial reference system. Use EPSG codes.
+  -f, --format=format        [default: ogr/GPKG] Output file format.
+  -h, --help                 show CLI help
+  -p, --path=path            Output path to file. If omitted file is saved in current folder.
+  -s, --statement=statement  SQL statement
 ```
 
 _See code: [src/commands/sql.ts](https://github.com/mapcentia/gc2-cli/blob/v2022.6.0/src/commands/sql.ts)_

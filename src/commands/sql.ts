@@ -55,7 +55,7 @@ export default class Sql extends Command {
         base64: true,
       }
       const res = await this.get(user, statement)
-      if (res.status === 500) {
+      if (res.status !== 200) {
         const data = await res.json()
         this.log(chalk.red(data.message))
         return
