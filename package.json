@@ -1,14 +1,17 @@
 {
   "name": "gc2",
   "description": "CLI tool for GC2",
-  "version": "2022.6.0",
+  "version": "2022.9.0",
   "author": "Martin Høgh @mapcentia",
   "bin": {
-    "gc2": "./bin/run"
+    "gc2": "bin/dev"
   },
-  "bugs": "https://github.com/mapcentia/gc2-cli/issues",
+  "bugs": {
+    "url": "https://github.com/mapcentia/gc2-cli/issues"
+  },
   "dependencies": {
     "@oclif/core": "^1.9.3",
+    "@oclif/plugin-help": "^5.1.12",
     "@oclif/plugin-update": "^3.0.0",
     "@types/configstore": "^4.0.0",
     "@types/inquirer": "^6.5.0",
@@ -52,7 +55,7 @@
   "keywords": [
     "oclif"
   ],
-  "license": "AGPL",
+  "license": "AGPL-3.0-or-later",
   "main": "lib/index.js",
   "oclif": {
     "additionalHelpFlags": [
@@ -77,7 +80,10 @@
       "identifier": "io.gc2.cli"
     }
   },
-  "repository": "mapcentia/gc2-cli",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mapcentia/gc2-cli.git"
+  },
   "scripts": {
     "postpack": "rm -f oclif.manifest.json",
     "posttest": "tslint -p test -t stylish",
@@ -85,5 +91,8 @@
     "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif-dev readme && git add README.md"
   },
-  "types": "lib/index.d.ts"
+  "types": "lib/index.d.ts",
+  "directories": {
+    "test": "test"
+  }
 }
