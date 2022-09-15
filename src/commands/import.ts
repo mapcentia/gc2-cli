@@ -78,6 +78,7 @@ export default class Import extends Command {
         })
         chunkCount++
       }
+
       cli.action.start('Server importing files')
       const response = await fetch(url + '/' + tmpFile, {
         method: 'GET',
@@ -89,7 +90,6 @@ export default class Import extends Command {
       const data = await response.json()
       // this.log(data)
       cli.action.stop()
-
     } catch (e) {
       console.log(e)
       exit(1)
