@@ -19,10 +19,10 @@ import {ApiResponse} from '../interfaces/ApiResponse'
 import {User} from '../interfaces/User'
 
 export default class Import extends Command {
-  static description = 'Run SQL statements. If run without --statement inactive mode will be enabled.'
+  static description = 'Import files to GC2. Set path to a file or folder, which will be compressed, uploaded and imported into GC2'
   static flags = {
     srs: flags.integer({char: 'c', description: 'Output spatial reference system. Use EPSG codes.', default: 4326}),
-    inputPath: flags.string({char: 'p', description: 'Input path to file or folder.', required: true}),
+    input: flags.string({char: 'p', description: 'Input path to file or folder.', required: true}),
     help: flags.help({char: 'h'}),
   }
   static args = [{name: 'options'}]
@@ -38,7 +38,7 @@ export default class Import extends Command {
     const appPrefix = 'gc2-cli-'
     const chunkSize = 1000000
 
-    const inputPath = flags.inputPath
+    const inputPath = flags.input
     try {
       tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix))
       tmpFile = uuidv4() + '.zip'
