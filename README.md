@@ -19,7 +19,7 @@ $ npm install -g gc2
 $ gc2 COMMAND
 running command...
 $ gc2 (-v|--version|version)
-gc2/2022.9.4 linux-x64 node-v14.15.5
+gc2/2022.9.4 linux-x64 node-v18.9.0
 $ gc2 --help [COMMAND]
 USAGE
   $ gc2 COMMAND
@@ -32,6 +32,7 @@ USAGE
 * [`gc2 connect [OPTIONS]`](#gc2-connect-options)
 * [`gc2 grid`](#gc2-grid)
 * [`gc2 help [COMMAND]`](#gc2-help-command)
+* [`gc2 import [OPTIONS]`](#gc2-import-options)
 * [`gc2 login [OPTIONS]`](#gc2-login-options)
 * [`gc2 scheduler:start [ID]`](#gc2-schedulerstart-id)
 * [`gc2 seed:list`](#gc2-seedlist)
@@ -107,6 +108,22 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.12/src/commands/help.ts)_
+
+## `gc2 import [OPTIONS]`
+
+Import files to GC2. Set path to a file or folder, which will be compressed, uploaded and imported into GC2
+
+```
+USAGE
+  $ gc2 import [OPTIONS]
+
+OPTIONS
+  -c, --srs=srs      [default: 4326] Output spatial reference system. Use EPSG codes.
+  -h, --help         show CLI help
+  -p, --input=input  (required) Input path to file or folder.
+```
+
+_See code: [src/commands/import.ts](https://github.com/mapcentia/gc2-cli/blob/v2022.9.4/src/commands/import.ts)_
 
 ## `gc2 login [OPTIONS]`
 

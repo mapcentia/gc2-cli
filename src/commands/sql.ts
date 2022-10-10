@@ -68,11 +68,30 @@ export default class Sql extends Command {
       }
 
       // We get a file
+      let fileStream: any
       const fileName = res.headers.get('content-disposition')?.split('=')[1].replace(/"/g, '')
-      const fileStream = fs.createWriteStream(flags.path || './' + fileName)
+      if (flags.path) {
+        try {
+          const stat = fs.lstatSync(flags.path + '')
+          if (stat.isDirectory()) {
+            fileStream = fs.createWriteStream(flags.path + '/' + fileName) // existing dir
+          } else {
+            fileStream = fs.createWriteStream(flags.path + '') // existing file
+          }
+          // tslint:disable-next-line:no-unused
+        } catch (e) {
+          fileStream = fs.createWriteStream(flags.path + '') // non existing file
+        }
+      } else {
+        fileStream = fs.createWriteStream(fileName + '') // No use of path
+      }
+
       await new Promise((resolve, reject) => {
         res.body.pipe(fileStream)
         res.body.on('error', reject)
+        fileStream.on('error', (e: any) => {
+          this.log(chalk.red(e.message))
+        })
         fileStream.on('finish', resolve)
       })
 
