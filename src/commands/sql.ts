@@ -1,7 +1,6 @@
 'use strict'
 
 import {Command, flags} from '@oclif/command'
-import {CliUx} from '@oclif/core'
 import base64url from 'base64url'
 import chalk from 'chalk'
 import cli from 'cli-ux'
@@ -9,7 +8,7 @@ import Configstore from 'configstore'
 import * as fs from 'fs'
 import fetch from 'node-fetch'
 
-import {User} from '../interfaces/User'
+import {User} from '../interfaces/user'
 
 interface Statement {
   q: string,
@@ -125,7 +124,7 @@ export default class Sql extends Command {
             data.features.forEach((e: { type: string, geometry: object, properties: any }) => {
               features.push(e.properties)
             })
-            CliUx.ux.table(features, columns)
+            cli.table(features, columns)
           }
         } else {
           this.log(chalk.red(data.message))

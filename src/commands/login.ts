@@ -7,7 +7,7 @@ import Configstore from 'configstore'
 import inquirer from 'inquirer'
 import fetch from 'node-fetch'
 
-import {User} from '../interfaces/User'
+import {User} from '../interfaces/user'
 
 export default class Login extends Command {
   static description = 'Sign in to GC2. You can set the connect options beforehand using the `connect` command. Providing the password on the commandline is considered insecure. It\'s better to be prompt for the password'
@@ -97,7 +97,7 @@ export default class Login extends Command {
       this.log(chalk.yellow('Warning: Using a password on the command line interface can be insecure.'))
     }
 
-    cli.action.start(`Loggin into ${chalk.yellow(obj.host)} with ${chalk.yellow(obj.user)}`)
+    cli.action.start(`Signing into ${chalk.yellow(obj.host)} with ${chalk.yellow(obj.user)}`)
 
     const response = await fetch(obj.host + '/api/v3/oauth/token', {
       method: 'POST',

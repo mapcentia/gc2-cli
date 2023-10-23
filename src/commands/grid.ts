@@ -4,7 +4,7 @@ import cli from 'cli-ux'
 import Configstore from 'configstore'
 import fetch from 'node-fetch'
 
-import {User} from '../interfaces/User'
+import {User} from '../interfaces/user'
 
 export default class Grid extends Command {
   static description = 'Create a fishnet grid from an input polygon.'

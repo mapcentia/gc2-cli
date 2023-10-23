@@ -6,7 +6,7 @@ import * as http from 'http'
 import * as https from 'https'
 import parse from 'url-parse'
 
-import {User} from '../../interfaces/User'
+import {User} from '../../interfaces/user'
 
 export default class Start extends Command {
   static description = 'Starts a scheduler job'

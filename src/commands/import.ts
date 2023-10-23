@@ -14,9 +14,9 @@ import FormData from 'form-data'
 import * as fs from 'fs'
 import fetch from 'node-fetch'
 import * as path from 'path'
-import {ApiResponse} from '../interfaces/ApiResponse'
+import {ApiResponse} from '../interfaces/api-response'
 
-import {User} from '../interfaces/User'
+import {User} from '../interfaces/user'
 
 export default class Import extends Command {
   static description = 'Import files to GC2. Set path to a file or folder, which will be compressed, uploaded and imported into GC2'

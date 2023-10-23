@@ -3,7 +3,7 @@ import chalk from 'chalk'
 import Configstore from 'configstore'
 import fetch from 'node-fetch'
 
-import {User} from '../../interfaces/User'
+import {User} from '../../interfaces/user'
 
 export default class Stop extends Command {
   static description = 'Stops a seed job'

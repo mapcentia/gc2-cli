@@ -3,8 +3,8 @@ import chalk from 'chalk'
 import Configstore from 'configstore'
 import fetch from 'node-fetch'
 
-import {ApiResponse} from '../../interfaces/ApiResponse'
-import {User} from '../../interfaces/User'
+import {ApiResponse} from '../../interfaces/api-response'
+import {User} from '../../interfaces/user'
 
 export default class Log extends Command {
   static description = 'Logs'

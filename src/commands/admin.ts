@@ -1,9 +1,10 @@
-import {CliUx as cli, Command, Flags as flags} from '@oclif/core'
+import {Command, Flags as flags} from '@oclif/core'
 import chalk from 'chalk'
+import cli from 'cli-ux'
 import Configstore from 'configstore'
 import fetch from 'node-fetch'
 
-import {User} from '../interfaces/User'
+import {User} from '../interfaces/user'
 
 const tasks: string[] = ['mapfiles', 'mapcachefile', 'qgisfiles', 'schema', 'migrations', 'diskcleanup', 'cachestats', 'cachecleanup' /*, 'qgisfromfiles' */]
 
@@ -24,7 +25,7 @@ export default class Admin extends Command {
 
     const config: Configstore = new Configstore('gc2-env')
     let user: User = config.all
-    cli.ux.action.start('Running task')
+    cli.action.start('Running task')
 
     const response = await fetch(user.host + '/api/v3/admin/' + flags.task, {
       method: 'GET',
@@ -38,7 +39,7 @@ export default class Admin extends Command {
       this.log(data.message)
       this.exit(1)
     }
-    cli.ux.action.stop('')
+    cli.action.stop('')
     // report
     switch (flags.task) {
     case tasks[0]:

@@ -10,9 +10,9 @@
     "url": "https://github.com/mapcentia/gc2-cli/issues"
   },
   "dependencies": {
-    "@oclif/command": "^1.8.16",
-    "@oclif/core": "^1.9.3",
-    "@oclif/plugin-help": "^5.1.12",
+    "@oclif/command": "^1.8.36",
+    "@oclif/core": "^3.0.8",
+    "@oclif/plugin-help": "^6.0.1",
     "@oclif/plugin-update": "^3.0.0",
     "@types/adm-zip": "^0.5.0",
     "@types/configstore": "^4.0.0",
