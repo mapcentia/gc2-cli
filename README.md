@@ -77,7 +77,7 @@ _See code: [src/commands/connect.ts](https://github.com/mapcentia/gc2-cli/blob/v
 
 ## `gc2 grid`
 
-Create a fishnet grid from an input polygon.
+Add a fishnet grid from an input polygon.
 
 ```
 USAGE

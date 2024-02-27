@@ -66,19 +66,22 @@ export default class Desc extends Command {
       restriction: any,
       geom_type?: string,
       srid?: string,
-      primary_key: boolean,
+      is_primary: boolean,
+      is_unique: boolean,
       index_method?: string
     }
 
     const data: object[] = []
-    const columns: columns = {name: {}, type: {}, nullable: {}, index_method: {extended: true}}
+    const columns: columns = {name: {}, type: {}, unique: {} , nullable: {}, index_method: {extended: true}, foreign_key: {extended: true}}
     for (const c of Object.keys(res.data.columns)) {
       const v: column = res.data.columns[c]
       data.push({
-        name: v.primary_key ? chalk.green(c) : c,
+        name: v.is_primary ? chalk.green(c) : c,
         type: v.full_type,
+        unique: v.is_unique,
         nullable: v.is_nullable,
-        index_method: v.index_method || ''
+        index_method: v.index_method || '',
+        foreign_key: v.reference || '',
       })
     }
 
