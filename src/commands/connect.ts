@@ -5,6 +5,8 @@ import Configstore from 'configstore'
 import inquirer from 'inquirer'
 import fetch from 'node-fetch'
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 export default class Connect extends Command {
   static description = 'Set connection. You can use flags to set host, database and user. If one or more flags are missing, you will be prompted instead.'
 
@@ -16,6 +18,7 @@ export default class Connect extends Command {
     user: flags.string({char: 'u', description: 'User'}),
   }
   static args = [{name: 'options'}]
+
   async run() {
     const {flags} = this.parse(Connect)
     const config: Configstore = new Configstore('gc2-env')
@@ -75,7 +78,7 @@ export default class Connect extends Command {
         } else {
           database = res.databases[0].parentdb ? res.databases[0].parentdb : res.databases[0].screenname
         }
-      } catch (e) {
+      } catch (e: Error | any) {
         cli.action.stop(chalk.red(e.message))
       }
     }

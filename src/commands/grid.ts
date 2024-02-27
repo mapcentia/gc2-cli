@@ -7,7 +7,7 @@ import fetch from 'node-fetch'
 import {User} from '../interfaces/user'
 
 export default class Grid extends Command {
-  static description = 'Create a fishnet grid from an input polygon.'
+  static description = 'Add a fishnet grid from an input polygon.'
 
   static flags = {
     help: flags.help({char: 'h'}),
