@@ -1,84 +1,80 @@
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
-import Configstore from 'configstore'
-import fetch from 'node-fetch'
+import args from '../../common/base_args'
+import get from '../../util/get-response'
+import make from '../../util/make-request'
 
-import {ApiResponse} from '../../interfaces/api-response'
-import {User} from '../../interfaces/user'
+let base_args = args
+let specific_args = {
+  columns: Args.string(
+    {
+      required: true,
+      description: 'Columns to index (comma separated)',
+    },
+  ),
+  type: Args.string(
+    {
+      required: true,
+      description: 'Type of constraint',
+      default: 'btree',
+      options: ['primary', 'unique', 'foreign', 'check'],
+    },
+  ),
+  name: Args.string(
+    {
+      required: false,
+      description: 'Name for constraint',
+    },
+  ),
+}
 
 export default class Add extends Command {
-  static description = 'Add a constraint on a column'
-
+  static description = 'Add a constraint'
   static flags = {
     help: Flags.help({char: 'h'}),
-    constraint: Flags.string({
-      char: 'c',
-      description: 'Type of constraint',
-      required: true,
-      options: ['unique', 'foreign'],
-    }),
     referencedTable: Flags.string({
       helpGroup: 'Foreign key options',
       char: 't',
       description: 'Referenced table',
     }),
-    referencedColumn: Flags.string({
+    referencedColumns: Flags.string({
       helpGroup: 'Foreign key options',
       char: 'e',
       description: 'Referenced column',
     }),
   }
-  static args = {
-    table: Args.string(
-      {
-        required: true,
-        description: 'Name of table',
-      },
-    ),
-    column: Args.string(
-      {
-        required: true,
-        description: 'Column',
-      },
-    ),
-  }
+  static args = {...base_args, ...specific_args}
 
   async run() {
     const {args} = await this.parse(Add)
     const {flags} = await this.parse(Add)
-
-    const config: Configstore = new Configstore('gc2-env')
-    let user: User = config.all
-    let response
-    if (flags.constraint === 'unique') {
-      response = await fetch(user.host + '/api/v3/constraint/unique/' + args.table + '/' + args.column, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + user.token
-        },
-      })
+    let body = {
+      name: args.name,
+      columns: args.columns.split(',').map(e => e.trim()),
+      constraint: args.type,
     }
 
-    if (flags.constraint === 'foreign') {
-      response = await fetch(user.host + '/api/v3/constraint/foreign/' + args.table + '/' + args.column, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + user.token
-        },
-        body: JSON.stringify(flags)
-      })
-    }
-
-    if (response) {
-      const res: ApiResponse = await response.json()
-      console.log(res)
-      if (!res.success) {
-        this.log(chalk.red(res.message))
+    if (args.type === 'foreign') {
+      if (!flags.referencedTable) {
+        this.log(chalk.red(`A referenced table must be set`))
         this.exit(1)
       }
-      this.log(`Added unique constraint on ${chalk.green(args.column)}`)
+      body = {
+        ...body, ...{
+          referenced_table: flags.referencedTable,
+        }
+      }
+      if (flags.referencedColumns) {
+        body = {
+          ...body, ...{
+            referenced_columns: flags.referencedColumns.split(',').map(e => e.trim()),
+          }
+        }
+      }
     }
+    console.log(body)
+    const response = await make('4', `schemas/${args.schema}/tables/${args.table}/constraints`, 'POST', body)
+    await get(this, response, 201)
+    this.log(`Constraint created here ${chalk.green(response.headers.get('Location'))}`)
   }
 }

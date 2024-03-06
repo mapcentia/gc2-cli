@@ -1,35 +1,22 @@
-import {Command, flags} from '@oclif/command'
+import {Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import cli from 'cli-ux'
-import Configstore from 'configstore'
-import fetch from 'node-fetch'
-
-import {User} from '../interfaces/user'
+import get from '../util/get-response'
+import make from '../util/make-request'
 
 export default class Grid extends Command {
   static description = 'Add a fishnet grid from an input polygon.'
-
   static flags = {
-    help: flags.help({char: 'h'}),
-    table: flags.string({char: 't', description: 'Name of the new fishnet table', required: true}),
-    extent: flags.string({char: 'e', description: 'Polygon table which should be used for extent', required: true}),
-    size: flags.string({char: 's', description: 'Cell size in map units', required: true}),
+    help: Flags.help({char: 'h'}),
+    table: Flags.string({char: 't', description: 'Name of the new fishnet table', required: true}),
+    extent: Flags.string({char: 'e', description: 'Polygon table which should be used for extent', required: true}),
+    size: Flags.string({char: 's', description: 'Cell size in map units', required: true}),
   }
-
   async run() {
-    const {flags} = this.parse(Grid)
-    const config: Configstore = new Configstore('gc2-env')
-    let user: User = config.all
+    const {flags} = await this.parse(Grid)
     cli.action.start('Creating fishnet grid ')
-    const response = await fetch(user.host + '/api/v3/grid', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + user.token
-      },
-      body: JSON.stringify(flags)
-    })
-    const data: { 'data'?: any, '_execution_time'?: number, 'success'?: boolean, 'message'?: string } = await response.json()
+    const response = await make('3', `grid`, 'POST', flags)
+    const data  = await get(this, response, 200)
     cli.action.stop('')
     if (data.success) {
       this.log(chalk.green('SUCCESS: Fishnet grid was created'))

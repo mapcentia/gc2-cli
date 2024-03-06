@@ -1,40 +1,29 @@
-import {Command, Flags as flags} from '@oclif/core'
+/**
+ * @author     Martin Høgh <mh@mapcentia.com>
+ * @copyright  2013-2024 MapCentia ApS
+ * @license    http://www.gnu.org/licenses/#AGPL  GNU AFFERO GENERAL PUBLIC LICENSE 3
+ *
+ */
+
+import {Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import cli from 'cli-ux'
-import Configstore from 'configstore'
-import fetch from 'node-fetch'
+import get from '../util/get-response'
+import make from '../util/make-request'
 
-import {User} from '../interfaces/user'
-
-const tasks: string[] = ['mapfiles', 'mapcachefile', 'qgisfiles', 'schema', 'migrations', 'diskcleanup', 'cachestats', 'cachecleanup' /*, 'qgisfromfiles' */]
+const tasks = ['mapfiles', 'mapcachefile', 'qgisfiles', 'schema', 'migrations', 'diskcleanup', 'cachestats', 'cachecleanup']
 
 export default class Admin extends Command {
   static description = 'Run administration task on the GC2 installation.'
-
   static flags = {
-    task: flags.string({char: 't', description: 'The task to run: ' + tasks.join(', '), required: true}),
+    task: Flags.string({char: 't', description: 'The task to run', required: true,
+      options: tasks}),
   }
-
   async run() {
-    const {flags} = await this.parse(Admin)
-
-    if (!tasks.includes(flags.task)) {
-      this.log(chalk.red('Invalid task'))
-      this.exit(1)
-    }
-
-    const config: Configstore = new Configstore('gc2-env')
-    let user: User = config.all
     cli.action.start('Running task')
-
-    const response = await fetch(user.host + '/api/v3/admin/' + flags.task, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + user.token
-      }
-    })
-    const data: { 'data'?: any, '_execution_time'?: number, 'success'?: boolean, 'message'?: string } = await response.json()
+    const {flags} = await this.parse(Admin)
+    const response = await make('3', `admin/${flags.task}`, 'GET', null)
+    const data = await get(this, response, 200)
     if (!data.success) {
       this.log(data.message)
       this.exit(1)

@@ -1,24 +1,25 @@
 'use strict'
 
-import {Command, flags} from '@oclif/command'
+import {Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import cli from 'cli-ux'
 import Configstore from 'configstore'
 import inquirer from 'inquirer'
 import fetch from 'node-fetch'
+import get from '../util/get-response'
+import make from '../util/make-request'
 
-import {User} from '../interfaces/user'
+import User from '../common/user'
 
 export default class Login extends Command {
   static description = 'Sign in to GC2. You can set the connect options beforehand using the `connect` command. Providing the password on the commandline is considered insecure. It\'s better to be prompt for the password'
   static flags = {
-    help: flags.help({char: 'h'}),
-    password: flags.string({char: 'p', description: 'Password'}),
+    help: Flags.help({char: 'h'}),
+    password: Flags.string({char: 'p', description: 'Password'}),
   }
-  static args = [{name: 'options'}]
 
   async run() {
-    const {flags} = this.parse(Login)
+    const {flags} = await this.parse(Login)
 
     interface Response {
       access_token: string,
@@ -53,21 +54,18 @@ export default class Login extends Command {
 
     if (obj.host === '') {
       obj.host = await cli.prompt('Host')
+      config.set({host: obj.host})
     }
 
     if (obj.user === '') {
       obj.user = await cli.prompt('User')
+      config.set({user: obj.user})
     }
 
     if (obj.database === '') {
       cli.action.start('Getting databases')
-      const response = await fetch(obj.host + '/api/v2/database/search?userIdentifier=' + obj.user, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      const res: Databases = await response.json()
+      const response = await make('2', `database/search?userIdentifier=${obj.user}`, 'GET', null, false)
+      const res = await get(this, response, 200)
       if (res.success) {
         cli.action.stop(chalk.green('success'))
       } else {
@@ -80,7 +78,7 @@ export default class Login extends Command {
           message: 'Database',
           type: 'list',
           default: config.all.database,
-          choices: res.databases.map(v => {
+          choices: res.databases.map((v: { parentdb: any }) => {
             return {name: v.parentdb}
           })
         }])
@@ -88,31 +86,22 @@ export default class Login extends Command {
       } else {
         obj.database = res.databases[0].parentdb ? res.databases[0].parentdb : res.databases[0].screenname
       }
+      config.set({database: obj.database})
     }
-
     const password: string = flags?.password ? flags.password : await cli.prompt('Password', {type: 'hide'})
-
     // Warn about using pwd on the command line
     if (flags?.password) {
       this.log(chalk.yellow('Warning: Using a password on the command line interface can be insecure.'))
     }
-
-    cli.action.start(`Signing into ${chalk.yellow(obj.host)} with ${chalk.yellow(obj.user)}`)
-
-    const response = await fetch(obj.host + '/api/v3/oauth/token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({grant_type: 'password', username: obj.user, password, database: obj.database})
+    const response = await make('4', `oauth`, 'POST', {
+      grant_type: 'password',
+      username: obj.user,
+      password,
+      database: obj.database
     })
-    const data: Response = await response.json()
-
-    if (response.status === 200) {
-      cli.action.stop(chalk.green('success'))
-      config.set({token: data.access_token})
-    } else {
-      cli.action.stop(chalk.red(data.error))
-    }
+    const data = await get(this, response, 200)
+    cli.action.start(`Signing into ${chalk.yellow(obj.host)} with ${chalk.yellow(obj.user)}`)
+    cli.action.stop(chalk.green('success'))
+    config.set({token: data.access_token})
   }
 }

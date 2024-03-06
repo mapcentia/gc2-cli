@@ -11,7 +11,7 @@ import get from '../../util/get-response'
 import make from '../../util/make-request'
 
 export default class Add extends Command {
-  static description = 'Add column'
+  static description = 'Create new table'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
@@ -19,36 +19,20 @@ export default class Add extends Command {
     schema: Args.string(
       {
         required: true,
-        description: 'Name of schema',
-      },
+        description: 'name of schema where the new table should be created ',
+      }
     ),
     table: Args.string(
       {
         required: true,
-        description: 'Name of table',
-      },
-    ),
-    column: Args.string(
-      {
-        required: true,
-        description: 'Name of new column',
-      },
-    ),
-    type: Args.string(
-      {
-        required: true,
-        description: 'Type of new column',
-      },
+        description: 'name of new table',
+      }
     ),
   }
   async run() {
     const {args} = await this.parse(Add)
-    const body = {
-      column: args.column,
-      type: args.type,
-    }
-    const response = await make('4', `schemas/${args.schema}/tables/${args.table}/columns`, 'POST', body)
+    const response = await make('4', `schemas/${args.schema}/tables`, 'POST', {table: args.table})
     await get(this, response, 201)
-    this.log(`Column created here ${chalk.green(response.headers.get('Location'))}`)
+    this.log(`Table created here ${chalk.green(response.headers.get('Location'))}`)
   }
 }

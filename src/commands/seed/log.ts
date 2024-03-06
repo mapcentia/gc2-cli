@@ -1,32 +1,17 @@
-import {Command, flags} from '@oclif/command'
-import chalk from 'chalk'
-import Configstore from 'configstore'
-import fetch from 'node-fetch'
-
-import {ApiResponse} from '../../interfaces/api-response'
-import {User} from '../../interfaces/user'
+import {Command, Flags} from '@oclif/core'
+import get from '../../util/get-response'
+import make from '../../util/make-request'
 
 export default class Log extends Command {
   static description = 'Logs'
-
   static flags = {
-    help: flags.help({char: 'h'}),
-    uuid: flags.string({char: 'u', description: 'UUID of seed job', required: true}),
+    help: Flags.help({char: 'h'}),
+    uuid: Flags.string({char: 'u', description: 'UUID of seed job', required: true}),
   }
-
   async run() {
-    const {flags} = this.parse(Log)
-    const config: Configstore = new Configstore('gc2-env')
-    const user: User = config.all
-    const url = user.host + '/api/v3/tileseeder/log/' + flags.uuid
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + user.token
-      }
-    })
-    const data: ApiResponse = await response.json()
+    const {flags} = await this.parse(Log)
+    const response = await make('3', `tileseeder/log`, 'GET', null)
+    const data = await get(this, response, 200)
     this.log(data.data)
   }
 }

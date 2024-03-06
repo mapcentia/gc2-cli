@@ -1,14 +1,10 @@
-'use strict'
-
-import {Command, flags} from '@oclif/command'
+import {Command, Flags} from '@oclif/core'
 import base64url from 'base64url'
 import chalk from 'chalk'
 import cli from 'cli-ux'
-import Configstore from 'configstore'
 import * as fs from 'fs'
-import fetch from 'node-fetch'
-
-import {User} from '../interfaces/user'
+import get from '../util/get-response'
+import make from '../util/make-request'
 
 interface Statement {
   q: string,
@@ -23,29 +19,15 @@ interface Statement {
 export default class Sql extends Command {
   static description = 'Run SQL statements. If run without --statement inactive mode will be enabled.'
   static flags = {
-    statement: flags.string({char: 's', description: 'SQL statement'}),
-    srs: flags.integer({char: 'c', description: 'Output spatial reference system. Use EPSG codes.', default: 4326}),
-    format: flags.string({char: 'f', description: 'Output file format.', default: 'ogr/GPKG'}),
-    path: flags.string({char: 'p', description: 'Output path to file. If omitted file is saved in current folder.'}),
-    help: flags.help({char: 'h'}),
-  }
-  static args = [{name: 'options'}]
-
-  get(user: User, statement: Statement) {
-    return fetch(user.host + '/api/v3/sql', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + user.token
-      },
-      body: JSON.stringify(statement)
-    })
+    statement: Flags.string({char: 's', description: 'SQL statement'}),
+    srs: Flags.integer({char: 'c', description: 'Output spatial reference system. Use EPSG codes.', default: 4326}),
+    format: Flags.string({char: 'f', description: 'Output file format.', default: 'ogr/GPKG'}),
+    path: Flags.string({char: 'p', description: 'Output path to file. If omitted file is saved in current folder.'}),
+    help: Flags.help({char: 'h'}),
   }
 
   async run() {
-    const {flags} = this.parse(Sql)
-    const config: Configstore = new Configstore('gc2-env')
-    let user: User = config.all
+    const {flags} = await this.parse(Sql)
     if (flags.statement) {
       const statement: Statement = {
         q: base64url(flags.statement),
@@ -53,15 +35,12 @@ export default class Sql extends Command {
         format: flags.format,
         base64: true,
       }
-      const res = await this.get(user, statement)
-      if (res.status !== 200) {
-        const data = await res.json()
-        this.log(chalk.red(data.message))
-        return
-      }
+
+      const res = await make('4', `sql`, 'POST', statement)
+      const data = await get(this, res, 200)
+
       // If we get JSON, when affected rows
       if (res.headers.get('content-type')?.startsWith('application/json')) {
-        const data = await res.json()
         this.log(chalk.green('Affected rows: ' + data.affected_rows))
         return
       }
@@ -105,8 +84,8 @@ export default class Sql extends Command {
           lifetime: 0,
           base64: true
         }
-        const res = await this.get(user, statement)
-        const data = await res.json()
+        const response = await make('4', `sql`, 'POST', statement)
+        const data = await get(this, response, 200)
         if (data.success) {
           if (data?.affected_rows) {
             this.log(chalk.green('Affected rows: ' + data.affected_rows))

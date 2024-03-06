@@ -1,28 +1,16 @@
-import {Command, flags} from '@oclif/command'
-import Configstore from 'configstore'
-import fetch from 'node-fetch'
-
-import {User} from '../../interfaces/user'
+import {Command, Flags} from '@oclif/core'
+import get from '../../util/get-response'
+import make from '../../util/make-request'
 
 export default class List extends Command {
   static description = 'List running seed jobs'
-
   static flags = {
-    help: flags.help({char: 'h'}),
+    help: Flags.help({char: 'h'}),
   }
-
   async run() {
-    const {args, flags} = this.parse(List)
-    const config: Configstore = new Configstore('gc2-env')
-    let user: User = config.all
-    const response = await fetch(user.host + '/api/v3/tileseeder', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + user.token
-      }
-    })
-    const data: Response = await response.json()
+    const {args} = await this.parse(List)
+    const response = await make('3', `tileseeder`, 'GET', null)
+    const data = await get(this, response, 200)
     console.log(data)
   }
 }

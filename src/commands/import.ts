@@ -1,10 +1,7 @@
-'use strict'
-
 process.env.NODE_DEBUG = 'http'
 
-import {Command, flags} from '@oclif/command'
+import {Command, Flags} from '@oclif/core'
 import {exit} from '@oclif/core/lib/errors'
-import chalk from 'chalk'
 import cli from 'cli-ux'
 import Configstore from 'configstore'
 import AdmZip from 'adm-zip'
@@ -12,26 +9,25 @@ import * as os from 'os'
 import {v4 as uuidv4} from 'uuid'
 import FormData from 'form-data'
 import * as fs from 'fs'
-import fetch from 'node-fetch'
 import * as path from 'path'
-import {ApiResponse} from '../interfaces/api-response'
 
-import {User} from '../interfaces/user'
+import User from '../common/user'
+import get from '../util/get-response'
+import make from '../util/make-request'
 
 export default class Import extends Command {
   static description = 'Import files to GC2. Set path to a file or folder, which will be compressed, uploaded and imported into GC2'
   static flags = {
-    srs: flags.integer({char: 'c', description: 'Output spatial reference system. Use EPSG codes.', default: 4326}),
-    input: flags.string({char: 'p', description: 'Input path to file or folder.', required: true}),
-    help: flags.help({char: 'h'}),
+    srs: Flags.integer({char: 'c', description: 'Output spatial reference system. Use EPSG codes.', default: 4326}),
+    input: Flags.string({char: 'p', description: 'Input path to file or folder.', required: true}),
+    help: Flags.help({char: 'h'}),
   }
-  static args = [{name: 'options'}]
 
   async run() {
-    const {flags} = this.parse(Import)
+    const {flags} = await this.parse(Import)
     const config: Configstore = new Configstore('gc2-env')
     const user: User = config.all
-    const url = user.host + '/api/v3/import'
+    const url = user.host + '/api/v4/import'
     let tmpDir
     let tmpFile
     let tmpPath
@@ -43,6 +39,7 @@ export default class Import extends Command {
       tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix))
       tmpFile = uuidv4() + '.zip'
       tmpPath = tmpDir + '/' + tmpFile
+      console.log(tmpPath)
 
       cli.action.start('Compressing files')
       await this.createZipArchive(inputPath, tmpPath)
@@ -64,30 +61,17 @@ export default class Import extends Command {
         form.append('file', chunk, {
           // @ts-ignore
           name: 'file',
-          filename: 'blob'
+          filename: 'file'
         })
-        await fetch(url, {
-          method: 'post',
-          headers: {
-            Authorization: 'Bearer ' + user.token,
-          },
-          body: form
-        }).then(res => {
-          // res.text().then(t => console.log(t))
-          cli.action.stop()
-        })
+        const res = await make('4', `import`, 'POST', form, true, 'ss')
+        const data = await get(this, res, 200)
+        console.log(data)
         chunkCount++
       }
-
+      cli.action.stop()
       cli.action.start('Server importing files')
-      const response = await fetch(url + '/' + tmpFile, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + user.token
-        }
-      })
-      const data = await response.json()
+      const res = await make('4', `import/${tmpFile}`, 'GET', null)
+      const data = await get(this, res, 200)
       // this.log(data)
       cli.action.stop()
     } catch (e) {

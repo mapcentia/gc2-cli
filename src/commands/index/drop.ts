@@ -1,62 +1,37 @@
+/**
+ * @author     Martin Høgh <mh@mapcentia.com>
+ * @copyright  2013-2024 MapCentia ApS
+ * @license    http://www.gnu.org/licenses/#AGPL  GNU AFFERO GENERAL PUBLIC LICENSE 3
+ *
+ */
+
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
-import Configstore from 'configstore'
-import fetch from 'node-fetch'
+import args from '../../common/base_args'
+import get from '../../util/get-response'
+import make from '../../util/make-request'
 
-import {ApiResponse} from '../../interfaces/api-response'
-import {User} from '../../interfaces/user'
+let base_args = args
+let specific_args = {
+  name: Args.string(
+    {
+      required: false,
+      description: 'Name for index',
+    },
+  ),
+}
 
 export default class Drop extends Command {
   static description = 'Add column'
-
   static flags = {
     help: Flags.help({char: 'h'}),
   }
-  static args = {
-    table: Args.string(
-      {
-        required: true,
-        description: 'Name of table',
-      },
-    ),
-    column: Args.string(
-      {
-        required: true,
-        description: 'Column to index',
-      },
-    ),
-    type: Args.string(
-      {
-        required: false,
-        description: 'Type of index',
-        default: 'btree',
-        options: ['brin', 'btree', 'gin', 'gist', 'hash', 'spgist']
-      },
-    ),
-  }
+  static args = {...base_args, ...specific_args}
 
   async run() {
     const {args} = await this.parse(Drop)
-    const {flags} = await this.parse(Drop)
-
-    const config: Configstore = new Configstore('gc2-env')
-    let user: User = config.all
-    let response
-    response = await fetch(user.host + '/api/v3/index/' + args.table + '/' + args.column + '/' + args.type, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + user.token
-      }
-    })
-
-    if (response) {
-      const res: ApiResponse = await response.json()
-      if (!res.success) {
-        this.log(chalk.red(res.message))
-        this.exit(1)
-      }
-      this.log(`Dropped ${args.type} index on ${chalk.green(args.column)}`)
-    }
+    const response = await make('4', `schemas/${args.schema}/tables/${args.table}/indices/${args.name}`, 'DELETE', null)
+    await get(this, response, 204)
+    this.log(`Dropped index ${args.name} on ${chalk.green(args.table)}`)
   }
 }
