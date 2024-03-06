@@ -18,8 +18,8 @@ CLI tool for GC2
 $ npm install -g gc2
 $ gc2 COMMAND
 running command...
-$ gc2 (-v|--version|version)
-gc2/2022.9.4 linux-x64 node-v18.9.0
+$ gc2 (--version|-v)
+gc2/2024.3.0 linux-x64 node-v18.16.0
 $ gc2 --help [COMMAND]
 USAGE
   $ gc2 COMMAND
@@ -29,18 +29,35 @@ USAGE
 # Commands
 <!-- commands -->
 * [`gc2 admin`](#gc2-admin)
-* [`gc2 connect [OPTIONS]`](#gc2-connect-options)
+* [`gc2 column add SCHEMA TABLE COLUMN TYPE`](#gc2-column-add-schema-table-column-type)
+* [`gc2 column drop SCHEMA TABLE COLUMN`](#gc2-column-drop-schema-table-column)
+* [`gc2 column nullable SCHEMA TABLE COLUMN NULLABLE`](#gc2-column-nullable-schema-table-column-nullable)
+* [`gc2 column rename SCHEMA TABLE COLUMN NAME`](#gc2-column-rename-schema-table-column-name)
+* [`gc2 connect`](#gc2-connect)
+* [`gc2 constraint add SCHEMA TABLE COLUMNS TYPE [NAME]`](#gc2-constraint-add-schema-table-columns-type-name)
+* [`gc2 constraint drop SCHEMA TABLE [NAME]`](#gc2-constraint-drop-schema-table-name)
 * [`gc2 grid`](#gc2-grid)
-* [`gc2 help [COMMAND]`](#gc2-help-command)
-* [`gc2 import [OPTIONS]`](#gc2-import-options)
-* [`gc2 login [OPTIONS]`](#gc2-login-options)
-* [`gc2 scheduler:start [ID]`](#gc2-schedulerstart-id)
-* [`gc2 seed:list`](#gc2-seedlist)
-* [`gc2 seed:log`](#gc2-seedlog)
-* [`gc2 seed:start`](#gc2-seedstart)
-* [`gc2 seed:stop`](#gc2-seedstop)
-* [`gc2 sql [OPTIONS]`](#gc2-sql-options)
+* [`gc2 help [COMMANDS]`](#gc2-help-commands)
+* [`gc2 import`](#gc2-import)
+* [`gc2 index add SCHEMA TABLE COLUMNS [METHOD] [NAME]`](#gc2-index-add-schema-table-columns-method-name)
+* [`gc2 index drop SCHEMA TABLE [NAME]`](#gc2-index-drop-schema-table-name)
+* [`gc2 login`](#gc2-login)
+* [`gc2 scheduler start ID`](#gc2-scheduler-start-id)
+* [`gc2 scheduler status`](#gc2-scheduler-status)
+* [`gc2 seed list`](#gc2-seed-list)
+* [`gc2 seed log`](#gc2-seed-log)
+* [`gc2 seed start`](#gc2-seed-start)
+* [`gc2 seed stop`](#gc2-seed-stop)
+* [`gc2 sql`](#gc2-sql)
+* [`gc2 table add SCHEMA TABLE`](#gc2-table-add-schema-table)
+* [`gc2 table drop SCHEMA TABLE`](#gc2-table-drop-schema-table)
+* [`gc2 table get SCHEMA TABLE`](#gc2-table-get-schema-table)
+* [`gc2 table rename SCHEMA TABLE NAME`](#gc2-table-rename-schema-table-name)
 * [`gc2 update [CHANNEL]`](#gc2-update-channel)
+* [`gc2 user add NAME`](#gc2-user-add-name)
+* [`gc2 user drop NAME`](#gc2-user-drop-name)
+* [`gc2 view backup SCHEMAS`](#gc2-view-backup-schemas)
+* [`gc2 view restore FROM [TO] [RELATION]`](#gc2-view-restore-from-to-relation)
 
 ## `gc2 admin`
 
@@ -48,32 +65,180 @@ Run administration task on the GC2 installation.
 
 ```
 USAGE
-  $ gc2 admin
+  $ gc2 admin -t mapfiles|mapcachefile|qgisfiles|schema|migrations|diskcleanup|cachestats|cachecleanup
 
-OPTIONS
-  -t, --task=task  (required) The task to run: mapfiles, mapcachefile, qgisfiles, schema, migrations, diskcleanup,
-                   cachestats, cachecleanup
+FLAGS
+  -t, --task=<option>  (required) The task to run
+                       <options: mapfiles|mapcachefile|qgisfiles|schema|migrations|diskcleanup|cachestats|cachecleanup>
+
+DESCRIPTION
+  Run administration task on the GC2 installation.
 ```
 
-_See code: [src/commands/admin.ts](https://github.com/mapcentia/gc2-cli/blob/v2022.9.4/src/commands/admin.ts)_
+_See code: [src/commands/admin.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/admin.ts)_
 
-## `gc2 connect [OPTIONS]`
+## `gc2 column add SCHEMA TABLE COLUMN TYPE`
+
+Add column
+
+```
+USAGE
+  $ gc2 column add SCHEMA TABLE COLUMN TYPE [-h]
+
+ARGUMENTS
+  SCHEMA  Name of schema
+  TABLE   Name of table
+  COLUMN  Name of new column
+  TYPE    Type of new column
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Add column
+```
+
+_See code: [src/commands/column/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/column/add.ts)_
+
+## `gc2 column drop SCHEMA TABLE COLUMN`
+
+Drop column
+
+```
+USAGE
+  $ gc2 column drop SCHEMA TABLE COLUMN [-h]
+
+ARGUMENTS
+  SCHEMA  Name of schema
+  TABLE   Name of table
+  COLUMN  Name of column to drop
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Drop column
+```
+
+_See code: [src/commands/column/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/column/drop.ts)_
+
+## `gc2 column nullable SCHEMA TABLE COLUMN NULLABLE`
+
+Set column to nullable
+
+```
+USAGE
+  $ gc2 column nullable SCHEMA TABLE COLUMN NULLABLE [-h]
+
+ARGUMENTS
+  SCHEMA    Name of schema
+  TABLE     Name of table
+  COLUMN    Name of column
+  NULLABLE  (true|false)
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Set column to nullable
+```
+
+_See code: [src/commands/column/nullable.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/column/nullable.ts)_
+
+## `gc2 column rename SCHEMA TABLE COLUMN NAME`
+
+Rename column
+
+```
+USAGE
+  $ gc2 column rename SCHEMA TABLE COLUMN NAME [-h]
+
+ARGUMENTS
+  SCHEMA  Name of schema
+  TABLE   Name of table
+  COLUMN  Existing Name of column
+  NAME    New name for column
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Rename column
+```
+
+_See code: [src/commands/column/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/column/rename.ts)_
+
+## `gc2 connect`
 
 Set connection. You can use flags to set host, database and user. If one or more flags are missing, you will be prompted instead.
 
 ```
 USAGE
-  $ gc2 connect [OPTIONS]
+  $ gc2 connect [-h] [-r] [-H <value>] [-d <value>] [-u <value>]
 
-OPTIONS
-  -H, --host=host          Host
-  -d, --database=database  Database
-  -h, --help               show CLI help
-  -r, --reset              Reset connection
-  -u, --user=user          User
+FLAGS
+  -H, --host=<value>      Host
+  -d, --database=<value>  Database
+  -h, --help              Show CLI help.
+  -r, --reset             Reset connection
+  -u, --user=<value>      User
+
+DESCRIPTION
+  Set connection. You can use flags to set host, database and user. If one or more flags are missing, you will be
+  prompted instead.
 ```
 
-_See code: [src/commands/connect.ts](https://github.com/mapcentia/gc2-cli/blob/v2022.9.4/src/commands/connect.ts)_
+_See code: [src/commands/connect.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/connect.ts)_
+
+## `gc2 constraint add SCHEMA TABLE COLUMNS TYPE [NAME]`
+
+Add a constraint
+
+```
+USAGE
+  $ gc2 constraint add SCHEMA TABLE COLUMNS TYPE [NAME] [-h] [-t <value>] [-e <value>]
+
+ARGUMENTS
+  SCHEMA   Name of schema
+  TABLE    Name of table
+  COLUMNS  Columns to index (comma separated)
+  TYPE     (primary|unique|foreign|check) [default: btree] Type of constraint
+  NAME     Name for constraint
+
+FLAGS
+  -h, --help  Show CLI help.
+
+FOREIGN KEY OPTIONS FLAGS
+  -e, --referencedColumns=<value>  Referenced column
+  -t, --referencedTable=<value>    Referenced table
+
+DESCRIPTION
+  Add a constraint
+```
+
+_See code: [src/commands/constraint/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/constraint/add.ts)_
+
+## `gc2 constraint drop SCHEMA TABLE [NAME]`
+
+Drop a constraint
+
+```
+USAGE
+  $ gc2 constraint drop SCHEMA TABLE [NAME] [-h]
+
+ARGUMENTS
+  SCHEMA  Name of schema
+  TABLE   Name of table
+  NAME    Name for constraint
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Drop a constraint
+```
+
+_See code: [src/commands/constraint/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/constraint/drop.ts)_
 
 ## `gc2 grid`
 
@@ -81,162 +246,355 @@ Add a fishnet grid from an input polygon.
 
 ```
 USAGE
-  $ gc2 grid
+  $ gc2 grid -t <value> -e <value> -s <value> [-h]
 
-OPTIONS
-  -e, --extent=extent  (required) Polygon table which should be used for extent
-  -h, --help           show CLI help
-  -s, --size=size      (required) Cell size in map units
-  -t, --table=table    (required) Name of the new fishnet table
+FLAGS
+  -e, --extent=<value>  (required) Polygon table which should be used for extent
+  -h, --help            Show CLI help.
+  -s, --size=<value>    (required) Cell size in map units
+  -t, --table=<value>   (required) Name of the new fishnet table
+
+DESCRIPTION
+  Add a fishnet grid from an input polygon.
 ```
 
-_See code: [src/commands/grid.ts](https://github.com/mapcentia/gc2-cli/blob/v2022.9.4/src/commands/grid.ts)_
+_See code: [src/commands/grid.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/grid.ts)_
 
-## `gc2 help [COMMAND]`
+## `gc2 help [COMMANDS]`
 
 Display help for gc2.
 
 ```
 USAGE
-  $ gc2 help [COMMAND]
+  $ gc2 help [COMMANDS] [-n]
 
 ARGUMENTS
-  COMMAND  Command to show help for.
+  COMMANDS  Command to show help for.
 
-OPTIONS
+FLAGS
   -n, --nested-commands  Include all nested commands in the output.
+
+DESCRIPTION
+  Display help for gc2.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.12/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.0.1/src/commands/help.ts)_
 
-## `gc2 import [OPTIONS]`
+## `gc2 import`
 
 Import files to GC2. Set path to a file or folder, which will be compressed, uploaded and imported into GC2
 
 ```
 USAGE
-  $ gc2 import [OPTIONS]
+  $ gc2 import -p <value> [-c <value>] [-h]
 
-OPTIONS
-  -c, --srs=srs      [default: 4326] Output spatial reference system. Use EPSG codes.
-  -h, --help         show CLI help
-  -p, --input=input  (required) Input path to file or folder.
+FLAGS
+  -c, --srs=<value>    [default: 4326] Output spatial reference system. Use EPSG codes.
+  -h, --help           Show CLI help.
+  -p, --input=<value>  (required) Input path to file or folder.
+
+DESCRIPTION
+  Import files to GC2. Set path to a file or folder, which will be compressed, uploaded and imported into GC2
 ```
 
-_See code: [src/commands/import.ts](https://github.com/mapcentia/gc2-cli/blob/v2022.9.4/src/commands/import.ts)_
+_See code: [src/commands/import.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/import.ts)_
 
-## `gc2 login [OPTIONS]`
+## `gc2 index add SCHEMA TABLE COLUMNS [METHOD] [NAME]`
+
+Add index
+
+```
+USAGE
+  $ gc2 index add SCHEMA TABLE COLUMNS [METHOD] [NAME] [-u] [-h]
+
+ARGUMENTS
+  SCHEMA   Name of schema
+  TABLE    Name of table
+  COLUMNS  Columns to index (comma separated)
+  METHOD   (brin|btree|gin|gist|hash|gist) [default: btree] Index method
+  NAME     Name for index
+
+FLAGS
+  -h, --help    Show CLI help.
+  -u, --unique  Causes the system to check for duplicate values in the table when the index is created
+
+DESCRIPTION
+  Add index
+```
+
+_See code: [src/commands/index/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/index/add.ts)_
+
+## `gc2 index drop SCHEMA TABLE [NAME]`
+
+Add column
+
+```
+USAGE
+  $ gc2 index drop SCHEMA TABLE [NAME] [-h]
+
+ARGUMENTS
+  SCHEMA  Name of schema
+  TABLE   Name of table
+  NAME    Name for index
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Add column
+```
+
+_See code: [src/commands/index/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/index/drop.ts)_
+
+## `gc2 login`
 
 Sign in to GC2. You can set the connect options beforehand using the `connect` command. Providing the password on the commandline is considered insecure. It's better to be prompt for the password
 
 ```
 USAGE
-  $ gc2 login [OPTIONS]
+  $ gc2 login [-h] [-p <value>]
 
-OPTIONS
-  -h, --help               show CLI help
-  -p, --password=password  Password
+FLAGS
+  -h, --help              Show CLI help.
+  -p, --password=<value>  Password
+
+DESCRIPTION
+  Sign in to GC2. You can set the connect options beforehand using the `connect` command. Providing the password on the
+  commandline is considered insecure. It's better to be prompt for the password
 ```
 
-_See code: [src/commands/login.ts](https://github.com/mapcentia/gc2-cli/blob/v2022.9.4/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/login.ts)_
 
-## `gc2 scheduler:start [ID]`
+## `gc2 scheduler start ID`
 
 Starts a scheduler job
 
 ```
 USAGE
-  $ gc2 scheduler:start [ID]
+  $ gc2 scheduler start ID [-h]
 
-OPTIONS
-  -h, --help  show CLI help
+ARGUMENTS
+  ID  Job id to start. Can also be a schema name and all jobs for that schema will be started
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Starts a scheduler job
 ```
 
-_See code: [src/commands/scheduler/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2022.9.4/src/commands/scheduler/start.ts)_
+_See code: [src/commands/scheduler/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/scheduler/start.ts)_
 
-## `gc2 seed:list`
+## `gc2 scheduler status`
+
+Get jobs in progress
+
+```
+USAGE
+  $ gc2 scheduler status [-h]
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Get jobs in progress
+```
+
+_See code: [src/commands/scheduler/status.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/scheduler/status.ts)_
+
+## `gc2 seed list`
 
 List running seed jobs
 
 ```
 USAGE
-  $ gc2 seed:list
+  $ gc2 seed list [-h]
 
-OPTIONS
-  -h, --help  show CLI help
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  List running seed jobs
 ```
 
-_See code: [src/commands/seed/list.ts](https://github.com/mapcentia/gc2-cli/blob/v2022.9.4/src/commands/seed/list.ts)_
+_See code: [src/commands/seed/list.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/seed/list.ts)_
 
-## `gc2 seed:log`
+## `gc2 seed log`
 
 Logs
 
 ```
 USAGE
-  $ gc2 seed:log
+  $ gc2 seed log -u <value> [-h]
 
-OPTIONS
-  -h, --help       show CLI help
-  -u, --uuid=uuid  (required) UUID of seed job
+FLAGS
+  -h, --help          Show CLI help.
+  -u, --uuid=<value>  (required) UUID of seed job
+
+DESCRIPTION
+  Logs
 ```
 
-_See code: [src/commands/seed/log.ts](https://github.com/mapcentia/gc2-cli/blob/v2022.9.4/src/commands/seed/log.ts)_
+_See code: [src/commands/seed/log.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/seed/log.ts)_
 
-## `gc2 seed:start`
+## `gc2 seed start`
 
 Starts a seed job
 
 ```
 USAGE
-  $ gc2 seed:start
+  $ gc2 seed start -n <value> -l <value> -g <value> -s <value> -e <value> -x <value> [-h] [-t <value>] [-f]
 
-OPTIONS
-  -e, --end=end          (required) End zoom level (the higher number)
+FLAGS
+  -e, --end=<value>      (required) End zoom level (the higher number)
   -f, --force            Force seed job - overwrites existing tiles
-  -g, --grid=grid        (required) Grid to use
-  -h, --help             show CLI help
-  -l, --layer=layer      (required) Layer to seed [schema].[relation]
-  -n, --name=name        (required) Name of seed job
-  -s, --start=start      (required) Start zoom level (the lower number)
-  -t, --threads=threads  Number of parallel threads that should be used to request tiles from the WMS source
-  -x, --extent=extent    (required) Polygon layer which set the extent for the seeding [schema].[relation]
+  -g, --grid=<value>     (required) Grid to use
+  -h, --help             Show CLI help.
+  -l, --layer=<value>    (required) Layer to seed [schema].[relation]
+  -n, --name=<value>     (required) Name of seed job
+  -s, --start=<value>    (required) Start zoom level (the lower number)
+  -t, --threads=<value>  Number of parallel threads that should be used to request tiles from the WMS source
+  -x, --extent=<value>   (required) Polygon layer which set the extent for the seeding [schema].[relation]
+
+DESCRIPTION
+  Starts a seed job
 ```
 
-_See code: [src/commands/seed/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2022.9.4/src/commands/seed/start.ts)_
+_See code: [src/commands/seed/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/seed/start.ts)_
 
-## `gc2 seed:stop`
+## `gc2 seed stop`
 
 Stops a seed job
 
 ```
 USAGE
-  $ gc2 seed:stop
+  $ gc2 seed stop -u <value> [-h]
 
-OPTIONS
-  -h, --help       show CLI help
-  -u, --uuid=uuid  (required) UUID of seed job
+FLAGS
+  -h, --help          Show CLI help.
+  -u, --uuid=<value>  (required) UUID of seed job
+
+DESCRIPTION
+  Stops a seed job
 ```
 
-_See code: [src/commands/seed/stop.ts](https://github.com/mapcentia/gc2-cli/blob/v2022.9.4/src/commands/seed/stop.ts)_
+_See code: [src/commands/seed/stop.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/seed/stop.ts)_
 
-## `gc2 sql [OPTIONS]`
+## `gc2 sql`
 
 Run SQL statements. If run without --statement inactive mode will be enabled.
 
 ```
 USAGE
-  $ gc2 sql [OPTIONS]
+  $ gc2 sql [-s <value>] [-c <value>] [-f <value>] [-p <value>] [-h]
 
-OPTIONS
-  -c, --srs=srs              [default: 4326] Output spatial reference system. Use EPSG codes.
-  -f, --format=format        [default: ogr/GPKG] Output file format.
-  -h, --help                 show CLI help
-  -p, --path=path            Output path to file. If omitted file is saved in current folder.
-  -s, --statement=statement  SQL statement
+FLAGS
+  -c, --srs=<value>        [default: 4326] Output spatial reference system. Use EPSG codes.
+  -f, --format=<value>     [default: ogr/GPKG] Output file format.
+  -h, --help               Show CLI help.
+  -p, --path=<value>       Output path to file. If omitted file is saved in current folder.
+  -s, --statement=<value>  SQL statement
+
+DESCRIPTION
+  Run SQL statements. If run without --statement inactive mode will be enabled.
 ```
 
-_See code: [src/commands/sql.ts](https://github.com/mapcentia/gc2-cli/blob/v2022.9.4/src/commands/sql.ts)_
+_See code: [src/commands/sql.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/sql.ts)_
+
+## `gc2 table add SCHEMA TABLE`
+
+Create new table
+
+```
+USAGE
+  $ gc2 table add SCHEMA TABLE [-h]
+
+ARGUMENTS
+  SCHEMA  name of schema where the new table should be created
+  TABLE   name of new table
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Create new table
+```
+
+_See code: [src/commands/table/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/table/add.ts)_
+
+## `gc2 table drop SCHEMA TABLE`
+
+Drop table
+
+```
+USAGE
+  $ gc2 table drop SCHEMA TABLE [-h]
+
+ARGUMENTS
+  SCHEMA  Name of schema
+  TABLE   Name of table to drop
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Drop table
+```
+
+_See code: [src/commands/table/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/table/drop.ts)_
+
+## `gc2 table get SCHEMA TABLE`
+
+Get table definition.
+
+```
+USAGE
+  $ gc2 table get SCHEMA TABLE [-h] [--columns <value> | -x] [--filter <value>] [--no-header | [--csv |
+    --no-truncate]] [--output csv|json|yaml |  | ] [--sort <value>]
+
+ARGUMENTS
+  SCHEMA  Name of schema
+  TABLE   Name of table
+
+FLAGS
+  -h, --help             Show CLI help.
+  -x, --extended         show extra columns
+      --columns=<value>  only show provided columns (comma-separated)
+      --csv              output is csv format [alias: --output=csv]
+      --filter=<value>   filter property by partial string matching, ex: name=foo
+      --no-header        hide table header from output
+      --no-truncate      do not truncate output to fit screen
+      --output=<option>  output in a more machine friendly format
+                         <options: csv|json|yaml>
+      --sort=<value>     property to sort by (prepend '-' for descending)
+
+DESCRIPTION
+  Get table definition.
+```
+
+_See code: [src/commands/table/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/table/get.ts)_
+
+## `gc2 table rename SCHEMA TABLE NAME`
+
+Rename table
+
+```
+USAGE
+  $ gc2 table rename SCHEMA TABLE NAME [-h]
+
+ARGUMENTS
+  SCHEMA  Name of schema
+  TABLE   Name of table
+  NAME    New name for table
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Rename table
+```
+
+_See code: [src/commands/table/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/table/rename.ts)_
 
 ## `gc2 update [CHANNEL]`
 
@@ -244,20 +602,119 @@ update the gc2 CLI
 
 ```
 USAGE
-  $ gc2 update [CHANNEL]
+  $ gc2 update [CHANNEL] [-a] [-v <value> | -i] [--force]
 
-OPTIONS
+FLAGS
   -a, --available        Install a specific version.
   -i, --interactive      Interactively select version to install. This is ignored if a channel is provided.
-  -v, --version=version  Install a specific version.
-  --force                Force a re-download of the requested version.
+  -v, --version=<value>  Install a specific version.
+      --force            Force a re-download of the requested version.
+
+DESCRIPTION
+  update the gc2 CLI
 
 EXAMPLES
-  [object Object]
-  [object Object]
-  [object Object]
-  [object Object]
+  Update to the stable channel:
+
+    $ gc2 update stable
+
+  Update to a specific version:
+
+    $ gc2 update --version 1.0.0
+
+  Interactively select version:
+
+    $ gc2 update --interactive
+
+  See available versions:
+
+    $ gc2 update --available
 ```
 
 _See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v3.0.0/src/commands/update.ts)_
+
+## `gc2 user add NAME`
+
+Create user with password and email
+
+```
+USAGE
+  $ gc2 user add NAME -p <value> -e <value> [-h] [-e <value>]
+
+ARGUMENTS
+  NAME  Name of new user
+
+FLAGS
+  -e, --email=<value>       (required) email of new user
+  -e, --properties=<value>  properties of new user
+  -h, --help                Show CLI help.
+  -p, --password=<value>    (required) password of new user
+
+DESCRIPTION
+  Create user with password and email
+```
+
+_See code: [src/commands/user/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/user/add.ts)_
+
+## `gc2 user drop NAME`
+
+Drop existing user
+
+```
+USAGE
+  $ gc2 user drop NAME [-h]
+
+ARGUMENTS
+  NAME  Name of user to drop
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Drop existing user
+```
+
+_See code: [src/commands/user/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/user/drop.ts)_
+
+## `gc2 view backup SCHEMAS`
+
+Backup all (mat)views definitions in schema
+
+```
+USAGE
+  $ gc2 view backup SCHEMAS [-h]
+
+ARGUMENTS
+  SCHEMAS  schemas for backup (comma separated)
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Backup all (mat)views definitions in schema
+```
+
+_See code: [src/commands/view/backup.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/view/backup.ts)_
+
+## `gc2 view restore FROM [TO] [RELATION]`
+
+Restore all (mat)views definitions from schema
+
+```
+USAGE
+  $ gc2 view restore FROM [TO] [RELATION] [-h]
+
+ARGUMENTS
+  FROM      comma separated list of source schemas
+  TO        comma separated list of target schemas
+  RELATION  single relation
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Restore all (mat)views definitions from schema
+```
+
+_See code: [src/commands/view/restore.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.0/src/commands/view/restore.ts)_
 <!-- commandsstop -->

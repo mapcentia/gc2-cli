@@ -6,7 +6,7 @@ import inquirer from 'inquirer'
 import get from '../util/get-response'
 import make from '../util/make-request'
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+//process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 export default class Connect extends Command {
   static description = 'Set connection. You can use flags to set host, database and user. If one or more flags are missing, you will be prompted instead.'
