@@ -9,14 +9,14 @@ let specific_args = {
   columns: Args.string(
     {
       required: true,
-      description: 'Columns to index (comma separated)',
+      description: 'Columns for use in the constraint (comma separated)',
     },
   ),
   type: Args.string(
     {
       required: true,
       description: 'Type of constraint',
-      default: 'btree',
+      default: 'primary',
       options: ['primary', 'unique', 'foreign', 'check'],
     },
   ),
