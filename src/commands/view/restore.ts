@@ -28,10 +28,10 @@ export default class Restore extends Command {
         description: 'comma separated list of target schemas',
       }
     ),
-    relation: Args.string(
+    include: Args.string(
       {
         required: false,
-        description: 'single relation',
+        description: 'only include named views in restore. Comma separated',
       }
     ),
   }
@@ -39,7 +39,8 @@ export default class Restore extends Command {
     const {args} = await this.parse(Restore)
     const from = args.from.split(',').map(s => s.trim())
     const to = args?.to ? args.to.split(',').map(s => s.trim()) : null
-    const response = await make('3', `view`, 'PUT', {from, to})
+    const include = args?.include ? args.include.split(',').map(s => s.trim()) : null
+    const response = await make('3', `view`, 'PUT', {from, to, include})
     const res = await get(this, response, 200)
     this.log(`${chalk.green(res.count)} views restored`)
   }

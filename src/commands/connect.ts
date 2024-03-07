@@ -1,4 +1,11 @@
-import {Command, Flags } from '@oclif/core'
+/**
+ * @author     Martin Høgh <mh@mapcentia.com>
+ * @copyright  2013-2024 MapCentia ApS
+ * @license    http://www.gnu.org/licenses/#AGPL  GNU AFFERO GENERAL PUBLIC LICENSE 3
+ *
+ */
+
+import {Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import cli from 'cli-ux'
 import Configstore from 'configstore'
@@ -18,6 +25,7 @@ export default class Connect extends Command {
     database: Flags.string({char: 'd', description: 'Database'}),
     user: Flags.string({char: 'u', description: 'User'}),
   }
+
   async run() {
     const {flags} = await this.parse(Connect)
     const config: Configstore = new Configstore('gc2-env')
@@ -26,15 +34,18 @@ export default class Connect extends Command {
       this.log('Connection reset')
       return
     }
+
     interface Database {
       screenname: string,
       email: string,
       parentdb: string
     }
+
     interface Databases {
       databases: Database[]
       success?: string
     }
+
     let database = ''
     let host = flags?.host ? flags.host : await cli.prompt('Host', {required: true, default: config.all.host})
     const user = flags?.user ? flags.user : await cli.prompt('User', {required: true, default: config.all.user})
@@ -44,7 +55,7 @@ export default class Connect extends Command {
         config.set({user})
         config.set({host})
         cli.action.start('Getting database')
-        const response = await make('2', `database/search?userIdentifier=${user}`, 'GET', null, false)
+        const response = await make('2', `database/search?userIdentifier=${user}`, 'GET', null, false, 'application/json', host)
         const res = await get(this, response, 200)
         if (res.databases.length > 0) {
           cli.action.stop(chalk.green('success'))

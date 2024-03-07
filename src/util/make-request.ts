@@ -17,7 +17,7 @@ import User from '../common/user'
 const config: Configstore = new Configstore('gc2-env')
 const user: User = config.all
 
-const make = async (version: string, resource: string, method: Method, payload?: any, checkConnection?: boolean, contentType: string = 'application/json'): Promise<any> => {
+const make = async (version: string, resource: string, method: Method, payload?: any, checkConnection?: boolean, contentType: string = 'application/json', host: string|null = null): Promise<any> => {
   const headers = getHeaders(contentType)
   if (!headers.Authorization && checkConnection) {
     logToStderr(chalk.red('No login. Use \'gc2 connect\''))
@@ -31,6 +31,6 @@ const make = async (version: string, resource: string, method: Method, payload?:
   if (payload) {
     request.body =  contentType === 'application/json' ? JSON.stringify(payload) : payload
   }
-  return await fetch(user.host + `/api/v${version}/${resource}`, request)
+  return await fetch((host || user.host) + `/api/v${version}/${resource}`, request)
 }
 export default make

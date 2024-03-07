@@ -55,6 +55,7 @@ export default class Get extends Command {
       srid?: string;
       is_primary: boolean;
       is_unique: boolean;
+      default_value: string;
       index_method?: string;
     }
     const data: object[] = []
@@ -62,7 +63,7 @@ export default class Get extends Command {
     for (const c in res.columns) {
       const v: column = res.columns[c]
       data.push({
-        column: v.is_primary ? chalk.green(v.column) : v.column,
+        column: (v.is_primary ? chalk.green(v.column) : v.column) + (v.default_value ? ' = ' + v.default_value : ''),
         type: v.full_type,
         unique: v.is_unique,
         nullable: v.is_nullable,
