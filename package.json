@@ -1,7 +1,7 @@
 {
   "name": "gc2",
   "description": "CLI tool for GC2",
-  "version": "2024.3.0",
+  "version": "2024.3.1",
   "author": "Martin Høgh @mapcentia",
   "bin": {
     "gc2": "./bin/run"
@@ -37,7 +37,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@aws-sdk/client-s3": "^3.113.0",
+    "@aws-sdk/client-s3": "^3.525.0",
     "@oclif/test": "^3.1.2",
     "@oclif/tslint": "^3.1.1",
     "@types/chai": "^4.3.10",
