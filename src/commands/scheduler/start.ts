@@ -16,22 +16,28 @@ export default class Start extends Command {
     id: Args.string(
       {
         required: true,
-        description: 'Job id to start. Can also be a schema name and all jobs for that schema will be started',
+        description: 'job id to start. Can also be a schema name and all jobs for that schema will be started',
       },
     ),
 
   }
   static flags = {
     help: Flags.help({char: 'h'}),
-    name: Flags.string({char: 'n', description: 'Name the started job(s). The name will be listed in the progress status', required: false}),
+    name: Flags.string(
+      {
+        char: 'n',
+        description: 'Name the started job(s). The name will be listed in the progress status',
+        required: false
+      }),
     force: Flags.boolean(
       {
         char: 'f',
+        description: 'force table to be recreated',
         required: false,
-        description: 'Force table to be recreated',
       },
     ),
   }
+
   async run() {
     const {args} = await this.parse(Start)
     const {flags} = await this.parse(Start)
