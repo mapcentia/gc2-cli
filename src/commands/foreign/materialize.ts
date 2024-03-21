@@ -14,6 +14,7 @@ export default class Materialize extends Command {
   static description = 'Create mat views from foreign tables'
   static flags = {
     help: Flags.help({char: 'h'}),
+    prefix: Flags.string({char: 'p', description: 'prefix for created foreign tables', required: false, default: 'mat_'}),
   }
   static args = {
     from: Args.string(
@@ -37,10 +38,11 @@ export default class Materialize extends Command {
   }
   async run() {
     const {args} = await this.parse(Materialize)
+    const {flags} = await this.parse(Materialize)
     const from = args.from.split(',').map(s => s.trim())
     const to = args?.to ? args.to.split(',').map(s => s.trim()) : null
     const include = args?.include ? args.include.split(',').map(s => s.trim()) : null
-    const response = await make('3', `foreign/materialize`, 'POST', {from, to, include})
+    const response = await make('3', `foreign/materialize`, 'POST', {from, to, include, prefix: flags.prefix})
     const res = await get(this, response, 200)
     this.log(`${chalk.green(res.count)} foreign tables materialized`)
   }
