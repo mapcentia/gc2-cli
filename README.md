@@ -36,6 +36,9 @@ USAGE
 * [`gc2 connect`](#gc2-connect)
 * [`gc2 constraint add SCHEMA TABLE COLUMNS TYPE [NAME]`](#gc2-constraint-add-schema-table-columns-type-name)
 * [`gc2 constraint drop SCHEMA TABLE [NAME]`](#gc2-constraint-drop-schema-table-name)
+* [`gc2 foreign drop SCHEMAS`](#gc2-foreign-drop-schemas)
+* [`gc2 foreign import SERVER FROM TO`](#gc2-foreign-import-server-from-to)
+* [`gc2 foreign materialize FROM [TO] [INCLUDE]`](#gc2-foreign-materialize-from-to-include)
 * [`gc2 grid`](#gc2-grid)
 * [`gc2 help [COMMANDS]`](#gc2-help-commands)
 * [`gc2 import`](#gc2-import)
@@ -58,6 +61,7 @@ USAGE
 * [`gc2 user drop NAME`](#gc2-user-drop-name)
 * [`gc2 view backup SCHEMAS`](#gc2-view-backup-schemas)
 * [`gc2 view get SCHEMA`](#gc2-view-get-schema)
+* [`gc2 view refresh SCHEMAS`](#gc2-view-refresh-schemas)
 * [`gc2 view restore FROM [TO] [INCLUDE]`](#gc2-view-restore-from-to-include)
 
 ## `gc2 admin`
@@ -241,6 +245,70 @@ DESCRIPTION
 
 _See code: [src/commands/constraint/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.1/src/commands/constraint/drop.ts)_
 
+## `gc2 foreign drop SCHEMAS`
+
+Drop all foreign tables in schema
+
+```
+USAGE
+  $ gc2 foreign drop SCHEMAS [-h]
+
+ARGUMENTS
+  SCHEMAS  schemas for dropping (comma separated)
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Drop all foreign tables in schema
+```
+
+_See code: [src/commands/foreign/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.1/src/commands/foreign/drop.ts)_
+
+## `gc2 foreign import SERVER FROM TO`
+
+Import schema from foreign server
+
+```
+USAGE
+  $ gc2 foreign import SERVER FROM TO [-h]
+
+ARGUMENTS
+  SERVER  name of foreign server
+  FROM    comma separated list of foreign schemas
+  TO      comma separated list of local schemas
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Import schema from foreign server
+```
+
+_See code: [src/commands/foreign/import.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.1/src/commands/foreign/import.ts)_
+
+## `gc2 foreign materialize FROM [TO] [INCLUDE]`
+
+Create mat views from foreign tables
+
+```
+USAGE
+  $ gc2 foreign materialize FROM [TO] [INCLUDE] [-h]
+
+ARGUMENTS
+  FROM     comma separated list of source schemas
+  TO       comma separated list of target schemas
+  INCLUDE  only include named foreign tables. Comma separated
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Create mat views from foreign tables
+```
+
+_See code: [src/commands/foreign/materialize.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.1/src/commands/foreign/materialize.ts)_
+
 ## `gc2 grid`
 
 Add a fishnet grid from an input polygon.
@@ -267,10 +335,10 @@ Display help for gc2.
 
 ```
 USAGE
-  $ gc2 help [COMMANDS] [-n]
+  $ gc2 help [COMMANDS...] [-n]
 
 ARGUMENTS
-  COMMANDS  Command to show help for.
+  COMMANDS...  Command to show help for.
 
 FLAGS
   -n, --nested-commands  Include all nested commands in the output.
@@ -372,12 +440,13 @@ Starts a scheduler job
 
 ```
 USAGE
-  $ gc2 scheduler start ID [-h] [-n <value>]
+  $ gc2 scheduler start ID [-h] [-n <value>] [-f]
 
 ARGUMENTS
   ID  Job id to start. Can also be a schema name and all jobs for that schema will be started
 
 FLAGS
+  -f, --force         Force table to be recreated
   -h, --help          Show CLI help.
   -n, --name=<value>  Name the started job(s). The name will be listed in the progress status
 
@@ -717,6 +786,26 @@ DESCRIPTION
 ```
 
 _See code: [src/commands/view/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.1/src/commands/view/get.ts)_
+
+## `gc2 view refresh SCHEMAS`
+
+Refresh all materialized views in schema
+
+```
+USAGE
+  $ gc2 view refresh SCHEMAS [-h]
+
+ARGUMENTS
+  SCHEMAS  comma separated list of schemas
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Refresh all materialized views in schema
+```
+
+_See code: [src/commands/view/refresh.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.3.1/src/commands/view/refresh.ts)_
 
 ## `gc2 view restore FROM [TO] [INCLUDE]`
 
