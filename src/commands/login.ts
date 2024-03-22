@@ -1,11 +1,15 @@
-'use strict'
+/**
+ * @author     Martin Høgh <mh@mapcentia.com>
+ * @copyright  2013-2024 MapCentia ApS
+ * @license    http://www.gnu.org/licenses/#AGPL  GNU AFFERO GENERAL PUBLIC LICENSE 3
+ *
+ */
 
 import {Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import cli from 'cli-ux'
 import Configstore from 'configstore'
 import inquirer from 'inquirer'
-import fetch from 'node-fetch'
 import get from '../util/get-response'
 import make from '../util/make-request'
 
@@ -53,7 +57,9 @@ export default class Login extends Command {
     }
 
     if (obj.host === '') {
-      obj.host = await cli.prompt('Host')
+      let host = await cli.prompt('Host')
+      host = host.replace(/\/$/, '')
+      obj.host = host
       config.set({host: obj.host})
     }
 
@@ -64,7 +70,7 @@ export default class Login extends Command {
 
     if (obj.database === '') {
       cli.action.start('Getting databases')
-      const response = await make('2', `database/search?userIdentifier=${obj.user}`, 'GET', null, false)
+      const response = await make('2', `database/search?userIdentifier=${obj.user}`, 'GET', null, false, 'application/json', obj.host)
       const res = await get(this, response, 200)
       if (res.success) {
         cli.action.stop(chalk.green('success'))
@@ -94,11 +100,12 @@ export default class Login extends Command {
       this.log(chalk.yellow('Warning: Using a password on the command line interface can be insecure.'))
     }
     const response = await make('4', `oauth`, 'POST', {
-      grant_type: 'password',
-      username: obj.user,
-      password,
-      database: obj.database
-    })
+        grant_type: 'password',
+        username: obj.user,
+        password,
+        database: obj.database
+      }, false, 'application/json', obj.host
+    )
     const data = await get(this, response, 200)
     cli.action.start(`Signing into ${chalk.yellow(obj.host)} with ${chalk.yellow(obj.user)}`)
     cli.action.stop(chalk.green('success'))
