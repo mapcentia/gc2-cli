@@ -34,13 +34,20 @@ export default class Import extends Command {
         description: 'comma separated list of local schemas',
       }
     ),
+    include: Args.string(
+      {
+        required: false,
+        description: 'only include named relations in import. Comma separated',
+      }
+    ),
   }
   async run() {
     const {args} = await this.parse(Import)
     const from = args.from.split(',').map(s => s.trim())
     const to = args?.to ? args.to.split(',').map(s => s.trim()) : null
+    const include = args?.include ? args.include.split(',').map(s => s.trim()) : null
     const server = args.server
-    const response = await make('3', `foreign`, 'POST', {from, to, server})
+    const response = await make('3', `foreign`, 'POST', {from, to, server, include})
     await get(this, response, 201)
     this.log(`${chalk.green('Schemas imported')}`)
   }

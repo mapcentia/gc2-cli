@@ -22,13 +22,20 @@ export default class Drop extends Command {
         description: 'schemas for dropping (comma separated)',
       }
     ),
+    include: Args.string(
+      {
+        required: false,
+        description: 'only drop named foreign tables. Comma separated',
+      }
+    ),
   }
 
   async run() {
     const {args} = await this.parse(Drop)
     const schemas = args.schemas.split(',').map(s => s.trim())
-    const response = await make('3', 'foreign', 'DELETE', {schemas})
-    await get(this, response, 204)
-    this.log(`Foreign tables dropped`)
+    const include = args?.include ? args.include.split(',').map(s => s.trim()) : null
+    const response = await make('3', 'foreign', 'DELETE', {schemas, include})
+    const res = await get(this, response, 200)
+    this.log(`${chalk.green(res.count)} foreign tables dropped`)
   }
 }
