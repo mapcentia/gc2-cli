@@ -13,12 +13,18 @@ import make from '../../util/make-request'
 export default class Start extends Command {
   static description = 'Starts a scheduler job'
   static args = {
-    id: Args.string(
+    job: Args.string(
       {
         required: true,
         description: 'job id to start. Can also be a schema name and all jobs for that schema will be started',
       },
     ),
+    include: Args.string(
+      {
+        required: false,
+        description: 'only include jobs for named tables. Comma separated. Will only have effect id schema is used in "job" option',
+      }
+    )
 
   }
   static flags = {
@@ -40,8 +46,16 @@ export default class Start extends Command {
 
   async run() {
     const {args} = await this.parse(Start)
+    const job = args.job
+    const include = args?.include ? args.include.split(',').map(s => s.trim()) : null
     const {flags} = await this.parse(Start)
-    const response = await make('3', `scheduler/${args.id}`, 'POST', flags)
+    const payload = {
+      job,
+      include,
+      name: flags.name,
+      force: flags.force
+    }
+    const response = await make('3', `scheduler`, 'POST', payload)
     await get(this, response, 202)
     this.log(`See status here: ${chalk.green(response.headers.get('Location'))}`)
   }
