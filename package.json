@@ -1,7 +1,7 @@
 {
   "name": "gc2",
   "description": "CLI tool for GC2",
-  "version": "2024.3.2",
+  "version": "2024.4.0",
   "author": "Martin Høgh @mapcentia",
   "bin": {
     "gc2": "./bin/run"
@@ -107,8 +107,10 @@
     "prepack": "rm -rf lib && tsc -b && oclif manifest && oclif readme",
     "test": " NODE_OPTIONS=\"--loader ts-node/esm\" nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif-dev readme && git add README.md",
-    "pack": "oclif pack win",
-    "upload": "oclif upload win"
+    "packwin": "oclif pack win",
+    "uploadwin": "oclif upload win",
+    "packdeb": "oclif pack deb",
+    "uploaddeb": "oclif upload deb"
   },
   "types": "lib/index.d.ts",
   "directories": {
