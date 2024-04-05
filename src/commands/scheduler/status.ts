@@ -6,6 +6,7 @@
  */
 
 import {Command, Flags} from '@oclif/core'
+import {exit} from '@oclif/core/lib/errors'
 import cli from 'cli-ux'
 import get from '../../util/get-response'
 import make from '../../util/make-request'
@@ -28,16 +29,20 @@ export default class Start extends Command {
     }
     const data: object[] = []
     const columns: Columns = {id: {}, pid: {}, name: {}}
-    for (const c in res.jobs) {
-      const v: Column = res.jobs[c]
-      data.push({
-        id: v.id,
-        pid: v.pid,
-        name: v.name || '-',
+    if (res.jobs.length > 0) {
+      for (const c in res.jobs) {
+        const v: Column = res.jobs[c]
+        data.push({
+          id: v.id,
+          pid: v.pid,
+          name: v.name || '-',
+        })
+      }
+      cli.table(data, columns, {
+        printLine: this.log.bind(this)
       })
+    } else {
+      this.exit(0)
     }
-    cli.table(data, columns, {
-      printLine: this.log.bind(this)
-    })
   }
 }

@@ -1,7 +1,7 @@
 {
   "name": "gc2",
   "description": "CLI tool for GC2",
-  "version": "2024.4.0",
+  "version": "2024.4.2",
   "author": "Martin Høgh @mapcentia",
   "bin": {
     "gc2": "./bin/run"
@@ -110,7 +110,9 @@
     "packwin": "oclif pack win",
     "uploadwin": "oclif upload win",
     "packdeb": "oclif pack deb",
-    "uploaddeb": "oclif upload deb"
+    "uploaddeb": "oclif upload deb",
+    "packtarballs": "oclif pack tarballs",
+    "uploadtarballs": "oclif upload tarballs"
   },
   "types": "lib/index.d.ts",
   "directories": {
