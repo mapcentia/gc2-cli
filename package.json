@@ -1,7 +1,7 @@
 {
   "name": "gc2",
   "description": "CLI tool for GC2",
-  "version": "2024.4.2",
+  "version": "2024.4.3",
   "author": "Martin Høgh @mapcentia",
   "bin": {
     "gc2": "./bin/run"

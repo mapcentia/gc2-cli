@@ -14,12 +14,7 @@ export default class Materialize extends Command {
   static description = 'Create mat views from foreign tables'
   static flags = {
     help: Flags.help({char: 'h'}),
-    prefix: Flags.string({
-      char: 'p',
-      description: 'prefix for created foreign tables',
-      required: false,
-      default: 'mat_'
-    }),
+    prefix: Flags.string({char: 'p', description: 'prefix for created foreign tables', required: false}),
     suffix: Flags.string({char: 's', description: 'suffix for created foreign tables', required: false}),
   }
   static args = {
