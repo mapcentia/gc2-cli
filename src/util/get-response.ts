@@ -28,7 +28,7 @@ const get = async (cmd: Command, response: Response, expectedCode: number): Prom
     if (res === null) {
       res = await response.json()
     }
-    cmd.log(chalk.red(res.message || res.error))
+    cmd.log('⚠️ ' + chalk.red(res.message || res.error))
     cmd.exit(1)
   }
   return res

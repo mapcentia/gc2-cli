@@ -9,9 +9,9 @@ import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import get from '../../util/get-response'
 import make from '../../util/make-request'
-import args from '../../common/base_args'
+import args, {BaseArgs} from '../../common/base_args'
 
-let base_args = args
+let base_args: BaseArgs = args
 let specific_args = {
   columns: Args.string(
     {
@@ -38,18 +38,23 @@ let specific_args = {
 export default class Add extends Command {
   static description = 'Add index'
   static flags = {
-    unique: Flags.boolean({char: 'u', description: 'Causes the system to check for duplicate values in the table when the index is created', required: false}),
+    unique: Flags.boolean({
+      char: 'u',
+      description: 'Causes the system to check for duplicate values in the table when the index is created',
+      required: false
+    }),
     help: Flags.help({char: 'h'}),
   }
   static args = {...base_args, ...specific_args}
+
   async run() {
     const {args} = await this.parse(Add)
     const body = {
       name: args.name,
-      columns: args.columns.split(',').map(e => e.trim()),
+      columns: args.columns.split(',').map((e: string) => e.trim()),
       method: args.method,
     }
-    const response = await make('4', `schemas/${args.schema}/tables/${args.table}/indices`, 'POST', body)
+    const response = await make('4', `schemas/${args.schema || 'rosa'}/tables/${args.table}/indices`, 'POST', body)
     await get(this, response, 201)
     this.log(`Index created here ${chalk.green(response.headers.get('Location'))}`)
   }

@@ -50,7 +50,7 @@ export default class Add extends Command {
     const {flags} = await this.parse(Add)
     let body = {
       name: args.name,
-      columns: args.columns.split(',').map(e => e.trim()),
+      columns: args.columns.split(',').map((e: string) => e.trim()),
       constraint: args.type,
     }
 
@@ -72,7 +72,6 @@ export default class Add extends Command {
         }
       }
     }
-    console.log(body)
     const response = await make('4', `schemas/${args.schema}/tables/${args.table}/constraints`, 'POST', body)
     await get(this, response, 201)
     this.log(`Constraint created here ${chalk.green(response.headers.get('Location'))}`)

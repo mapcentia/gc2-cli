@@ -6,24 +6,58 @@
  */
 
 import {Command, Flags} from '@oclif/core'
+import {exit} from '@oclif/core/lib/errors'
 import chalk from 'chalk'
 import cli from 'cli-ux'
 import Configstore from 'configstore'
 import inquirer from 'inquirer'
+import EventEmitter = require('events')
+import * as http from 'http'
+import * as querystring from 'querystring'
+
+import {Gc2Service} from '../services/gc2.service'
+
 import get from '../util/get-response'
 import make from '../util/make-request'
 
 import User from '../common/user'
+
+import {
+  CLI_SERVER_ADDRESS,
+  CLI_SERVER_ADDRESS_CALLBACK,
+  generatePkceChallenge,
+  UserCredentials,
+  waitFor,
+} from '../util/utils'
+
+type AuthoricationCodeCallbackParams = {
+  state?: string;
+  code?: string;
+  access_token: string;
+  session_state?: string;
+};
 
 export default class Login extends Command {
   static description = 'Sign in to GC2. You can set the connect options beforehand using the `connect` command. Providing the password on the commandline is considered insecure. It\'s better to be prompt for the password'
   static flags = {
     help: Flags.help({char: 'h'}),
     password: Flags.string({char: 'p', description: 'Password'}),
+    flow: Flags.string({
+      char: 'f',
+      description: 'Authentication flow',
+      options: ['password', 'device', 'code'],
+      required: false,
+      default: 'password'
+    }),
   }
 
   async run() {
     const {flags} = await this.parse(Login)
+
+    let userCredentials: UserCredentials = {
+      accessToken: '',
+      refreshToken: '',
+    }
 
     interface Response {
       access_token: string,
@@ -53,7 +87,7 @@ export default class Login extends Command {
     }
 
     if (!instanceOfResponse(obj, 'user')) {
-      obj = {database: '', user: '', host: '', token: ''}
+      obj = {database: '', user: '', host: '', token: '', superUser: false, refresh_token: ''}
     }
 
     if (obj.host === '') {
@@ -63,52 +97,127 @@ export default class Login extends Command {
       config.set({host: obj.host})
     }
 
-    if (obj.user === '') {
-      obj.user = await cli.prompt('User')
-      config.set({user: obj.user})
-    }
+    let data
+    if (flags.flow === 'password') {
+      if (obj.user === '') {
+        obj.user = await cli.prompt('User')
+      }
 
-    if (obj.database === '') {
-      cli.action.start('Getting databases')
-      const response = await make('2', `database/search?userIdentifier=${obj.user}`, 'GET', null, false, 'application/json', obj.host)
-      const res = await get(this, response, 200)
-      if (res.success) {
-        cli.action.stop(chalk.green('success'))
-      } else {
-        cli.action.stop(chalk.green('fail'))
-        return
+      if (obj.database === '') {
+        cli.action.start('Getting databases')
+        const response = await make('2', `database/search?userIdentifier=${obj.user}`, 'GET', null, false, 'application/json', obj.host)
+        const res = await get(this, response, 200)
+        if (res.success) {
+          cli.action.stop(chalk.green('success'))
+        } else {
+          cli.action.stop(chalk.green('fail'))
+          return
+        }
+        if (res.databases.length > 1) {
+          let response: any = await inquirer.prompt([{
+            name: 'db',
+            message: 'Database',
+            type: 'list',
+            default: config.all.database,
+            choices: res.databases.map((v: { parentdb: any }) => {
+              return {name: v.parentdb}
+            })
+          }])
+          obj.database = response.db
+        } else {
+          obj.database = res.databases[0].parentdb ? res.databases[0].parentdb : res.databases[0].screenname
+        }
       }
-      if (res.databases.length > 1) {
-        let response: any = await inquirer.prompt([{
-          name: 'db',
-          message: 'Database',
-          type: 'list',
-          default: config.all.database,
-          choices: res.databases.map((v: { parentdb: any }) => {
-            return {name: v.parentdb}
-          })
-        }])
-        obj.database = response.db
-      } else {
-        obj.database = res.databases[0].parentdb ? res.databases[0].parentdb : res.databases[0].screenname
+      const password: string = flags?.password ? flags.password : await cli.prompt('Password', {type: 'hide'})
+      // Warn about using pwd on the command line
+      if (flags?.password) {
+        this.log(chalk.yellow('Warning: Using a password on the command line interface can be insecure.'))
       }
-      config.set({database: obj.database})
+      data = await this.startPasswordFlow(obj.user, password, obj.database)
+    } else if (flags.flow === 'code') {
+      data = await this.startAuthorizationCodeFlow()
+    } else {
+      data = await this.startDeviceCodeFlow()
     }
-    const password: string = flags?.password ? flags.password : await cli.prompt('Password', {type: 'hide'})
-    // Warn about using pwd on the command line
-    if (flags?.password) {
-      this.log(chalk.yellow('Warning: Using a password on the command line interface can be insecure.'))
-    }
-    const response = await make('4', `oauth`, 'POST', {
-        grant_type: 'password',
-        username: obj.user,
-        password,
-        database: obj.database
-      }, false, 'application/json', obj.host
-    )
-    const data = await get(this, response, 200)
-    cli.action.start(`Signing into ${chalk.yellow(obj.host)} with ${chalk.yellow(obj.user)}`)
-    cli.action.stop(chalk.green('success'))
+    const superUser = JSON.parse(atob(data.access_token.split('.')[1])).superUser
+    const database = JSON.parse(atob(data.access_token.split('.')[1])).database
+    const user = JSON.parse(atob(data.access_token.split('.')[1])).uid
     config.set({token: data.access_token})
+    config.set({refresh_token: data.refresh_token.token})
+    config.set({superUser})
+    config.set({database})
+    config.set({user})
+    cli.action.start(`Signing into ${chalk.yellow(obj?.host)} with ${chalk.yellow(user)}`)
+    cli.action.stop(chalk.green('success'))
+  }
+
+  private async startPasswordFlow(user: string, password: string, database: string): Promise<any> {
+    const keycloakService = new Gc2Service()
+    const {access_token, refresh_token} = await keycloakService.getPasswordToken(user, password, database)
+    return {
+      access_token: access_token,
+      refresh_token: refresh_token,
+    }
+  }
+
+  private async startAuthorizationCodeFlow(): Promise<any> {
+    const keycloakService = new Gc2Service()
+    const {codeVerifier, codeChallenge, state} = generatePkceChallenge()
+    const port = CLI_SERVER_ADDRESS.split(':').pop()
+    const callbackPath = CLI_SERVER_ADDRESS_CALLBACK.split(':')[2].replace(
+      port!, '',
+    )
+    const authorizationCodeURL = keycloakService.getAuthorizationCodeURL(
+      codeChallenge,
+      state,
+    )
+    const emmiter = new EventEmitter()
+    const eventName = 'authorication_code_callback_params'
+    const server = http.createServer((req, res) => {
+      if (req?.url?.startsWith(callbackPath)) {
+        const params = querystring.parse(
+          req?.url.replace(`${callbackPath}?`, ''),
+        ) as AuthoricationCodeCallbackParams
+        emmiter.emit(eventName, params)
+        res.end('You can close this browser now.')
+        server.close()
+      } else {
+        // TODO: handle an invalid URL address
+        res.end('Unsupported')
+        emmiter.emit(eventName, new Error('Invalid URL address'))
+      }
+    })
+      .listen(port)
+    await cli.anykey('Press any key to open GC2 in your browser')
+    await cli.open(authorizationCodeURL)
+    cli.action.start('Waiting for authentication')
+    const {code, state: stateFromParams} = await waitFor<AuthoricationCodeCallbackParams>(eventName, emmiter)
+    if (stateFromParams !== state) {
+      throw new Error('Possible CSRF attack. Aborting login! ⚠️')
+    }
+    const {access_token, refresh_token} = await keycloakService.getAuthorizationCodeToken(code, codeVerifier)
+    return {
+      access_token: access_token,
+      refresh_token: refresh_token,
+    }
+  }
+
+  private async startDeviceCodeFlow(): Promise<any> {
+    const keycloakService = new Gc2Service()
+    const {device_code, interval, verification_uri, user_code} = await keycloakService.getDeviceCode()
+    this.log(`⚠️  First copy your one-time code: ${user_code}`)
+    await cli.anykey('Press any key to open GC2 in your browser ' + verification_uri)
+    await cli.open(verification_uri)
+    cli.action.start('Waiting for authentication')
+    try {
+      const {access_token, refresh_token} = await keycloakService.poolToken(device_code, interval)
+      return {
+        access_token: access_token,
+        refresh_token: refresh_token,
+      }
+    } catch (e: any) {
+      this.log(`⚠️ ` + e.message)
+      exit(1)
+    }
   }
 }

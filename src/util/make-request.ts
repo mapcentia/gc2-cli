@@ -13,6 +13,8 @@ import fetch, {RequestInit} from 'node-fetch'
 import getHeaders from './request-headers'
 import Method from '../common/http-verbs'
 import User from '../common/user'
+import {isTokenExpired} from './utils'
+import {Gc2Service} from '../services/gc2.service'
 
 const config: Configstore = new Configstore('gc2-env')
 const user: User = config.all
@@ -22,6 +24,22 @@ const make = async (version: string, resource: string, method: Method, payload?:
   if (!headers.Authorization && checkConnection) {
     logToStderr(chalk.red('No login. Use \'gc2 connect\''))
     exit(1);
+  }
+  // We check is token needs refreshing
+  if (isTokenExpired(user.token)) {
+    if (isTokenExpired(user.refresh_token)) {
+      logToStderr('⚠️ Refresh token has expired. Please login again')
+      exit(1)
+    }
+    const keycloakService = new Gc2Service()
+    try {
+      const data = await keycloakService.getRefreshToken(user.refresh_token)
+      headers.Authorization = 'Bearer ' + data.access_token
+      config.set({token: data.access_token})
+    } catch (e) {
+      logToStderr('⚠️ Could not get refresh token')
+      exit(1)
+    }
   }
   let request: RequestInit = {
     method: method,

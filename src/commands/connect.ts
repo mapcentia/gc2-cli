@@ -5,9 +5,9 @@
  *
  */
 
-import {Command, Flags} from '@oclif/core'
+import {Command, Flags, ux as cli } from '@oclif/core'
 import chalk from 'chalk'
-import cli from 'cli-ux'
+//import cli from 'cli-ux'
 import Configstore from 'configstore'
 import inquirer from 'inquirer'
 import get from '../util/get-response'
@@ -48,38 +48,41 @@ export default class Connect extends Command {
 
     let database = ''
     let host = flags?.host ? flags.host : await cli.prompt('Host', {required: true, default: config.all.host})
-    const user = flags?.user ? flags.user : await cli.prompt('User', {required: true, default: config.all.user})
-    if (user && host) {
+    //const user = flags?.user ? flags.user : await cli.prompt('User', {required: true, default: config.all.user})
+    const user = flags?.user ? flags.user : await cli.prompt('User', {required: false})
+    if (host) {
       try {
         host = host.replace(/\/$/, '')
         config.set({user})
         config.set({host})
-        cli.action.start('Getting database')
-        const response = await make('2', `database/search?userIdentifier=${user}`, 'GET', null, false, 'application/json', host)
-        const res = await get(this, response, 200)
-        if (res.databases.length > 0) {
-          cli.action.stop(chalk.green('success'))
-        } else {
-          cli.action.stop(chalk.red('fail'))
-          return
+        if (user) {
+          cli.action.start('Getting database')
+          const response = await make('2', `database/search?userIdentifier=${user}`, 'GET', null, false, 'application/json', host)
+          const res = await get(this, response, 200)
+          if (res.databases.length > 0) {
+            cli.action.stop(chalk.green('success'))
+          } else {
+            cli.action.stop(chalk.red('fail'))
+            return
+          }
+          if (flags?.database) {
+            database = flags.database
+          } else if (res.databases.length > 1) {
+            let response: any = await inquirer.prompt([{
+              name: 'db',
+              message: 'Database',
+              type: 'list',
+              default: config.all.database,
+              choices: res.databases.map((v: { parentdb: any }) => {
+                return {name: v.parentdb}
+              })
+            }])
+            database = response.db
+          } else {
+            database = res.databases[0].parentdb ? res.databases[0].parentdb : res.databases[0].screenname
+          }
+          config.set({database})
         }
-        if (flags?.database) {
-          database = flags.database
-        } else if (res.databases.length > 1) {
-          let response: any = await inquirer.prompt([{
-            name: 'db',
-            message: 'Database',
-            type: 'list',
-            default: config.all.database,
-            choices: res.databases.map((v: { parentdb: any }) => {
-              return {name: v.parentdb}
-            })
-          }])
-          database = response.db
-        } else {
-          database = res.databases[0].parentdb ? res.databases[0].parentdb : res.databases[0].screenname
-        }
-        config.set({database})
       } catch (e: Error | any) {
         cli.action.stop(chalk.red(e.message))
       }
