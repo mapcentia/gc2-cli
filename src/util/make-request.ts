@@ -16,17 +16,16 @@ import User from '../common/user'
 import {isTokenExpired} from './utils'
 import {Gc2Service} from '../services/gc2.service'
 
-const config: Configstore = new Configstore('gc2-env')
-const user: User = config.all
-
-const make = async (version: string, resource: string, method: Method, payload?: any, checkConnection?: boolean, contentType: string = 'application/json', host: string|null = null): Promise<any> => {
+const make = async (version: string, resource: string, method: Method, payload?: any, checkConnection: boolean = true, contentType: string = 'application/json', host: string | null = null): Promise<any> => {
+  const config: Configstore = new Configstore('gc2-env')
+  const user: User = config.all
   const headers = getHeaders(contentType)
   if (!headers.Authorization && checkConnection) {
     logToStderr(chalk.red('No login. Use \'gc2 connect\''))
-    exit(1);
+    exit(1)
   }
   // We check is token needs refreshing
-  if (isTokenExpired(user.token)) {
+  if (checkConnection && isTokenExpired(user.token)) {
     if (isTokenExpired(user.refresh_token)) {
       logToStderr('⚠️ Refresh token has expired. Please login again')
       exit(1)
@@ -47,7 +46,7 @@ const make = async (version: string, resource: string, method: Method, payload?:
     redirect: 'manual'
   }
   if (payload) {
-    request.body =  contentType === 'application/json' ? JSON.stringify(payload) : payload
+    request.body = contentType === 'application/json' ? JSON.stringify(payload) : payload
   }
   return await fetch((host || user.host) + `/api/v${version}/${resource}`, request)
 }

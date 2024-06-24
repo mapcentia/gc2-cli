@@ -5,7 +5,7 @@
  *
  */
 
-import {Command, Flags, ux as cli } from '@oclif/core'
+import {Command, Flags, ux as cli} from '@oclif/core'
 import chalk from 'chalk'
 //import cli from 'cli-ux'
 import Configstore from 'configstore'

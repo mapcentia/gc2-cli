@@ -209,7 +209,7 @@ export class Gc2Service {
           },
         },
       )
-      .then(({data}) => data).catch(err => console.log(err))
+      .then(({data}) => data)
   }
 
   async getRefreshToken(token: string): Promise<GetTokenResponse> {

@@ -133,7 +133,12 @@ export default class Login extends Command {
       if (flags?.password) {
         this.log(chalk.yellow('Warning: Using a password on the command line interface can be insecure.'))
       }
-      data = await this.startPasswordFlow(obj.user, password, obj.database)
+      try {
+        data = await this.startPasswordFlow(obj.user, password, obj.database)
+      } catch (error: any) {
+        this.log(error.response.data.error_description)
+        exit(1);
+      }
     } else if (flags.flow === 'code') {
       data = await this.startAuthorizationCodeFlow()
     } else {
@@ -143,7 +148,7 @@ export default class Login extends Command {
     const database = JSON.parse(atob(data.access_token.split('.')[1])).database
     const user = JSON.parse(atob(data.access_token.split('.')[1])).uid
     config.set({token: data.access_token})
-    config.set({refresh_token: data.refresh_token.token})
+    config.set({refresh_token: data.refresh_token})
     config.set({superUser})
     config.set({database})
     config.set({user})
