@@ -1,7 +1,7 @@
 {
   "name": "gc2",
   "description": "CLI tool for GC2",
-  "version": "2024.4.3",
+  "version": "2024.6.0",
   "author": "Martin Høgh @mapcentia",
   "bin": {
     "gc2": "./bin/run"
@@ -56,7 +56,7 @@
     "stdout-stderr": "^0.1.13",
     "ts-node": "^10.9.2",
     "tslint": "^5.20.1",
-    "typescript": "^4.4.4"
+    "typescript": "4.5"
   },
   "engines": {
     "node": ">=18.0.0"
