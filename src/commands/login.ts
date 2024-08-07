@@ -47,7 +47,7 @@ export default class Login extends Command {
       description: 'Authentication flow',
       options: ['password', 'device', 'code'],
       required: false,
-      default: 'password'
+      default: 'code'
     }),
   }
 
@@ -210,6 +210,7 @@ export default class Login extends Command {
   private async startDeviceCodeFlow(): Promise<any> {
     const keycloakService = new Gc2Service()
     const {device_code, interval, verification_uri, user_code} = await keycloakService.getDeviceCode()
+    console.log(device_code)
     this.log(`⚠️  First copy your one-time code: ${user_code}`)
     await cli.anykey('Press any key to open GC2 in your browser ' + verification_uri)
     await cli.open(verification_uri)

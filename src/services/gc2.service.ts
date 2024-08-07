@@ -46,7 +46,7 @@ export class Gc2Service {
     this.http = axios.create({
       baseURL: `${GC2_SERVER_ADDRESS}`,
     })
-    this.clientId = '667414465e8a4' // using the same name by the way
+    this.clientId = 'gc2-cli' // using the same name by the way
   }
 
   async getDeviceCode(): Promise<GetDeviceCodeResponse> {
