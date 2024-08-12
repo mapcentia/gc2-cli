@@ -1,3 +1,11 @@
+/**
+ * @author     Martin Høgh <mh@mapcentia.com>
+ * @copyright  2013-2024 MapCentia ApS
+ * @license    http://www.gnu.org/licenses/#AGPL  GNU AFFERO GENERAL PUBLIC LICENSE 3
+ *
+ */
+
+
 import {exit} from '@oclif/core/lib/errors'
 import axios, {AxiosError, AxiosInstance} from 'axios'
 import * as querystring from 'querystring'
@@ -46,7 +54,7 @@ export class Gc2Service {
     this.http = axios.create({
       baseURL: `${GC2_SERVER_ADDRESS}`,
     })
-    this.clientId = 'gc2-cli' // using the same name by the way
+    this.clientId = 'gc2-cli'
   }
 
   async getDeviceCode(): Promise<GetDeviceCodeResponse> {

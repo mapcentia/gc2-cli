@@ -42,6 +42,7 @@ export default class Login extends Command {
   static flags = {
     help: Flags.help({char: 'h'}),
     password: Flags.string({char: 'p', description: 'Password'}),
+    user: Flags.string({char: 'u', description: 'Username/database'}),
     flow: Flags.string({
       char: 'f',
       description: 'Authentication flow',
@@ -99,33 +100,34 @@ export default class Login extends Command {
 
     let data
     if (flags.flow === 'password') {
-      if (obj.user === '') {
+      if (obj.user === '' && !flags?.user) {
         obj.user = await cli.prompt('User')
       }
+      const user: string = flags?.user || obj.user
 
       if (obj.database === '') {
-        cli.action.start('Getting databases')
-        const response = await make('2', `database/search?userIdentifier=${obj.user}`, 'GET', null, false, 'application/json', obj.host)
+        const response = await make('2', `database/search?userIdentifier=${user}`, 'GET', null, false, 'application/json', obj.host)
         const res = await get(this, response, 200)
-        if (res.success) {
-          cli.action.stop(chalk.green('success'))
-        } else {
-          cli.action.stop(chalk.green('fail'))
+        if (!res.success) {
+          this.log(chalk.red('fail'))
           return
         }
-        if (res.databases.length > 1) {
+        if (res.databases.length === 1) {
+          obj.database = res.databases[0].parentdb ? res.databases[0].parentdb : res.databases[0].screenname
+        }
+        else if (res.databases.length > 1) {
           let response: any = await inquirer.prompt([{
             name: 'db',
             message: 'Database',
             type: 'list',
-            default: config.all.database,
-            choices: res.databases.map((v: { parentdb: any }) => {
+            default: config.all.database, choices: res.databases.map((v: { parentdb: any }) => {
               return {name: v.parentdb}
             })
           }])
           obj.database = response.db
         } else {
-          obj.database = res.databases[0].parentdb ? res.databases[0].parentdb : res.databases[0].screenname
+          this.log(chalk.red('User not found'))
+          return
         }
       }
       const password: string = flags?.password ? flags.password : await cli.prompt('Password', {type: 'hide'})
@@ -134,7 +136,7 @@ export default class Login extends Command {
         this.log(chalk.yellow('Warning: Using a password on the command line interface can be insecure.'))
       }
       try {
-        data = await this.startPasswordFlow(obj.user, password, obj.database)
+        data = await this.startPasswordFlow(user, password, obj.database)
       } catch (error: any) {
         this.log(error.response.data.error_description)
         exit(1);
@@ -144,14 +146,9 @@ export default class Login extends Command {
     } else {
       data = await this.startDeviceCodeFlow()
     }
-    const superUser = JSON.parse(atob(data.access_token.split('.')[1])).superUser
-    const database = JSON.parse(atob(data.access_token.split('.')[1])).database
     const user = JSON.parse(atob(data.access_token.split('.')[1])).uid
     config.set({token: data.access_token})
     config.set({refresh_token: data.refresh_token})
-    config.set({superUser})
-    config.set({database})
-    config.set({user})
     cli.action.start(`Signing into ${chalk.yellow(obj?.host)} with ${chalk.yellow(user)}`)
     cli.action.stop(chalk.green('success'))
   }
@@ -211,9 +208,8 @@ export default class Login extends Command {
     const keycloakService = new Gc2Service()
     const {device_code, interval, verification_uri, user_code} = await keycloakService.getDeviceCode()
     console.log(device_code)
-    this.log(`⚠️  First copy your one-time code: ${user_code}`)
-    await cli.anykey('Press any key to open GC2 in your browser ' + verification_uri)
-    await cli.open(verification_uri)
+    this.log(`First copy your one-time code: ${user_code}`)
+    this.log('When open a browser at ' + verification_uri)
     cli.action.start('Waiting for authentication')
     try {
       const {access_token, refresh_token} = await keycloakService.poolToken(device_code, interval)
