@@ -5,32 +5,26 @@
  *
  */
 
-import {Args, Command, Flags} from '@oclif/core'
+import {Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
+import args from '../../common/base_args'
 import get from '../../util/get-response'
 import make from '../../util/make-request'
+import setSchema from '../../util/set-schema'
+
+let base_args = args
+let specific_args = {}
 
 export default class Add extends Command {
   static description = 'Create new table'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
-  static args = {
-    schema: Args.string(
-      {
-        required: true,
-        description: 'name of schema where the new table should be created ',
-      }
-    ),
-    table: Args.string(
-      {
-        required: true,
-        description: 'name of new table',
-      }
-    ),
-  }
+  static args = {...base_args, ...specific_args}
+
   async run() {
-    const {args} = await this.parse(Add)
+    let {args} = await this.parse(Add)
+    args = setSchema(args)
     const response = await make('4', `schemas/${args.schema}/tables`, 'POST', {table: args.table})
     await get(this, response, 201)
     this.log(`Table created here ${chalk.green(response.headers.get('Location'))}`)

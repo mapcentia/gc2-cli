@@ -147,8 +147,10 @@ export default class Login extends Command {
       data = await this.startDeviceCodeFlow()
     }
     const user = JSON.parse(atob(data.access_token.split('.')[1])).uid
+    const superUser = JSON.parse(atob(data.access_token.split('.')[1])).superUser
     config.set({token: data.access_token})
     config.set({refresh_token: data.refresh_token})
+    config.set({superUser})
     cli.action.start(`Signing into ${chalk.yellow(obj?.host)} with ${chalk.yellow(user)}`)
     cli.action.stop(chalk.green('success'))
   }

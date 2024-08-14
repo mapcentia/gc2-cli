@@ -18,22 +18,22 @@ export interface BaseArgs {
   table: Arg;
 }
 
-let args: BaseArgs = {
-  table:Args.string(
-    {
-      required: true,
-      description: 'Name of table',
-    },
-  )
-}
+let obj: any = {}
 if (user.superUser) {
-  args['schema'] = Args.string(
+  obj.schema = Args.string(
     {
       required: true,
       description: 'Name of schema',
     },
   )
 }
+obj.table = Args.string(
+  {
+    required: true,
+    description: 'Name of table',
+  },
+)
+const args: BaseArgs = obj
 
 export default args
 
