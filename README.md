@@ -19,7 +19,7 @@ $ npm install -g gc2
 $ gc2 COMMAND
 running command...
 $ gc2 (--version|-v)
-gc2/2024.6.0 linux-x64 node-v18.16.0
+gc2/2024.6.0 linux-x64 node-v18.19.1
 $ gc2 --help [COMMAND]
 USAGE
   $ gc2 COMMAND
@@ -45,15 +45,21 @@ USAGE
 * [`gc2 index add TABLE COLUMNS [METHOD] [NAME]`](#gc2-index-add-table-columns-method-name)
 * [`gc2 index drop TABLE [NAME]`](#gc2-index-drop-table-name)
 * [`gc2 login`](#gc2-login)
+* [`gc2 privilege get TABLE`](#gc2-privilege-get-table)
+* [`gc2 privilege set TABLE USER PRIVILEGES`](#gc2-privilege-set-table-user-privileges)
 * [`gc2 scheduler start JOB [INCLUDE]`](#gc2-scheduler-start-job-include)
 * [`gc2 scheduler status`](#gc2-scheduler-status)
+* [`gc2 schema add SCHEMA`](#gc2-schema-add-schema)
+* [`gc2 schema drop SCHEMA`](#gc2-schema-drop-schema)
+* [`gc2 schema get SCHEMA`](#gc2-schema-get-schema)
+* [`gc2 schema rename SCHEMA NAME`](#gc2-schema-rename-schema-name)
 * [`gc2 seed list`](#gc2-seed-list)
 * [`gc2 seed log`](#gc2-seed-log)
 * [`gc2 seed start`](#gc2-seed-start)
 * [`gc2 seed stop`](#gc2-seed-stop)
 * [`gc2 sql`](#gc2-sql)
 * [`gc2 symbol PATH`](#gc2-symbol-path)
-* [`gc2 table add SCHEMA TABLE`](#gc2-table-add-schema-table)
+* [`gc2 table add TABLE`](#gc2-table-add-table)
 * [`gc2 table drop SCHEMA TABLE`](#gc2-table-drop-schema-table)
 * [`gc2 table get SCHEMA TABLE`](#gc2-table-get-schema-table)
 * [`gc2 table rename SCHEMA TABLE NAME`](#gc2-table-rename-schema-table-name)
@@ -182,14 +188,12 @@ Set connection. You can use flags to set host, database and user. If one or more
 
 ```
 USAGE
-  $ gc2 connect [-h] [-r] [-H <value>] [-d <value>] [-u <value>]
+  $ gc2 connect [-h] [-r] [-H <value>]
 
 FLAGS
-  -H, --host=<value>      Host
-  -d, --database=<value>  Database
-  -h, --help              Show CLI help.
-  -r, --reset             Reset connection
-  -u, --user=<value>      User
+  -H, --host=<value>  Host
+  -h, --help          Show CLI help.
+  -r, --reset         Reset connection
 
 DESCRIPTION
   Set connection. You can use flags to set host, database and user. If one or more flags are missing, you will be
@@ -424,13 +428,14 @@ Sign in to GC2. You can set the connect options beforehand using the `connect` c
 
 ```
 USAGE
-  $ gc2 login [-h] [-p <value>] [-f password|device|code]
+  $ gc2 login [-h] [-p <value>] [-u <value>] [-f password|device|code]
 
 FLAGS
-  -f, --flow=<option>     [default: password] Authentication flow
+  -f, --flow=<option>     [default: code] Authentication flow
                           <options: password|device|code>
   -h, --help              Show CLI help.
   -p, --password=<value>  Password
+  -u, --user=<value>      Username/database
 
 DESCRIPTION
   Sign in to GC2. You can set the connect options beforehand using the `connect` command. Providing the password on the
@@ -438,6 +443,48 @@ DESCRIPTION
 ```
 
 _See code: [src/commands/login.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.6.0/src/commands/login.ts)_
+
+## `gc2 privilege get TABLE`
+
+Get privileges on table
+
+```
+USAGE
+  $ gc2 privilege get TABLE [-h]
+
+ARGUMENTS
+  TABLE  Name of table
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Get privileges on table
+```
+
+_See code: [src/commands/privilege/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.6.0/src/commands/privilege/get.ts)_
+
+## `gc2 privilege set TABLE USER PRIVILEGES`
+
+Set privileges on table
+
+```
+USAGE
+  $ gc2 privilege set TABLE USER PRIVILEGES [-h]
+
+ARGUMENTS
+  TABLE       Name of table
+  USER        Name of user
+  PRIVILEGES  Which privileges
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Set privileges on table
+```
+
+_See code: [src/commands/privilege/set.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.6.0/src/commands/privilege/set.ts)_
 
 ## `gc2 scheduler start JOB [INCLUDE]`
 
@@ -478,6 +525,97 @@ DESCRIPTION
 ```
 
 _See code: [src/commands/scheduler/status.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.6.0/src/commands/scheduler/status.ts)_
+
+## `gc2 schema add SCHEMA`
+
+Create new schema
+
+```
+USAGE
+  $ gc2 schema add SCHEMA [-h]
+
+ARGUMENTS
+  SCHEMA  name of schema
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Create new schema
+```
+
+_See code: [src/commands/schema/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.6.0/src/commands/schema/add.ts)_
+
+## `gc2 schema drop SCHEMA`
+
+Drop table
+
+```
+USAGE
+  $ gc2 schema drop SCHEMA [-h]
+
+ARGUMENTS
+  SCHEMA  Name of schema
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Drop table
+```
+
+_See code: [src/commands/schema/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.6.0/src/commands/schema/drop.ts)_
+
+## `gc2 schema get SCHEMA`
+
+Get table definition.
+
+```
+USAGE
+  $ gc2 schema get SCHEMA [-h] [--columns <value> | -x] [--filter <value>] [--no-header | [--csv |
+    --no-truncate]] [--output csv|json|yaml |  | ] [--sort <value>]
+
+ARGUMENTS
+  SCHEMA  Name of schema
+
+FLAGS
+  -h, --help             Show CLI help.
+  -x, --extended         show extra columns
+      --columns=<value>  only show provided columns (comma-separated)
+      --csv              output is csv format [alias: --output=csv]
+      --filter=<value>   filter property by partial string matching, ex: name=foo
+      --no-header        hide table header from output
+      --no-truncate      do not truncate output to fit screen
+      --output=<option>  output in a more machine friendly format
+                         <options: csv|json|yaml>
+      --sort=<value>     property to sort by (prepend '-' for descending)
+
+DESCRIPTION
+  Get table definition.
+```
+
+_See code: [src/commands/schema/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.6.0/src/commands/schema/get.ts)_
+
+## `gc2 schema rename SCHEMA NAME`
+
+Rename schema
+
+```
+USAGE
+  $ gc2 schema rename SCHEMA NAME [-h]
+
+ARGUMENTS
+  SCHEMA  Name of schema
+  NAME    New name for schema
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Rename schema
+```
+
+_See code: [src/commands/schema/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.6.0/src/commands/schema/rename.ts)_
 
 ## `gc2 seed list`
 
@@ -599,17 +737,16 @@ DESCRIPTION
 
 _See code: [src/commands/symbol.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.6.0/src/commands/symbol.ts)_
 
-## `gc2 table add SCHEMA TABLE`
+## `gc2 table add TABLE`
 
 Create new table
 
 ```
 USAGE
-  $ gc2 table add SCHEMA TABLE [-h]
+  $ gc2 table add TABLE [-h]
 
 ARGUMENTS
-  SCHEMA  name of schema where the new table should be created
-  TABLE   name of new table
+  TABLE  Name of table
 
 FLAGS
   -h, --help  Show CLI help.

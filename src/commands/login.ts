@@ -10,23 +10,19 @@ import {exit} from '@oclif/core/lib/errors'
 import chalk from 'chalk'
 import cli from 'cli-ux'
 import Configstore from 'configstore'
-import inquirer from 'inquirer'
 import EventEmitter = require('events')
 import * as http from 'http'
+import inquirer from 'inquirer'
 import * as querystring from 'querystring'
 
+import User from '../common/user'
 import {Gc2Service} from '../services/gc2.service'
-
 import get from '../util/get-response'
 import make from '../util/make-request'
-
-import User from '../common/user'
-
 import {
   CLI_SERVER_ADDRESS,
   CLI_SERVER_ADDRESS_CALLBACK,
   generatePkceChallenge,
-  UserCredentials,
   waitFor,
 } from '../util/utils'
 
@@ -35,7 +31,7 @@ type AuthoricationCodeCallbackParams = {
   code?: string;
   access_token: string;
   session_state?: string;
-};
+}
 
 export default class Login extends Command {
   static description = 'Sign in to GC2. You can set the connect options beforehand using the `connect` command. Providing the password on the commandline is considered insecure. It\'s better to be prompt for the password'
@@ -55,31 +51,6 @@ export default class Login extends Command {
   async run() {
     const {flags} = await this.parse(Login)
 
-    let userCredentials: UserCredentials = {
-      accessToken: '',
-      refreshToken: '',
-    }
-
-    interface Response {
-      access_token: string,
-      token_type: string,
-      expires_in: number,
-      refresh_token: string,
-      scope: string,
-      error: string
-    }
-
-    interface Database {
-      screenname: string,
-      email: string,
-      parentdb: string
-    }
-
-    interface Databases {
-      databases: Database[]
-      success?: string
-    }
-
     const config: Configstore = new Configstore('gc2-env')
     let obj: User = config.all // User object or empty object
 
@@ -92,10 +63,8 @@ export default class Login extends Command {
     }
 
     if (obj.host === '') {
-      let host = await cli.prompt('Host')
-      host = host.replace(/\/$/, '')
-      obj.host = host
-      config.set({host: obj.host})
+      this.log('Connect is not set. Please use the \'connect\' command')
+      this.exit()
     }
 
     let data
