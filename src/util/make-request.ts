@@ -21,7 +21,7 @@ const make = async (version: string, resource: string, method: Method, payload?:
   const user: User = config.all
   const headers = getHeaders(contentType)
   if (!headers.Authorization && checkConnection) {
-    logToStderr(chalk.red('No login. Use \'gc2 connect\''))
+    logToStderr(chalk.red('No login. Use \'connect\' command'))
     exit(1)
   }
   // We check is token needs refreshing
