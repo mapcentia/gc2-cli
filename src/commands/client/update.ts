@@ -10,6 +10,7 @@ import chalk from 'chalk'
 import inquirer from 'inquirer'
 import get from '../../util/get-response'
 import {clients} from '../../util/getters'
+import {clientList} from '../../util/lists'
 import make from '../../util/make-request'
 
 export default class Update extends Command {
@@ -33,22 +34,8 @@ export default class Update extends Command {
   async run() {
     const {args} = await this.parse(Update)
     const {flags} = await this.parse(Update)
-    let id, name, description, redirect_uri_str, homepage
-
-    id = args?.id
-
-    if (!id) {
-      const cls: any = await clients()
-      let r: any = await inquirer.prompt([{
-        name: 'id',
-        message: 'Choose a client to update',
-        type: 'list',
-        default: null, choices: cls.clients.map((v: {id: string, name: string }) => {
-          return {name: v.id + ' ' + v.name}
-        })
-      }])
-      id = r.id.split(' ')[0]
-    }
+    let name, description, redirect_uri_str, homepage
+    let id = args?.id || await clientList()
     const cl = await clients(id)
     // Interactive
     name = flags?.name || await cli.prompt('Name', {required: false, default: cl.name})

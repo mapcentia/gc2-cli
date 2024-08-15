@@ -5,34 +5,33 @@
  *
  */
 
-import {Args, Command, Flags} from '@oclif/core'
+import {Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
+import args from '../../common/base_args'
 import get from '../../util/get-response'
+import {schemasList, tableList} from '../../util/lists'
 import make from '../../util/make-request'
+import setSchema from '../../util/set-schema'
+
+let base_args = args
+let specific_args = {}
 
 export default class Drop extends Command {
   static description = 'Drop table'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
-  static args = {
-    schema: Args.string(
-      {
-        required: true,
-        description: 'Name of schema',
-      }
-    ),
-    table: Args.string(
-      {
-        required: true,
-        description: 'Name of table to drop',
-      }
-    ),
-  }
+  static args = {...base_args, ...specific_args}
+
   async run() {
-    const {args} = await this.parse(Drop)
-    const response = await make('4', `schemas/${args.schema}/tables/${args.table}`, 'DELETE', null)
+    let {args} = await this.parse(Drop)
+
+    args = setSchema(args)
+    const schema = args?.schema || await schemasList()
+    const table = args?.table || await tableList(schema)
+
+    const response = await make('4', `schemas/${schema}/tables/${table}`, 'DELETE', null)
     await get(response, 204)
-    this.log(`Table ${chalk.green(args.table)} dropped`)
+    this.log(`Table ${chalk.green(table)} dropped`)
   }
 }

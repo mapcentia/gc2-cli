@@ -5,11 +5,16 @@
  *
  */
 
-import {Args, Command, Flags, ux} from '@oclif/core'
+import {Command, Flags, ux} from '@oclif/core'
 import chalk from 'chalk'
 import cli from 'cli-ux'
-import get from '../../util/get-response'
-import make from '../../util/make-request'
+import args from '../../common/base_args'
+import {tables} from '../../util/getters'
+import {schemasList, tableList} from '../../util/lists'
+import setSchema from '../../util/set-schema'
+
+let base_args = args
+let specific_args = {}
 
 export default class Get extends Command {
   static description = 'Get table definition.'
@@ -17,25 +22,17 @@ export default class Get extends Command {
     help: Flags.help({char: 'h'}),
     ...ux.table.flags()
   }
-  static args = {
-    schema: Args.string(
-      {
-        required: true,
-        description: 'Name of schema',
-      }
-    ),
-    table: Args.string(
-      {
-        required: true,
-        description: 'Name of table',
-      }
-    ),
-  }
+  static args = {...base_args, ...specific_args}
+
   async run() {
-    const {args} = await this.parse(Get)
+    let {args} = await this.parse(Get)
     const {flags} = await this.parse(Get)
-    const response = await make('4', `schemas/${args.schema}/tables/${args.table}`, 'GET', null)
-    const res = await get(response, 200)
+
+    args = setSchema(args)
+    const schema = args?.schema || await schemasList()
+    const table = args?.table || await tableList(schema)
+    const res = await tables(schema, table)
+
     type columns = {
       [key: string]: any
     }

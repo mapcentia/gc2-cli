@@ -9,6 +9,7 @@ import {Command, Flags, ux as cli} from '@oclif/core'
 import chalk from 'chalk'
 import args from '../../common/base_args'
 import get from '../../util/get-response'
+import {schemasList} from '../../util/lists'
 import make from '../../util/make-request'
 import setSchema from '../../util/set-schema'
 
@@ -27,7 +28,7 @@ export default class Add extends Command {
     args = setSchema(args)
 
     // Interactive
-    const schema = args?.schema || await cli.prompt('Schema', {required: true})
+    const schema = args?.schema || await schemasList()
     const table = args?.table || await cli.prompt('Table', {required: true})
 
     const response = await make('4', `schemas/${schema}/tables`, 'POST', {table})

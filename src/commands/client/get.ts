@@ -8,7 +8,6 @@
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import cli from 'cli-ux'
-import setSchema from '../../util/set-schema'
 import {clients} from '../../util/getters'
 
 let specific_args = {
@@ -21,14 +20,17 @@ let specific_args = {
 }
 
 export default class Get extends Command {
-  static description = 'Get privileges on table'
+  static description = 'Get client'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
   static args = {...specific_args}
   async run() {
     let {args} = await this.parse(Get)
-    const res = await clients(args?.id)
+    let res = await clients(args?.id)
+    if (args?.id) {
+      res = {clients: [res]};
+    }
     type row = {
       [key: string]: any
     }
@@ -48,7 +50,7 @@ export default class Get extends Command {
         name: v.name,
         homepage: v.homepage || '',
         description: v.description || '',
-        redirect_uri: v.redirect_uri.join(',') || '',
+        redirect_uri: v.redirect_uri?.join(',') || '',
       })
     }
     cli.table(data, rows, {

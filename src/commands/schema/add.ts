@@ -5,7 +5,7 @@
  *
  */
 
-import {Args, Command, Flags} from '@oclif/core'
+import {Args, Command, Flags, ux as cli} from '@oclif/core'
 import chalk from 'chalk'
 import get from '../../util/get-response'
 import make from '../../util/make-request'
@@ -18,14 +18,15 @@ export default class Add extends Command {
   static args = {
     schema: Args.string(
       {
-        required: true,
+        required: false,
         description: 'name of schema',
       }
     )
   }
   async run() {
     const {args} = await this.parse(Add)
-    const response = await make('4', `schemas`, 'POST', {schema: args.schema})
+    const schema = args?.schema || await cli.prompt('Name', {required: true})
+    const response = await make('4', `schemas`, 'POST', {schema})
     await get(response, 201)
     this.log(`Schema created here ${chalk.green(response.headers.get('Location'))}`)
   }

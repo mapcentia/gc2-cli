@@ -5,9 +5,10 @@
  *
  */
 
-import {Args, Command, Flags, ux} from '@oclif/core'
+import {Args, Command, Flags, ux as cli, ux} from '@oclif/core'
 import chalk from 'chalk'
 import get from '../../util/get-response'
+import {schemasList} from '../../util/lists'
 import make from '../../util/make-request'
 
 export default class Drop extends Command {
@@ -18,18 +19,19 @@ export default class Drop extends Command {
   static args = {
     schema: Args.string(
       {
-        required: true,
+        required: false,
         description: 'Name of schema',
       }
-    ),
+    )
   }
   async run() {
+    const {args} = await this.parse(Drop)
+    let schema = args?.schema || await schemasList()
     if (!await ux.confirm('The whole schema will be deleted. Are you sure')) {
       this.exit();
     }
-    const {args} = await this.parse(Drop)
-    const response = await make('4', `schemas/${args.schema}`, 'DELETE', null)
+    const response = await make('4', `schemas/${schema}`, 'DELETE', null)
     await get(response, 204)
-    this.log(`Schema ${chalk.green(args.schema)} dropped`)
+    this.log(`Schema ${chalk.green(schema)} dropped`)
   }
 }

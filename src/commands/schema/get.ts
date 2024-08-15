@@ -8,7 +8,10 @@
 import {Args, Command, Flags, ux} from '@oclif/core'
 import chalk from 'chalk'
 import cli from 'cli-ux'
+import inquirer from 'inquirer'
 import get from '../../util/get-response'
+import {clients, schemas} from '../../util/getters'
+import {schemasList} from '../../util/lists'
 import make from '../../util/make-request'
 
 export default class Get extends Command {
@@ -20,16 +23,19 @@ export default class Get extends Command {
   static args = {
     schema: Args.string(
       {
-        required: true,
+        required: false,
         description: 'Name of schema',
       }
     )
   }
+
   async run() {
     const {args} = await this.parse(Get)
     const {flags} = await this.parse(Get)
-    const response = await make('4', `schemas/${args.schema}`, 'GET', null)
-    const res = await get(response, 200)
+
+    let schema = args?.schema || await schemasList()
+
+    const res = await schemas(schema)
     type columns = {
       [key: string]: any
     }

@@ -5,9 +5,10 @@
  *
  */
 
-import {Args, Command, Flags} from '@oclif/core'
+import {Args, Command, Flags, ux as cli} from '@oclif/core'
 import chalk from 'chalk'
 import get from '../../util/get-response'
+import {schemasList} from '../../util/lists'
 import make from '../../util/make-request'
 
 export default class Rename extends Command {
@@ -18,20 +19,25 @@ export default class Rename extends Command {
   static args = {
     schema: Args.string(
       {
-        required: true,
+        required: false,
         description: 'Name of schema',
       }
     ),
     name: Args.string(
       {
-        required: true,
+        required: false,
         description: 'New name for schema',
       }
     )
   }
   async run() {
     const {args} = await this.parse(Rename)
-    const response = await make('4', `schemas/${args.schema}`, 'PUT', {schema: args.name})
+
+    let schema = args?.schema || await schemasList()
+    const name = args?.name || await cli.prompt('Name', {required: true})
+
+
+    const response = await make('4', `schemas/${schema}`, 'PUT', {schema: name})
     await get(response, 303)
     this.log(`Schema relocated to here ${chalk.green(response.headers.get('Location'))}`)
   }

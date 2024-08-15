@@ -13,4 +13,19 @@ const clients = async (id?: string) => {
   const response = await make('4', res, 'GET')
   return await get(response, 200)
 }
-export {clients}
+
+const schemas = async (id?: string) => {
+  const res = id ? `schemas/${id}` : 'schemas'
+  const response = await make('4', res, 'GET')
+  return await get(response, 200)
+
+}
+
+const tables = async (schema: string, table?: string) => {
+  const res = table ? `schemas/${schema}/tables/${table}` : `schemas/${schema}/tables`
+  const response = await make('4', res, 'GET')
+  return await get(response, 200)
+
+}
+
+export {clients, schemas, tables}
