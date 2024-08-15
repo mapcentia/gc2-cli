@@ -102,4 +102,16 @@ const clientList = async () => {
   })
   return r.split(' ')[0]
 }
-export {schemasList, tableList, columnList, columnCheck, clientList, indexList}
+
+const typeList = async () => {
+  let r: any = await select({
+    message: 'Choose a type',
+    default: null,
+    choices: [
+      {value: 'String'}, {value: 'Integer'}, {value: 'Decimal'}, {value: 'Double'},
+      {value: 'Text'}, {value: 'Date'}, {value: 'Timestamp'}, {value: 'Time'}, {value: 'Timestamptz'}, {value: 'Timetz'},
+      {value: 'Boolean'}, {value: 'Bytea'}, {value: 'Json'}, {value: 'Geometry'}]
+  })
+  return r
+}
+export {schemasList, tableList, columnList, columnCheck, clientList, indexList, typeList}

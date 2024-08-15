@@ -43,7 +43,7 @@ export default class Rename extends Command {
     const schema = args?.schema || await schemasList()
     const table = args?.table || await tableList(schema)
     const column = args?.column || await columnList(schema, table)
-    const name = args?.name || await cli.prompt('Name', {required: true})
+    const name = args?.name || await cli.prompt('New name', {required: true})
 
     const response = await make('4', `schemas/${schema}/tables/${table}/columns/${column}`, 'PUT', {column: name})
     await get(response, 303)

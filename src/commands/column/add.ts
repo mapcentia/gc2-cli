@@ -10,7 +10,7 @@ import chalk from 'chalk'
 import args from '../../common/base_args'
 import get from '../../util/get-response'
 import {tables} from '../../util/getters'
-import {schemasList, tableList} from '../../util/lists'
+import {schemasList, tableList, typeList} from '../../util/lists'
 import make from '../../util/make-request'
 import setSchema from '../../util/set-schema'
 
@@ -43,9 +43,8 @@ export default class Add extends Command {
     args = setSchema(args)
     const schema = args?.schema || await schemasList()
     const table = args?.table || await tableList(schema)
-    const res = await tables(schema, table)
     const column = args?.column || await cli.prompt('Name', {required: true})
-    const type = args?.type || await cli.prompt('Type', {required: true})
+    const type = args?.type || await typeList()
 
     const body = {
       column,
