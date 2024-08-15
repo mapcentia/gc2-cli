@@ -26,7 +26,7 @@ export default class Drop extends Command {
   async run() {
     const {args} = await this.parse(Drop)
     const response = await make('4', `users/${args.name}`, 'DELETE', null)
-    await get(this, response, 204)
+    await get(response, 204)
     this.log(`User ${chalk.green(args.name)} dropped`)
   }
 }

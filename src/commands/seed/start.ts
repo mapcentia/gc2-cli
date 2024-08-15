@@ -23,7 +23,7 @@ export default class Start extends Command {
   async run() {
     const {flags} = await this.parse(Start)
     const response = await make('3', `tileseeder`, 'POST', flags)
-    const data = await get(this, response, 200)
+    const data = await get(response, 200)
     console.log(data)
   }
 }

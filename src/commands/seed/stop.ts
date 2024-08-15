@@ -19,7 +19,7 @@ export default class Stop extends Command {
   async run() {
     const {flags} = await this.parse(Stop)
     const response = await make('3', `tileseeder/index/` + flags.uuid, 'DELETE', null)
-    const data = await get(this, response, 200)
+    const data = await get(response, 200)
     console.log(data)
     if (data.success) {
       this.log(chalk.green(`SUCCESS: Seed job ${data.pid.uuid} with name ${data.pid.name} was stopped`))

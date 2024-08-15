@@ -37,7 +37,7 @@ export default class Add extends Command {
       properties: flags.properties,
     }
     const response = await make('4', `users`, 'POST', body)
-    await get(this, response, 201)
+    await get(response, 201)
     this.log(`User created here ${chalk.green(response.headers.get('Location'))}`)
   }
 }

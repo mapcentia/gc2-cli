@@ -55,7 +55,7 @@ export default class Add extends Command {
       method: args.method,
     }
     const response = await make('4', `schemas/${args.schema || 'rosa'}/tables/${args.table}/indices`, 'POST', body)
-    await get(this, response, 201)
+    await get(response, 201)
     this.log(`Index created here ${chalk.green(response.headers.get('Location'))}`)
   }
 }

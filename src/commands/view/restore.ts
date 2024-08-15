@@ -41,7 +41,7 @@ export default class Restore extends Command {
     const to = args?.to ? args.to.split(',').map(s => s.trim()) : null
     const include = args?.include ? args.include.split(',').map(s => s.trim()) : null
     const response = await make('3', `view`, 'PUT', {from, to, include})
-    const res = await get(this, response, 200)
+    const res = await get(response, 200)
     this.log(`${chalk.green(res.count)} views restored`)
   }
 }

@@ -37,7 +37,7 @@ export default class Sql extends Command {
       }
 
       const res = await make('4', `sql`, 'POST', statement)
-      const data = await get(this, res, 200)
+      const data = await get(res, 200)
 
       // If we get JSON, when affected rows
       if (res.headers.get('content-type')?.startsWith('application/json')) {
@@ -85,7 +85,7 @@ export default class Sql extends Command {
           base64: true
         }
         const response = await make('4', `sql`, 'POST', statement)
-        const data = await get(this, response, 200)
+        const data = await get(response, 200)
         if (data.success) {
           if (data?.affected_rows) {
             this.log(chalk.green('Affected rows: ' + data.affected_rows))

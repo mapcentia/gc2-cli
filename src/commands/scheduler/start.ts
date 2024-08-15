@@ -56,7 +56,7 @@ export default class Start extends Command {
       force: flags.force
     }
     const response = await make('3', `scheduler`, 'POST', payload)
-    await get(this, response, 202)
+    await get(response, 202)
     this.log(`See status here: ${chalk.green(response.headers.get('Location'))}`)
   }
 }

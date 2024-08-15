@@ -26,7 +26,7 @@ export default class Admin extends Command {
     cli.action.start('Running task')
     const {flags} = await this.parse(Admin)
     const response = await make('3', `admin/${flags.task}`, 'GET', null)
-    const data = await get(this, response, 200)
+    const data = await get(response, 200)
     if (!data.success) {
       this.log(data.message)
       this.exit(1)

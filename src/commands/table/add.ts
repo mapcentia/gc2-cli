@@ -5,7 +5,7 @@
  *
  */
 
-import {Command, Flags} from '@oclif/core'
+import {Command, Flags, ux as cli} from '@oclif/core'
 import chalk from 'chalk'
 import args from '../../common/base_args'
 import get from '../../util/get-response'
@@ -16,7 +16,7 @@ let base_args = args
 let specific_args = {}
 
 export default class Add extends Command {
-  static description = 'Create new table'
+  static description = 'Create new table. Leave out arguments for interactive mode'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
@@ -25,8 +25,13 @@ export default class Add extends Command {
   async run() {
     let {args} = await this.parse(Add)
     args = setSchema(args)
-    const response = await make('4', `schemas/${args.schema}/tables`, 'POST', {table: args.table})
-    await get(this, response, 201)
+
+    // Interactive
+    const schema = args?.schema || await cli.prompt('Schema', {required: true})
+    const table = args?.table || await cli.prompt('Table', {required: true})
+
+    const response = await make('4', `schemas/${schema}/tables`, 'POST', {table})
+    await get(response, 201)
     this.log(`Table created here ${chalk.green(response.headers.get('Location'))}`)
   }
 }

@@ -29,7 +29,7 @@ export default class Drop extends Command {
     }
     const {args} = await this.parse(Drop)
     const response = await make('4', `schemas/${args.schema}`, 'DELETE', null)
-    await get(this, response, 204)
+    await get(response, 204)
     this.log(`Schema ${chalk.green(args.schema)} dropped`)
   }
 }

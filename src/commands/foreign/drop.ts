@@ -35,7 +35,7 @@ export default class Drop extends Command {
     const schemas = args.schemas.split(',').map(s => s.trim())
     const include = args?.include ? args.include.split(',').map(s => s.trim()) : null
     const response = await make('3', 'foreign', 'DELETE', {schemas, include})
-    const res = await get(this, response, 200)
+    const res = await get(response, 200)
     this.log(`${chalk.green(res.count)} foreign tables dropped`)
   }
 }

@@ -11,7 +11,7 @@ import User from '../common/user'
 const config: Configstore = new Configstore('gc2-env')
 const user: User = config.all
 const setSchema: any = (args: any) => {
-  if (!args?.schema) {
+  if (!args?.schema && !user.superUser) {
     args.schema = JSON.parse(atob(user.token.split('.')[1])).uid
   }
   return args

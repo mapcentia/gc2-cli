@@ -73,7 +73,7 @@ export default class Add extends Command {
       }
     }
     const response = await make('4', `schemas/${args.schema}/tables/${args.table}/constraints`, 'POST', body)
-    await get(this, response, 201)
+    await get(response, 201)
     this.log(`Constraint created here ${chalk.green(response.headers.get('Location'))}`)
   }
 }

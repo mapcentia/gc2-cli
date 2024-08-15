@@ -30,7 +30,7 @@ export default class Drop extends Command {
   async run() {
     const {args} = await this.parse(Drop)
     const response = await make('4', `schemas/${args.schema}/tables/${args.table}/constraints/${args.name}`, 'DELETE', null)
-    await get(this, response, 204)
+    await get(response, 204)
     this.log(`Dropped constraint ${args.name} on ${chalk.green(args.table)}`)
   }
 }

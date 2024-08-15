@@ -47,7 +47,7 @@ export default class Nullable extends Command {
         is_nullable: args.nullable === 'true'
     }
     const response = await make('4', `schemas/${args.schema}/tables/${args.table}/columns/${args.column}`, 'PUT', body)
-    await get(this, response, 303)
+    await get(response, 303)
     this.log(`Column ${chalk.green(args.column)} is now ${args.nullable !== 'true' ? chalk.red('NOT ') : ''}nullable`)
   }
 }

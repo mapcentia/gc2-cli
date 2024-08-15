@@ -22,14 +22,14 @@ let obj: any = {}
 if (user.superUser) {
   obj.schema = Args.string(
     {
-      required: true,
+      required: false,
       description: 'Name of schema',
     },
   )
 }
 obj.table = Args.string(
   {
-    required: true,
+    required: false,
     description: 'Name of table',
   },
 )

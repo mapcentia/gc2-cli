@@ -18,7 +18,7 @@ export default class Start extends Command {
   }
   async run() {
     const response = await make('3', `scheduler`, 'GET', null)
-    const res = await get(this, response, 200)
+    const res = await get(response, 200)
     type Columns = {
       [key: string]: any
     }

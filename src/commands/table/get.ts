@@ -35,7 +35,7 @@ export default class Get extends Command {
     const {args} = await this.parse(Get)
     const {flags} = await this.parse(Get)
     const response = await make('4', `schemas/${args.schema}/tables/${args.table}`, 'GET', null)
-    const res = await get(this, response, 200)
+    const res = await get(response, 200)
     type columns = {
       [key: string]: any
     }

@@ -32,7 +32,7 @@ export default class Rename extends Command {
   async run() {
     const {args} = await this.parse(Rename)
     const response = await make('4', `schemas/${args.schema}`, 'PUT', {schema: args.name})
-    await get(this, response, 303)
+    await get(response, 303)
     this.log(`Schema relocated to here ${chalk.green(response.headers.get('Location'))}`)
   }
 }

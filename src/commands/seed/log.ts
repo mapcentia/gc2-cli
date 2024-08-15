@@ -18,7 +18,7 @@ export default class Log extends Command {
   async run() {
     const {flags} = await this.parse(Log)
     const response = await make('3', `tileseeder/log/` + flags.uuid , 'GET', null)
-    const data = await get(this, response, 200)
+    const data = await get(response, 200)
     this.log(data.data)
   }
 }

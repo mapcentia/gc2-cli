@@ -27,7 +27,7 @@ export default class Get extends Command {
   async run() {
     const {args} = await this.parse(Get)
     const response = await make('3', `view/${args.schema}`, 'GET', null)
-    const res = await get(this, response, 200)
+    const res = await get(response, 200)
     type Columns = {
       [key: string]: any
     }

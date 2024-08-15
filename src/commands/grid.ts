@@ -16,7 +16,7 @@ export default class Grid extends Command {
     const {flags} = await this.parse(Grid)
     cli.action.start('Creating fishnet grid ')
     const response = await make('3', `grid`, 'POST', flags)
-    const data  = await get(this, response, 200)
+    const data  = await get(response, 200)
     cli.action.stop('')
     if (data.success) {
       this.log(chalk.green('SUCCESS: Fishnet grid was created'))

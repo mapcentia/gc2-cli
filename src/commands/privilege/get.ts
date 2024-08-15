@@ -27,7 +27,7 @@ export default class Get extends Command {
     let {args} = await this.parse(Get)
     args = setSchema(args)
     const response = await make('4', `schemas/${args.schema}/tables/${args.table}/privilege`, 'GET')
-    const data = await get(this, response, 200)
+    const data = await get(response, 200)
     this.log(data)
   }
 }

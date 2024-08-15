@@ -64,14 +64,14 @@ export default class Import extends Command {
           filename: 'file'
         })
         const res = await make('4', `import`, 'POST', form, true, 'ss')
-        const data = await get(this, res, 200)
+        const data = await get(res, 200)
         console.log(data)
         chunkCount++
       }
       cli.action.stop()
       cli.action.start('Server importing files')
       const res = await make('4', `import/${tmpFile}`, 'GET', null)
-      const data = await get(this, res, 200)
+      const data = await get(res, 200)
       // this.log(data)
       cli.action.stop()
     } catch (e) {

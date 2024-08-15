@@ -41,7 +41,7 @@ export default class Set extends Command {
     let {args} = await this.parse(Set)
     args = setSchema(args)
     const response = await make('4', `schemas/${args.schema}/tables/${args.table}/privilege`, 'PUT', {subuser: args.user, privileges: args.privileges})
-    await get(this, response, 200)
+    await get(response, 200)
     this.log(`Privileges update on ${chalk.green(args.table)}`)
   }
 }

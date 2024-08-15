@@ -51,7 +51,7 @@ export default class Materialize extends Command {
       prefix: flags.prefix,
       suffix: flags.suffix
     })
-    const res = await get(this, response, 200)
+    const res = await get(response, 200)
     this.log(`${chalk.green(res.count)} foreign tables materialized`)
   }
 }

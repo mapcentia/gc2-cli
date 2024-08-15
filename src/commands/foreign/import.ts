@@ -48,7 +48,7 @@ export default class Import extends Command {
     const include = args?.include ? args.include.split(',').map(s => s.trim()) : null
     const server = args.server
     const response = await make('3', `foreign`, 'POST', {from, to, server, include})
-    await get(this, response, 201)
+    await get(response, 201)
     this.log(`${chalk.green('Schemas imported')}`)
   }
 }

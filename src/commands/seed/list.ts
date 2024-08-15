@@ -10,7 +10,7 @@ export default class List extends Command {
   async run() {
     const {args} = await this.parse(List)
     const response = await make('3', `tileseeder`, 'GET', null)
-    const data = await get(this, response, 200)
+    const data = await get(response, 200)
     console.log(data)
   }
 }

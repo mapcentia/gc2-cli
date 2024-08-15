@@ -28,7 +28,7 @@ export default class Backup extends Command {
     const {args} = await this.parse(Backup)
     const schemas = args.schemas.split(',').map(s => s.trim())
     const response = await make('3', 'view', 'POST', {schemas: schemas})
-    const res = await get(this, response, 201)
+    const res = await get(response, 201)
     this.log(`${chalk.green(res.count)} views backed up`)
   }
 }

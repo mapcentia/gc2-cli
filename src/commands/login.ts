@@ -76,7 +76,7 @@ export default class Login extends Command {
 
       if (obj.database === '') {
         const response = await make('2', `database/search?userIdentifier=${user}`, 'GET', null, false, 'application/json', obj.host)
-        const res = await get(this, response, 200)
+        const res = await get(response, 200)
         if (!res.success) {
           this.log(chalk.red('fail'))
           return
