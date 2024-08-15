@@ -30,7 +30,7 @@
     "configstore": "^5.0.1",
     "fetch-blob": "^3.2.0",
     "form-data": "^4.0.0",
-    "inquirer": "^7.3.3",
+    "inquirer": "^10.1.8",
     "jsdom": "^24.1.0",
     "jwt-decode": "^4.0.0",
     "node-fetch": "^2.6.7",

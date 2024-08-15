@@ -5,7 +5,7 @@
  *
  */
 
-import {clients, schemas, tables, indices} from './getters'
+import {clients, schemas, tables} from './getters'
 import {ux} from '@oclif/core'
 import {exit} from '@oclif/core/lib/errors'
 import {checkbox, select} from '@inquirer/prompts'
@@ -46,8 +46,9 @@ const columnList = async (schema: string, table: string) => {
   let r: any = await select({
     message: 'Choose a column',
     default: null,
-    choices: s.columns.map((v: { column: string }) => {
-      return {value: v.column.split('.').reverse()[0]}
+    choices: s.columns.map((v: { column: string, type: string }) => {
+      const c = v.column.split('.').reverse()[0]
+      return {value: c, name: c + ` (${v.type})`}
     })
   })
   return r
@@ -62,8 +63,9 @@ const columnCheck = async (schema: string, table: string) => {
   const r: any = await checkbox({
     message: 'Choose one or more columns',
     required: true,
-    choices: s.columns.map((v: { column: string }) => {
-      return {value: v.column.split('.').reverse()[0]}
+    choices: s.columns.map((v: { column: string, type: string }) => {
+      const c = v.column.split('.').reverse()[0]
+      return {value: c, name: c + ` (${v.type})`}
     })
   })
   return r

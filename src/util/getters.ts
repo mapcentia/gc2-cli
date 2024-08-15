@@ -28,6 +28,3 @@ const tables = async (schema: string, table?: string) => {
 }
 
 export {clients, schemas, tables}
-
-export class indices {
-}
