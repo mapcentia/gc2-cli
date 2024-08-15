@@ -5,45 +5,99 @@
  *
  */
 
-import inquirer from 'inquirer'
-import {clients, schemas, tables} from './getters'
+import {clients, schemas, tables, indices} from './getters'
+import {ux} from '@oclif/core'
+import {exit} from '@oclif/core/lib/errors'
+import {checkbox, select} from '@inquirer/prompts'
 
 const schemasList = async () => {
   const s: any = await schemas()
-  let r: any = await inquirer.prompt([{
-    name: 'id',
+  let r: any = await select({
     message: 'Choose a schema',
-    type: 'list',
-    default: null, choices: s.schemas.map((v: { schema: string }) => {
-      return {name: v.schema}
+    default: null,
+    choices: s.schemas.map((v: { schema: string }) => {
+      return {value: v.schema}
     })
-  }])
-  return r.id
+  })
+  return r
 }
 const tableList = async (schema: string) => {
   const s: any = await tables(schema)
-  let r: any = await inquirer.prompt([{
-    name: 'id',
+  if (s.tables.length < 1) {
+    ux.log(`⚠️ No tables found for schema ${schema}`)
+    exit(0)
+  }
+  let r: any = await select({
     message: 'Choose a table',
-    type: 'list',
-    default: null, choices: s.tables.map((v: { table: string }) => {
-      return {name: v.table.split('.').reverse()[0]}
+    default: null,
+    choices: s.tables.map((v: { table: string }) => {
+      return {value: v.table.split('.').reverse()[0]}
     })
-  }])
-  return r.id
+  })
+  return r
 }
 
+const columnList = async (schema: string, table: string) => {
+  const s: any = await tables(schema, table)
+  if (s.columns.length < 1) {
+    ux.log(`⚠️ No columns found for table ${table}`)
+    exit(0)
+  }
+  let r: any = await select({
+    message: 'Choose a column',
+    default: null,
+    choices: s.columns.map((v: { column: string }) => {
+      return {value: v.column.split('.').reverse()[0]}
+    })
+  })
+  return r
+}
+
+const columnCheck = async (schema: string, table: string) => {
+  const s: any = await tables(schema, table)
+  if (s.columns.length < 1) {
+    ux.log(`⚠️ No columns found for table ${table}`)
+    exit(0)
+  }
+  const r: any = await checkbox({
+    message: 'Choose one or more columns',
+    required: true,
+    choices: s.columns.map((v: { column: string }) => {
+      return {value: v.column.split('.').reverse()[0]}
+    })
+  })
+  return r
+}
+
+const indexList = async (schema: string, table: string) => {
+  const s: any = await tables(schema, table)
+  if (s.columns.length < 1) {
+    ux.log(`⚠️ No indices found for table ${table}`)
+    exit(0)
+  }
+  let r: any = await select({
+    message: 'Choose an index',
+    default: null,
+    choices: s.indices.map((v: { name: string, method: string, columns: any }) => {
+      return {value: v.name, name: v.name + ` (${v.method} on ${v.columns.join(', ')})`}
+    })
+  })
+  return r
+}
 
 const clientList = async () => {
-  const cls: any = await clients()
-  let r: any = await inquirer.prompt([{
-    name: 'id',
+  const s: any = await clients()
+  if (s.clients.length < 1) {
+    ux.log(`⚠️ No clients yet`)
+    exit(0)
+  }
+  let r: any = await select({
     message: 'Choose a client',
-    type: 'list',
-    default: null, choices: cls.clients.map((v: {id: string, name: string }) => {
-      return {name: v.id + ' ' + v.name}
+    default: null,
+    choices: s.clients.map((v: { id: string, name: string }) => {
+      return {value: v.id + ' ' + v.name}
     })
-  }])
-  return  r.id.split(' ')[0]
+  })
+  return r.split(' ')[0]
 }
-export {schemasList, tableList, clientList}
+export {schemasList, tableList, columnList, columnCheck, clientList, indexList}

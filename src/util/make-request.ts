@@ -33,8 +33,8 @@ const make = async (version: string, resource: string, method: Method, payload?:
     const keycloakService = new Gc2Service()
     try {
       const data = await keycloakService.getRefreshToken(user.refresh_token)
-      headers.Authorization = 'Bearer ' + data.access_token
       config.set({token: data.access_token})
+      headers.Authorization = 'Bearer ' + data.access_token
     } catch (e) {
       logToStderr('⚠️ Could not get refresh token')
       exit(1)

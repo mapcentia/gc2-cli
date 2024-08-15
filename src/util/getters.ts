@@ -25,7 +25,9 @@ const tables = async (schema: string, table?: string) => {
   const res = table ? `schemas/${schema}/tables/${table}` : `schemas/${schema}/tables`
   const response = await make('4', res, 'GET')
   return await get(response, 200)
-
 }
 
 export {clients, schemas, tables}
+
+export class indices {
+}

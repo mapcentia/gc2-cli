@@ -5,49 +5,60 @@
  *
  */
 
+import {select} from '@inquirer/prompts'
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
+import args from '../../common/base_args'
 import get from '../../util/get-response'
+import {schemas, tables} from '../../util/getters'
+import {columnList, schemasList, tableList} from '../../util/lists'
 import make from '../../util/make-request'
+import setSchema from '../../util/set-schema'
 
+let base_args = args
+let specific_args = {
+  column: Args.string(
+    {
+      required: false,
+      description: 'Name of column',
+    },
+  ),
+  nullable: Args.string(
+    {
+      required: false,
+      options: ['true', 'false']
+    },
+  ),
+}
 export default class Nullable extends Command {
   static description = 'Set column to nullable'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
-  static args = {
-    schema: Args.string(
-      {
-        required: true,
-        description: 'Name of schema',
-      },
-    ),
-    table: Args.string(
-      {
-        required: true,
-        description: 'Name of table',
-      },
-    ),
-    column: Args.string(
-      {
-        required: true,
-        description: 'Name of column',
-      },
-    ),
-    nullable: Args.string(
-      {
-        required: true,
-        options: ['true', 'false']
-      },
-    ),
-  }
+  static args = {...base_args, ...specific_args}
+
   async run() {
-    const {args} = await this.parse(Nullable)
+    let {args} = await this.parse(Nullable)
+
+    args = setSchema(args)
+    const schema = args?.schema || await schemasList()
+    const table = args?.table || await tableList(schema)
+    const column = args?.column || await columnList(schema, table)
+    const res = await tables(schema, table)
+
+    const c = res.columns.filter((e: { column: any }) => e.column === column)[0]
+
+    const nullable = args?.nullable || (await select({
+      message: 'True or false',
+      default: c.is_nullable ? 'true' : 'false',
+      choices: [{value: 'true'}, {value: 'false'}],
+    }))
+
     const body = {
-        is_nullable: args.nullable === 'true'
+      is_nullable: nullable === 'true'
     }
-    const response = await make('4', `schemas/${args.schema}/tables/${args.table}/columns/${args.column}`, 'PUT', body)
+    const response = await make('4', `schemas/${schema}/tables/${table}/columns/${column}`, 'PUT', body)
     await get(response, 303)
-    this.log(`Column ${chalk.green(args.column)} is now ${args.nullable !== 'true' ? chalk.red('NOT ') : ''}nullable`)
+    this.log(`Column ${chalk.green(column)} is now ${nullable !== 'true' ? chalk.red('NOT ') : ''}nullable`)
   }
 }

@@ -7,7 +7,6 @@
 
 import {Args, Command, Flags, ux, ux as cli} from '@oclif/core'
 import chalk from 'chalk'
-import inquirer from 'inquirer'
 import get from '../../util/get-response'
 import {clients} from '../../util/getters'
 import {clientList} from '../../util/lists'

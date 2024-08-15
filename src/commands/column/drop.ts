@@ -7,39 +7,39 @@
 
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
+import args from '../../common/base_args'
 import get from '../../util/get-response'
+import {columnList, schemasList, tableList} from '../../util/lists'
 import make from '../../util/make-request'
+import setSchema from '../../util/set-schema'
+
+let base_args = args
+let specific_args = {
+  column: Args.string(
+    {
+      required: false,
+      description: 'Name of column to drop',
+    },
+  ),
+}
 
 export default class Drop extends Command {
   static description = 'Drop column'
-
   static flags = {
     help: Flags.help({char: 'h'}),
   }
-  static args = {
-    schema: Args.string(
-      {
-        required: true,
-        description: 'Name of schema',
-      },
-    ),
-    table: Args.string(
-      {
-        required: true,
-        description: 'Name of table',
-      },
-    ),
-    column: Args.string(
-      {
-        required: true,
-        description: 'Name of column to drop',
-      },
-    ),
-  }
+  static args = {...base_args, ...specific_args}
+
   async run() {
-    const {args} = await this.parse(Drop)
-    const response = await make('4', `schemas/${args.schema}/tables/${args.table}/columns/${args.column}`, 'DELETE', null)
+    let {args} = await this.parse(Drop)
+
+    args = setSchema(args)
+    const schema = args?.schema || await schemasList()
+    const table = args?.table || await tableList(schema)
+    const column = args?.column || await columnList(schema, table)
+
+    const response = await make('4', `schemas/${schema}/tables/${table}/columns/${column}`, 'DELETE', null)
     await get(response, 204)
-    this.log(`Column ${chalk.green(args.column)} dropped`)
+    this.log(`Column ${chalk.green(column)} dropped`)
   }
 }

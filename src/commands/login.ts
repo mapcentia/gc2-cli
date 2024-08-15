@@ -5,26 +5,21 @@
  *
  */
 
+import {select} from '@inquirer/prompts'
 import {Command, Flags} from '@oclif/core'
 import {exit} from '@oclif/core/lib/errors'
 import chalk from 'chalk'
 import cli from 'cli-ux'
 import Configstore from 'configstore'
-import EventEmitter = require('events')
 import * as http from 'http'
-import inquirer from 'inquirer'
 import * as querystring from 'querystring'
 
 import User from '../common/user'
 import {Gc2Service} from '../services/gc2.service'
 import get from '../util/get-response'
 import make from '../util/make-request'
-import {
-  CLI_SERVER_ADDRESS,
-  CLI_SERVER_ADDRESS_CALLBACK,
-  generatePkceChallenge,
-  waitFor,
-} from '../util/utils'
+import {CLI_SERVER_ADDRESS, CLI_SERVER_ADDRESS_CALLBACK, generatePkceChallenge, waitFor,} from '../util/utils'
+import EventEmitter = require('events')
 
 type AuthoricationCodeCallbackParams = {
   state?: string;
@@ -85,15 +80,12 @@ export default class Login extends Command {
           obj.database = res.databases[0].parentdb ? res.databases[0].parentdb : res.databases[0].screenname
         }
         else if (res.databases.length > 1) {
-          let response: any = await inquirer.prompt([{
-            name: 'db',
+          obj.database = await select({
             message: 'Database',
-            type: 'list',
             default: config.all.database, choices: res.databases.map((v: { parentdb: any }) => {
-              return {name: v.parentdb}
+              return {value: v.parentdb}
             })
-          }])
-          obj.database = response.db
+          })
         } else {
           this.log(chalk.red('User not found'))
           return

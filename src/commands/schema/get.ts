@@ -6,13 +6,9 @@
  */
 
 import {Args, Command, Flags, ux} from '@oclif/core'
-import chalk from 'chalk'
 import cli from 'cli-ux'
-import inquirer from 'inquirer'
-import get from '../../util/get-response'
-import {clients, schemas} from '../../util/getters'
+import {schemas} from '../../util/getters'
 import {schemasList} from '../../util/lists'
-import make from '../../util/make-request'
 
 export default class Get extends Command {
   static description = 'Get table definition.'

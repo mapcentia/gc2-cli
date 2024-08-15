@@ -25,6 +25,8 @@ const get = async (response: Response, expectedCode: number): Promise<any> => {
   if (expectedCode !== 204) {
     res = await response.json()
   }
+  //console.log(response.status, expectedCode)
+
   if (response.status !== expectedCode) {
     if (res === null) {
       res = await response.json()
