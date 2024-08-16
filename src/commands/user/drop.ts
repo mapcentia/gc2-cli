@@ -8,6 +8,7 @@
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import get from '../../util/get-response'
+import {userList} from '../../util/lists'
 import make from '../../util/make-request'
 
 export default class Drop extends Command {
@@ -18,15 +19,16 @@ export default class Drop extends Command {
   static args = {
     name: Args.string(
       {
-        required: true,
+        required: false,
         description: 'Name of user to drop',
       }
     ),
   }
   async run() {
     const {args} = await this.parse(Drop)
-    const response = await make('4', `users/${args.name}`, 'DELETE', null)
+    const name = args?.name || await userList()
+    const response = await make('4', `users/${name}`, 'DELETE', null)
     await get(response, 204)
-    this.log(`User ${chalk.green(args.name)} dropped`)
+    this.log(`User ${chalk.green(name)} dropped`)
   }
 }

@@ -15,10 +15,10 @@ import make from '../../util/make-request'
 export default class Update extends Command {
   static description = 'Update a client'
   static flags = {
-    name: Flags.string({char: 'n', description: 'Name'}),
-    description: Flags.string({char: 'd', description: 'Description'}),
-    redirect_uri: Flags.string({char: 'r', description: 'Redirect uri'}),
-    homepage: Flags.string({char: 'p', description: 'Homepage'}),
+    name: Flags.string({char: 'n', description: 'Name', required: false}),
+    description: Flags.string({char: 'd', description: 'Description', required: false}),
+    redirect_uri: Flags.string({char: 'r', description: 'Redirect uri', required: false}),
+    homepage: Flags.string({char: 'p', description: 'Homepage', required: false}),
     help: Flags.help({char: 'h'}),
   }
   static args = {

@@ -28,7 +28,7 @@ const tables = async (schema: string, table?: string) => {
 }
 
 const users = async (id?: string) => {
-  const res = `users`
+  const res = id ? `users/${id}` : 'users'
   const response = await make('4', res, 'GET')
   return await get(response, 200)
 }

@@ -5,7 +5,7 @@
  *
  */
 
-import {Args, Command, Flags} from '@oclif/core'
+import {Args, Command, Flags, ux as cli} from '@oclif/core'
 import chalk from 'chalk'
 import get from '../../util/get-response'
 import make from '../../util/make-request'
@@ -15,25 +15,30 @@ export default class Add extends Command {
 
   static flags = {
     help: Flags.help({char: 'h'}),
-    password: Flags.string({char: 'p', description: 'password of new user', required: true}),
-    email: Flags.string({char: 'e', description: 'email of new user', required: true}),
+    password: Flags.string({char: 'p', description: 'password of new user', required: false}),
+    email: Flags.string({char: 'e', description: 'email of new user', required: false}),
     properties: Flags.string({char: 'e', description: 'properties of new user', required: false}),
   }
   static args = {
     name: Args.string(
       {
-        required: true,
+        required: false,
         description: 'Name of new user',
       }
     ),
   }
 
   async run() {
-    const {args, flags} = await this.parse(Add)
+    let {args, flags} = await this.parse(Add)
+
+    const name = args?.name || await cli.prompt('Name', {required: true})
+    const password = flags?.password || await cli.prompt('Password', {required: true, type: 'hide'})
+    const email = flags?.password || await cli.prompt('E-mail', {required: true})
+
     const body = {
-      name: args.name,
-      email: flags.email,
-      password: flags.password,
+      name,
+      email,
+      password,
       properties: flags.properties,
     }
     const response = await make('4', `users`, 'POST', body)
