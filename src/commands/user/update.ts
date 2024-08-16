@@ -9,7 +9,7 @@ import {Args, Command, Flags, ux as cli} from '@oclif/core'
 import chalk from 'chalk'
 import get from '../../util/get-response'
 import {users} from '../../util/getters'
-import {userList} from '../../util/lists'
+import {groupList, userList} from '../../util/lists'
 import make from '../../util/make-request'
 
 export default class Update extends Command {
@@ -38,7 +38,7 @@ export default class Update extends Command {
     const user = await users(name)
     const password = flags?.password || await cli.prompt('Password', {required: false, type: 'hide', default: undefined})
     const email = flags?.password || await cli.prompt('E-mail', {required: true, default: user.email})
-    const group = flags?.group || await userList(user.user_group)
+    const group = flags?.group || await groupList(name, user.user_group)
 
     const p: string|null = password === '' ? null: password
 
