@@ -1,22 +1,30 @@
-import {Args, Command, Flags} from '@oclif/core'
+/**
+ * @author     Martin Høgh <mh@mapcentia.com>
+ * @copyright  2013-2024 MapCentia ApS
+ * @license    http://www.gnu.org/licenses/#AGPL  GNU AFFERO GENERAL PUBLIC LICENSE 3
+ *
+ */
+
+import {Args, Command, Flags, ux as cli} from '@oclif/core'
 import chalk from 'chalk'
 import args from '../../common/base_args'
 import get from '../../util/get-response'
+import {columnCheck, constraintTypeList, schemasList, tableList} from '../../util/lists'
 import make from '../../util/make-request'
+import setSchema from '../../util/set-schema'
 
 let base_args = args
 let specific_args = {
   columns: Args.string(
     {
-      required: true,
+      required: false,
       description: 'Columns for use in the constraint (comma separated)',
     },
   ),
   type: Args.string(
     {
-      required: true,
+      required: false,
       description: 'Type of constraint',
-      default: 'primary',
       options: ['primary', 'unique', 'foreign', 'check'],
     },
   ),
@@ -32,6 +40,7 @@ export default class Add extends Command {
   static description = 'Add a constraint'
   static flags = {
     help: Flags.help({char: 'h'}),
+
     referencedTable: Flags.string({
       helpGroup: 'Foreign key options',
       char: 't',
@@ -40,39 +49,62 @@ export default class Add extends Command {
     referencedColumns: Flags.string({
       helpGroup: 'Foreign key options',
       char: 'e',
-      description: 'Referenced column',
+      description: 'Referenced columns',
+    }),
+    check: Flags.string({
+      helpGroup: 'Check options',
+      char: 'c',
+      description: 'Check expression',
     }),
   }
   static args = {...base_args, ...specific_args}
 
   async run() {
-    const {args} = await this.parse(Add)
-    const {flags} = await this.parse(Add)
+    let {args} = await this.parse(Add)
+    let {flags} = await this.parse(Add)
+
+    args = setSchema(args)
+    const schema = args?.schema || await schemasList()
+    const table = args?.table || await tableList(schema)
+    const columns = args?.columns || (await columnCheck(schema, table)).join(',')
+    const name = args?.name || await cli.prompt('Name', {required: false})
+    const type = args?.type || await constraintTypeList()
+
     let body = {
-      name: args.name,
-      columns: args.columns.split(',').map((e: string) => e.trim()),
-      constraint: args.type,
+      name,
+      columns: columns.split(',').map((e: string) => e.trim()),
+      constraint: type,
     }
 
-    if (args.type === 'foreign') {
-      if (!flags.referencedTable) {
-        this.log(chalk.red(`A referenced table must be set`))
-        this.exit(1)
-      }
+    if (type === 'foreign') {
+      const ft = flags?.referencedTable || await cli.prompt('Referenced table', {required: true})
       body = {
         ...body, ...{
-          referenced_table: flags.referencedTable,
+          referenced_table: ft,
         }
       }
-      if (flags.referencedColumns) {
+
+      const fc = flags?.referencedColumns || await cli.prompt('Referenced columns', {required: false})
+
+      if (fc) {
         body = {
           ...body, ...{
-            referenced_columns: flags.referencedColumns.split(',').map(e => e.trim()),
+            referenced_columns: fc.split(',').map(e => e.trim()),
           }
         }
       }
     }
-    const response = await make('4', `schemas/${args.schema}/tables/${args.table}/constraints`, 'POST', body)
+
+    if (type === 'check') {
+      const ch = flags?.check || await cli.prompt('Check expression', {required: true})
+      body = {
+        ...body, ...{
+          check: ch,
+        }
+      }
+    }
+
+    const response = await make('4', `schemas/${schema}/tables/${table}/constraints`, 'POST', body)
     await get(response, 201)
     this.log(`Constraint created here ${chalk.green(response.headers.get('Location'))}`)
   }

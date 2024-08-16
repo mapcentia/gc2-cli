@@ -87,6 +87,23 @@ const indexList = async (schema: string, table: string) => {
   return r
 }
 
+const constraintList = async (schema: string, table: string) => {
+  const s: any = await tables(schema, table)
+  if (s.columns.length < 1) {
+    ux.log(`⚠️ No constraints found for table ${table}`)
+    exit(0)
+  }
+  let r: any = await select({
+    message: 'Choose an constraint',
+    default: null,
+    choices: s.constraints.map((v: { name: string, constraint: string, columns?: any }) => {
+      const name = v.name + ` (${v.constraint}` + (v?.columns ? ` on ${v.columns.join(', ')})` : ')')
+      return {value: v.name, name}
+    })
+  })
+  return r
+}
+
 const clientList = async () => {
   const s: any = await clients()
   if (s.clients.length < 1) {
@@ -114,4 +131,29 @@ const typeList = async () => {
   })
   return r
 }
-export {schemasList, tableList, columnList, columnCheck, clientList, indexList, typeList}
+
+const constraintTypeList = async () => {
+  let r: any = await select({
+    message: 'Choose a constraint type',
+    default: null,
+    choices: [
+      {value: 'primary', name: 'Primary'},
+      {value: 'unique', name: 'Unique'},
+      {value: 'foreign', name: 'Foreign'},
+      {value: 'check', name: 'Check'},
+    ]
+  })
+  return r
+}
+
+export {
+  schemasList,
+  tableList,
+  columnList,
+  columnCheck,
+  clientList,
+  indexList,
+  typeList,
+  constraintList,
+  constraintTypeList
+}
