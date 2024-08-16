@@ -5,7 +5,7 @@
  *
  */
 
-import {clients, schemas, tables} from './getters'
+import {clients, schemas, tables, users} from './getters'
 import {ux} from '@oclif/core'
 import {exit} from '@oclif/core/lib/errors'
 import {checkbox, select} from '@inquirer/prompts'
@@ -21,6 +21,7 @@ const schemasList = async () => {
   })
   return r
 }
+
 const tableList = async (schema: string) => {
   const s: any = await tables(schema)
   if (s.tables.length < 1) {
@@ -146,6 +147,44 @@ const constraintTypeList = async () => {
   return r
 }
 
+const privilegeList = async (defaultValue?: string) => {
+  let r: any = await select({
+    message: 'Choose privileges',
+    default: defaultValue,
+    choices: [
+      {value: 'none', name: 'No privileges'},
+      {value: 'read', name:  'Read privileges'},
+      {value: 'read/write', name: 'Read and write privileges'},
+    ]
+  })
+  return r
+}
+
+const authLevelList = async () => {
+  let r: any = await select({
+    message: 'Choose a auth level',
+    default: null,
+    choices: [
+      {value: 'None', name: 'No restrictions for any users (not recommend)'},
+      {value: 'Write', name: 'Users must be signed in to write but not read'},
+      {value: 'Read/write', name: 'Users must be signed in to both read and write'},
+    ]
+  })
+  return r
+}
+
+const userList = async (defaultValue?: string) => {
+  const s: any = await users()
+  let r: any = await select({
+    message: 'Choose a user',
+    default: defaultValue,
+    choices: s.users.map((v: { name: string }) => {
+      return {value: v.name}
+    })
+  })
+  return r
+}
+
 export {
   schemasList,
   tableList,
@@ -155,5 +194,7 @@ export {
   indexList,
   typeList,
   constraintList,
-  constraintTypeList
+  constraintTypeList,
+  privilegeList,
+  userList,
 }

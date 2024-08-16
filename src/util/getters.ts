@@ -27,4 +27,16 @@ const tables = async (schema: string, table?: string) => {
   return await get(response, 200)
 }
 
-export {clients, schemas, tables}
+const users = async (id?: string) => {
+  const res = `users`
+  const response = await make('4', res, 'GET')
+  return await get(response, 200)
+}
+
+const privileges = async (schema: string, table: string) => {
+  const res = `schemas/${schema}/tables/${table}/privilege`
+  const response = await make('4', res, 'GET')
+  return await get(response, 200)
+}
+
+export {clients, schemas, tables, users, privileges}

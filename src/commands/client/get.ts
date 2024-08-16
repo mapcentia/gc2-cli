@@ -6,7 +6,6 @@
  */
 
 import {Args, Command, Flags} from '@oclif/core'
-import chalk from 'chalk'
 import cli from 'cli-ux'
 import {clients} from '../../util/getters'
 

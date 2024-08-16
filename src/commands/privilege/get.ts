@@ -7,8 +7,11 @@
 
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
+import cli from 'cli-ux'
 import args from '../../common/base_args'
 import get from '../../util/get-response'
+import {privileges} from '../../util/getters'
+import {schemasList, tableList} from '../../util/lists'
 import make from '../../util/make-request'
 import setSchema from '../../util/set-schema'
 
@@ -25,9 +28,32 @@ export default class Get extends Command {
 
   async run() {
     let {args} = await this.parse(Get)
+
     args = setSchema(args)
-    const response = await make('4', `schemas/${args.schema}/tables/${args.table}/privilege`, 'GET')
-    const data = await get(response, 200)
-    this.log(data)
+    const schema = args?.schema || await schemasList()
+    const table = args?.table || await tableList(schema)
+    const res = await privileges(schema, table)
+
+    type row = {
+      [key: string]: any
+    }
+    type user = {
+      subuser: string;
+      privileges: string;
+      group?: string;
+    }
+    const data: object[] = []
+    const rows: row = {subuser: {}, privileges: {}, group: {}}
+    for (const c in res.privileges) {
+      const v: user = res.privileges[c]
+      data.push({
+        subuser: v.subuser,
+        privileges: v.privileges,
+        group: v.group || '',
+      })
+    }
+    cli.table(data, rows, {
+      printLine: this.log.bind(this)
+    })
   }
 }
