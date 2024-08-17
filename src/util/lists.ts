@@ -153,7 +153,7 @@ const privilegeList = async (defaultValue?: string) => {
     default: defaultValue,
     choices: [
       {value: 'none', name: 'No privileges'},
-      {value: 'read', name:  'Read privileges'},
+      {value: 'read', name: 'Read privileges'},
       {value: 'read/write', name: 'Read and write privileges'},
     ]
   })
@@ -185,6 +185,20 @@ const userList = async (defaultValue?: string) => {
   return r
 }
 
+const groupList = async (exclude: string, defaultValue?: string) => {
+  const s: any = await users()
+  let r: any = await select({
+    message: 'Choose a group',
+    default: defaultValue || '',
+    choices: [{value: '', name: 'None'}, ...s.users.filter((e: { name: string }) => e.name !== exclude).map((v: {
+      name: string
+    }) => {
+      return {value: v.name}
+    })]
+  })
+  return r
+}
+
 export {
   schemasList,
   tableList,
@@ -197,4 +211,5 @@ export {
   constraintTypeList,
   privilegeList,
   userList,
+  groupList,
 }

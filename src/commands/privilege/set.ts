@@ -48,7 +48,7 @@ export default class Set extends Command {
     const user = args?.user || await userList()
     const current = await privileges(schema, table)
     const v = current.privileges.filter((e: { subuser: any }) => user === e.subuser)[0]
-    const pr = args?.privileges || await privilegeList(v.privileges)
+    const pr = args?.privileges || await privilegeList(v?.privileges)
 
     const response = await make('4', `schemas/${schema}/tables/${table}/privilege`, 'PUT', {subuser: user, privileges: pr})
     await get(response, 200)
