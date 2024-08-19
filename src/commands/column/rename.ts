@@ -5,7 +5,8 @@
  *
  */
 
-import {Args, Command, Flags, ux as cli} from '@oclif/core'
+import {input} from '@inquirer/prompts'
+import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import args from '../../common/base_args'
 import get from '../../util/get-response'
@@ -43,7 +44,7 @@ export default class Rename extends Command {
     const schema = args?.schema || await schemasList()
     const table = args?.table || await tableList(schema)
     const column = args?.column || await columnList(schema, table)
-    const name = args?.name || await cli.prompt('New name', {required: true})
+    const name = args?.name || await input({message: 'New name', required: true})
 
     const response = await make('4', `schemas/${schema}/tables/${table}/columns/${column}`, 'PUT', {column: name})
     await get(response, 303)

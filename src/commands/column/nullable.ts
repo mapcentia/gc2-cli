@@ -10,7 +10,7 @@ import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import args from '../../common/base_args'
 import get from '../../util/get-response'
-import {schemas, tables} from '../../util/getters'
+import {tables} from '../../util/getters'
 import {columnList, schemasList, tableList} from '../../util/lists'
 import make from '../../util/make-request'
 import setSchema from '../../util/set-schema'
@@ -44,12 +44,12 @@ export default class Nullable extends Command {
     const schema = args?.schema || await schemasList()
     const table = args?.table || await tableList(schema)
     const column = args?.column || await columnList(schema, table)
-    const res = await tables(schema, table)
 
+    const res = await tables(schema, table)
     const c = res.columns.filter((e: { column: any }) => e.column === column)[0]
 
     const nullable = args?.nullable || (await select({
-      message: 'True or false',
+      message: 'Nullable',
       default: c.is_nullable ? 'true' : 'false',
       choices: [{value: 'true'}, {value: 'false'}],
     }))

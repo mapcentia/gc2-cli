@@ -24,7 +24,7 @@ let specific_args = {
 }
 
 export default class Drop extends Command {
-  static description = 'Drop column'
+  static description = 'Drop a column'
   static flags = {
     help: Flags.help({char: 'h'}),
   }

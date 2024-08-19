@@ -5,11 +5,11 @@
  *
  */
 
-import {Args, Command, Flags, ux as cli} from '@oclif/core'
+import {input} from '@inquirer/prompts'
+import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import args from '../../common/base_args'
 import get from '../../util/get-response'
-import {tables} from '../../util/getters'
 import {schemasList, tableList, typeList} from '../../util/lists'
 import make from '../../util/make-request'
 import setSchema from '../../util/set-schema'
@@ -31,7 +31,7 @@ let specific_args = {
 }
 
 export default class Add extends Command {
-  static description = 'Add column'
+  static description = 'Add a new column'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
@@ -43,7 +43,7 @@ export default class Add extends Command {
     args = setSchema(args)
     const schema = args?.schema || await schemasList()
     const table = args?.table || await tableList(schema)
-    const column = args?.column || await cli.prompt('Name', {required: true})
+    const column = args?.column || await input({message: 'Name', required: true})
     const type = args?.type || await typeList()
 
     const body = {

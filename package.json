@@ -84,7 +84,7 @@
         "description": "Create new tables and rename existing ones"
       },
       "column": {
-        "description": "Create new column in tables and alter/drop existing ones"
+        "description": "Create new columns in tables and alter/drop existing ones"
       }
     },
     "additionalHelpFlags": [
