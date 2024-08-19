@@ -19,7 +19,7 @@ let specific_args = {
 }
 
 export default class Get extends Command {
-  static description = 'Get client'
+  static description = 'Get client(s).'
   static flags = {
     help: Flags.help({char: 'h'}),
   }

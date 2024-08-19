@@ -5,6 +5,7 @@
  *
  */
 
+import {confirm} from '@inquirer/prompts'
 import {Args, Command, Flags, ux, ux as cli} from '@oclif/core'
 import chalk from 'chalk'
 import get from '../../util/get-response'
@@ -13,7 +14,7 @@ import {clientList} from '../../util/lists'
 import make from '../../util/make-request'
 
 export default class Drop extends Command {
-  static description = 'Drop a client'
+  static description = 'Drop a client.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
@@ -29,6 +30,9 @@ export default class Drop extends Command {
   async run() {
     const {args} = await this.parse(Drop)
     let id = args?.id || await clientList()
+    if (!await confirm({message: '⚠️ The client will be deleted. Are you sure', default: false})) {
+      this.exit();
+    }
     const response = await make('4', `clients/${id}`, 'DELETE')
     await get(response, 204)
     this.log(`Client is dropped`)

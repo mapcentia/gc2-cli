@@ -5,13 +5,24 @@
  *
  */
 
-import {Args, Command, Flags, ux as cli} from '@oclif/core'
+import {input} from '@inquirer/prompts'
+import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import get from '../../util/get-response'
 import make from '../../util/make-request'
 
 export default class Add extends Command {
   static description = 'Create new client'
+
+  static args = {
+    name: Args.string(
+      {
+        required: false,
+        description: 'Name of new client',
+      }
+    ),
+  }
+
   static flags = {
     name: Flags.string({char: 'n', description: 'Name'}),
     description: Flags.string({char: 'd', description: 'Description'}),
@@ -22,19 +33,15 @@ export default class Add extends Command {
 
   async run() {
     const {flags} = await this.parse(Add)
-    let name, description, redirect_uri_str, homepage
-    // Interactive
-    if (Object.keys(flags).length === 0) {
-      name = await cli.prompt('Name', {required: true})
-      description = await cli.prompt('Description', {required: false})
-      redirect_uri_str = await cli.prompt('Redirect uri (comma separated)', {required: false})
-      homepage = await cli.prompt('homepage', {required: false})
-    } else {
-      name = flags?.name || await cli.prompt('Name', {required: true})
-      description = flags?.description
-      redirect_uri_str = flags?.redirect_uri
-      homepage = flags?.homepage
-    }
+
+    const name = flags?.name || await input({message: 'Client name', required: true})
+    const description = flags?.description || await input({message: 'description', required: false})
+    const redirect_uri_str = flags?.redirect_uri || await input({
+      message: 'Redirect uri (comma separated)',
+      required: false
+    })
+    const homepage = flags?.homepage || await input({message: 'homepage', required: false})
+
     let redirect_uri = null
     if (redirect_uri_str) {
       redirect_uri = redirect_uri_str.split(',').map((e: string) => e.trim())

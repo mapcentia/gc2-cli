@@ -5,6 +5,7 @@
  *
  */
 
+import {input} from '@inquirer/prompts'
 import {Args, Command, Flags, ux as cli} from '@oclif/core'
 import chalk from 'chalk'
 import get from '../../util/get-response'
@@ -13,9 +14,9 @@ import {clientList} from '../../util/lists'
 import make from '../../util/make-request'
 
 export default class Update extends Command {
-  static description = 'Update a client'
+  static description = 'Update a client.'
+
   static flags = {
-    name: Flags.string({char: 'n', description: 'Name', required: false}),
     description: Flags.string({char: 'd', description: 'Description', required: false}),
     redirect_uri: Flags.string({char: 'r', description: 'Redirect uri', required: false}),
     homepage: Flags.string({char: 'p', description: 'Homepage', required: false}),
@@ -33,17 +34,22 @@ export default class Update extends Command {
   async run() {
     const {args} = await this.parse(Update)
     const {flags} = await this.parse(Update)
-    let name, description, redirect_uri_str, homepage
     let id = args?.id || await clientList()
     const cl = await clients(id)
-    // Interactive
-    name = flags?.name || await cli.prompt('Name', {required: false, default: cl.name})
-    description = flags?.description || await cli.prompt('Description', {required: false, default: cl.description})
-    redirect_uri_str = flags?.redirect_uri || await cli.prompt('Redirect uri (comma separated)', {
+
+    const name = flags?.name || await input({message: 'Name', required: false, default: cl.name})
+    const description = flags?.description || await input({
+      message: 'Description',
+      required: false,
+      default: cl.description
+    })
+    const redirect_uri_str = flags?.redirect_uri || await input({
+      message: 'Redirect uri (comma separated)',
       required: false,
       default: cl.redirect_uri?.join(',')
     })
-    homepage = flags?.homepage || await cli.prompt('homepage', {required: false, default: cl.homepage})
+    const homepage = flags?.homepage || await input({message: 'homepage', required: false, default: cl.homepage})
+
     let redirect_uri = null
     if (redirect_uri_str) {
       redirect_uri = redirect_uri_str.split(',').map((e: string) => e.trim())
