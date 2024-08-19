@@ -5,8 +5,7 @@
  *
  */
 
-import {Args, Command, Flags} from '@oclif/core'
-import chalk from 'chalk'
+import {Args, Command, Flags, ux} from '@oclif/core'
 import cli from 'cli-ux'
 import args from '../../common/base_args'
 import get from '../../util/get-response'
@@ -33,6 +32,11 @@ export default class Get extends Command {
     const schema = args?.schema || await schemasList()
     const table = args?.table || await tableList(schema)
     const res = await privileges(schema, table)
+
+    if (Object.keys(res.privileges).length === 0) {
+      ux.log(`⚠️ No privilege set yet`)
+      this.exit(1)
+    }
 
     type row = {
       [key: string]: any

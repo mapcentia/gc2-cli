@@ -32,11 +32,9 @@ let specific_args = {
 
 export default class Set extends Command {
   static description = 'Set privileges on table'
-
   static flags = {
     help: Flags.help({char: 'h'}),
   }
-
   static args = {...base_args, ...specific_args}
 
   async run() {

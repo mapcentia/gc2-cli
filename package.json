@@ -95,6 +95,9 @@
       },
       "client": {
         "description": "Create new client and update/drop existing ones."
+      },
+      "privilege": {
+        "description": "Set and get user privileges for tables."
       }
     },
     "additionalHelpFlags": [
