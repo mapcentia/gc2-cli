@@ -9,7 +9,7 @@ import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import args from '../../common/base_args'
 import get from '../../util/get-response'
-import {constraintList, indexList, schemasList, tableList} from '../../util/lists'
+import {constraintList, schemasList, tableList} from '../../util/lists'
 import make from '../../util/make-request'
 import setSchema from '../../util/set-schema'
 
@@ -39,6 +39,6 @@ export default class Drop extends Command {
 
     const response = await make('4', `schemas/${schema}/tables/${table}/constraints/${name}`, 'DELETE', null)
     await get(response, 204)
-    this.log(`Dropped constraint ${args.name} on ${chalk.green(args.table)}`)
+    this.log(`Dropped constraint ${name} on ${chalk.green(table)}`)
   }
 }

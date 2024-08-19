@@ -5,7 +5,8 @@
  *
  */
 
-import {Args, Command, Flags, ux as cli} from '@oclif/core'
+import {input} from '@inquirer/prompts'
+import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import args from '../../common/base_args'
 import get from '../../util/get-response'
@@ -67,8 +68,8 @@ export default class Add extends Command {
     const schema = args?.schema || await schemasList()
     const table = args?.table || await tableList(schema)
     const columns = args?.columns || (await columnCheck(schema, table)).join(',')
-    const name = args?.name || await cli.prompt('Name', {required: false})
     const type = args?.type || await constraintTypeList()
+    const name = args?.name || await input({message: 'Name', required: false, default: `${table}_${type}`})
 
     let body = {
       name,
@@ -77,14 +78,14 @@ export default class Add extends Command {
     }
 
     if (type === 'foreign') {
-      const ft = flags?.referencedTable || await cli.prompt('Referenced table', {required: true})
+      const ft = flags?.referencedTable || await input({message: 'Referenced table', required: true})
       body = {
         ...body, ...{
           referenced_table: ft,
         }
       }
 
-      const fc = flags?.referencedColumns || await cli.prompt('Referenced columns', {required: false})
+      const fc = flags?.referencedColumns || await input({message: 'Referenced columns', required: false})
 
       if (fc) {
         body = {
@@ -96,7 +97,7 @@ export default class Add extends Command {
     }
 
     if (type === 'check') {
-      const ch = flags?.check || await cli.prompt('Check expression', {required: true})
+      const ch = flags?.check || await input({message: 'Check expression', required: true})
       body = {
         ...body, ...{
           check: ch,

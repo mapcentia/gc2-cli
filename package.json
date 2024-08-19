@@ -75,16 +75,17 @@
   "main": "lib/index.js",
   "oclif": {
     "topics": {
-      "schema":
-      {
+      "schema": {
         "description": "Create new schemas and rename existing ones"
       },
-      "table":
-      {
+      "table": {
         "description": "Create new tables and rename existing ones"
       },
       "column": {
-        "description": "Create new columns in tables and alter/drop existing ones"
+        "description": "Create new columns on tables and alter/drop existing ones"
+      },
+      "constraint": {
+        "description": "Create new constraints on tables and drop existing ones"
       }
     },
     "additionalHelpFlags": [
