@@ -7,9 +7,7 @@
 
 import {confirm} from '@inquirer/prompts'
 import {Args, Command, Flags, ux, ux as cli} from '@oclif/core'
-import chalk from 'chalk'
 import get from '../../util/get-response'
-import {clients} from '../../util/getters'
 import {clientList} from '../../util/lists'
 import make from '../../util/make-request'
 

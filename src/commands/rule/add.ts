@@ -8,6 +8,8 @@
 import {input, select} from '@inquirer/prompts'
 import {Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
+import get from '../../util/get-response'
+import {accessList, requestList, serviceList} from '../../util/lists'
 import make from '../../util/make-request'
 
 export default class Add extends Command {
@@ -31,30 +33,12 @@ export default class Add extends Command {
     // Interactive
     const priority = flags?.priority || await input({message: 'Priority', required: true})
     const username = flags?.username || await input({message: 'Username', required: false, default: '*'})
-    const service = flags?.service || await input({message: 'Service', required: false})
-    const request = flags?.request ||  await select({
-      message: 'Request',
-      default: '*',
-      choices: [
-        {value: '', name: '*'},
-        {value: 'select', name: 'Select'},
-        {value: 'insert', name: 'Insert'},
-        {value: 'update', name: 'Update'},
-        {value: 'delete', name: 'Delete'},
-      ]
-    })
+    const service = flags?.service || await serviceList()
+    const request = flags?.request ||  await requestList()
     const schema = flags?.schema || await input({message: 'schema', required: false, default: '*'})
     const table = flags?.table || await input({message: 'table', required: false, default: '*'})
     const iprange = flags?.iprange || await input({message: 'iprange', required: false, default: '*'})
-    const access = flags?.access || await select({
-      message: 'Access',
-      default: 'deny',
-      choices: [
-        {value: 'deny', name: 'Deny'},
-        {value: 'allow', name: 'Allow'},
-        {value: 'limit', name: 'Limit'},
-      ]
-    })
+    const access = flags?.access || await accessList()
     const filter = flags?.filter || await input({message: 'filter', required: false})
 
     const body: {[index: string]:any} = {priority, username, service, request, schema, layer:table, iprange, access, filter}
@@ -65,6 +49,7 @@ export default class Add extends Command {
     });
    // console.log(body)
     const response = await make('4', `rules`, 'POST', body)
+    await get(response, 201)
     this.log(`Rule created here ${chalk.green(response.headers.get('Location'))}`)
   }
 }

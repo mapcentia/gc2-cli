@@ -7,7 +7,7 @@
 
 import {Args, Command, Flags} from '@oclif/core'
 import cli from 'cli-ux'
-import {clients, rules} from '../../util/getters'
+import {rules} from '../../util/getters'
 
 let specific_args = {
   id: Args.string(
@@ -19,7 +19,7 @@ let specific_args = {
 }
 
 export default class Get extends Command {
-  static description = 'Get rule'
+  static description = 'Get rule(s).'
   static flags = {
     help: Flags.help({char: 'h'}),
   }

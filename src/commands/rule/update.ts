@@ -6,10 +6,10 @@
  */
 
 import {select} from '@inquirer/prompts'
-import {Args, Command, Flags, ux as cli} from '@oclif/core'
+import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import {rules} from '../../util/getters'
-import {ruleList} from '../../util/lists'
+import {accessList, requestList, ruleList, serviceList} from '../../util/lists'
 import make from '../../util/make-request'
 import {input} from '@inquirer/prompts'
 
@@ -43,45 +43,25 @@ export default class Update extends Command {
     let {args, flags} = await this.parse(Update)
 
     const id = args?.id || await ruleList()
-
     const rule = await rules(id)
-    console.log(rule)
 
     // Interactive
     const priority = flags?.priority || await input({message: 'Priority', required: true, default: rule.priority})
-    const username = flags?.username || await cli.prompt('Username', {required: false, default: rule.username})
-    const service = flags?.service || await cli.prompt('service', {required: false, default: rule.service})
-    const request = flags?.request ||  await select({
-      message: 'Request',
-      default: rule.request,
-      choices: [
-        {value: '', name: '*'},
-        {value: 'select', name: 'Select'},
-        {value: 'insert', name: 'Insert'},
-        {value: 'update', name: 'Update'},
-        {value: 'delete', name: 'Delete'},
-      ]
-    })
-    const schema = flags?.schema || await cli.prompt('schema', {required: false, default: rule.schema})
-    const table = flags?.table || await cli.prompt('table', {required: false, default: rule.layer})
-    const iprange = flags?.iprange || await cli.prompt('IP range', {required: false, default: rule.iprange})
-    const access = flags?.access || await select({
-      message: 'Access',
-      default: rule.access,
-      choices: [
-        {value: 'deny', name: 'Deny'},
-        {value: 'allow', name: 'Allow'},
-        {value: 'limit', name: 'Limit'},
-      ]
-    })
-    const filter = flags?.filter || await cli.prompt('Filter', {required: false, default: rule.filter})
+    const username = flags?.username || await input({message: 'Username', required: false, default: rule.username})
+    const service = flags?.service || await serviceList(rule.service)
+    const request = flags?.request ||  await requestList(rule.request)
+    const schema = flags?.schema || await input({message: 'Schema', required: false, default: rule.schema})
+    const table = flags?.table || await input({message: 'Table', required: false, default: rule.layer})
+    const iprange = flags?.iprange || await input({message: 'IP range', required: false, default: rule.iprange})
+    const access = flags?.access || await accessList(rule.access)
+    const filter = flags?.filter || await input({message: 'Filter', required: false, default: rule.filter})
     const body: {[index: string]:any} = {priority, username, service, request, schema, layer:table, iprange, access, filter}
     Object.keys(body).forEach((key) => {
       if (body[key] === '') {
         delete (body[key])
       }
     });
-    // console.log(body)
+
     const response = await make('4', `rules/${id}`, 'PUT', body)
     this.log(`Rule is here ${chalk.green(response.headers.get('Location'))}`)
   }

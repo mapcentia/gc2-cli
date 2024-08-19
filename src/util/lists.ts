@@ -163,7 +163,7 @@ const constraintTypeList = async () => {
   return r
 }
 
-const privilegeList = async (defaultValue?: string) => {
+const privilegeList = async (defaultValue: string = 'none') => {
   let r: any = await select({
     message: 'Choose privileges',
     default: defaultValue,
@@ -215,6 +215,48 @@ const groupList = async (exclude: string, defaultValue?: string) => {
   return r
 }
 
+const serviceList = async (defaultValue: string = '*') => {
+  let r: any = await select({
+    message: 'Service',
+    default: defaultValue,
+    choices: [
+      {value: '', name: '*'},
+      {value: 'sql', name: 'Sql'},
+      {value: 'ows', name: 'Ows'},
+      {value: 'Wfs-t', name: 'wfst'},
+    ]
+  })
+  return r
+}
+
+const requestList = async (defaultValue: string = '*') => {
+  let r: any = select({
+    message: 'Request',
+    default: defaultValue,
+    choices: [
+      {value: '', name: '*'},
+      {value: 'select', name: 'Select'},
+      {value: 'insert', name: 'Insert'},
+      {value: 'update', name: 'Update'},
+      {value: 'delete', name: 'Delete'},
+    ]
+  })
+  return r
+}
+
+const accessList = async (defaultValue: string = 'deny') => {
+  let r: any =select({
+    message: 'Access',
+    default: defaultValue,
+    choices: [
+      {value: 'deny', name: 'Deny'},
+      {value: 'allow', name: 'Allow'},
+      {value: 'limit', name: 'Limit'},
+    ]
+  })
+  return r
+}
+
 export {
   schemasList,
   tableList,
@@ -229,4 +271,7 @@ export {
   privilegeList,
   userList,
   groupList,
+  serviceList,
+  requestList,
+  accessList,
 }
