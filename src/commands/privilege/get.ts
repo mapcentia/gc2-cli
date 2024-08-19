@@ -5,20 +5,18 @@
  *
  */
 
-import {Args, Command, Flags, ux} from '@oclif/core'
+import {Command, Flags, ux} from '@oclif/core'
 import cli from 'cli-ux'
 import args from '../../common/base_args'
-import get from '../../util/get-response'
 import {privileges} from '../../util/getters'
 import {schemasList, tableList} from '../../util/lists'
-import make from '../../util/make-request'
 import setSchema from '../../util/set-schema'
 
 let base_args = args
 let specific_args = {}
 
 export default class Get extends Command {
-  static description = 'Get privileges on table'
+  static description = 'Get privileges on table.'
 
   static flags = {
     help: Flags.help({char: 'h'}),

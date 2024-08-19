@@ -31,7 +31,7 @@ let specific_args = {
 }
 
 export default class Set extends Command {
-  static description = 'Set privileges on table'
+  static description = 'Set privileges on table.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
