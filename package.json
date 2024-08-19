@@ -77,7 +77,11 @@
     "topics": {
       "schema":
       {
-        "description": "Create new schema and rename existing ones"
+        "description": "Create new schemas and rename existing ones"
+      },
+      "table":
+      {
+        "description": "Create new tables and rename existing ones"
       },
       "column": {
         "description": "Create new column in tables and alter/drop existing ones"

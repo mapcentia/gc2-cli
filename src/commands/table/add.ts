@@ -5,6 +5,7 @@
  *
  */
 
+import {input} from '@inquirer/prompts'
 import {Command, Flags, ux as cli} from '@oclif/core'
 import chalk from 'chalk'
 import args from '../../common/base_args'
@@ -17,7 +18,7 @@ let base_args = args
 let specific_args = {}
 
 export default class Add extends Command {
-  static description = 'Create new table. Leave out arguments for interactive mode'
+  static description = 'Create a new table.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
@@ -29,7 +30,7 @@ export default class Add extends Command {
 
     // Interactive
     const schema = args?.schema || await schemasList()
-    const table = args?.table || await cli.prompt('Table', {required: true})
+    const table = args?.table || await input({message: 'Table', required: true})
 
     const response = await make('4', `schemas/${schema}/tables`, 'POST', {table})
     await get(response, 201)

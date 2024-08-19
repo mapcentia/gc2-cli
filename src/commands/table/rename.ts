@@ -5,6 +5,7 @@
  *
  */
 
+import {input} from '@inquirer/prompts'
 import {Args, Command, Flags, ux as cli} from '@oclif/core'
 import chalk from 'chalk'
 import args from '../../common/base_args'
@@ -24,7 +25,7 @@ let specific_args = {
 }
 
 export default class Rename extends Command {
-  static description = 'Rename table'
+  static description = 'Rename table.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
@@ -35,7 +36,7 @@ export default class Rename extends Command {
     args = setSchema(args)
     const schema = args?.schema || await schemasList()
     const table = args?.table || await tableList(schema)
-    const name = args?.name || await cli.prompt('Name', {required: true})
+    const name = args?.name || await input({message: 'New name', required: true})
 
     const response = await make('4', `schemas/${schema}/tables/${table}`, 'PUT', {table: name})
     await get(response, 303)

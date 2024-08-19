@@ -5,6 +5,7 @@
  *
  */
 
+import {confirm} from '@inquirer/prompts'
 import {Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import args from '../../common/base_args'
@@ -29,6 +30,9 @@ export default class Drop extends Command {
     args = setSchema(args)
     const schema = args?.schema || await schemasList()
     const table = args?.table || await tableList(schema)
+    if (!await confirm({message: '⚠️ The table will be deleted. Are you sure', default: false})) {
+      this.exit();
+    }
 
     const response = await make('4', `schemas/${schema}/tables/${table}`, 'DELETE', null)
     await get(response, 204)
