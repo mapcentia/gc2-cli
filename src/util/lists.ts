@@ -5,7 +5,7 @@
  *
  */
 
-import {clients, schemas, tables, users} from './getters'
+import {clients, rules, schemas, tables, users} from './getters'
 import {ux} from '@oclif/core'
 import {exit} from '@oclif/core/lib/errors'
 import {checkbox, select} from '@inquirer/prompts'
@@ -121,6 +121,22 @@ const clientList = async () => {
   return r.split(' ')[0]
 }
 
+const ruleList = async () => {
+  const s: any = await rules()
+  if (s.rules.length < 1) {
+    ux.log(`⚠️ No rules yet`)
+    exit(0)
+  }
+  let r: any = await select({
+    message: 'Choose a rule',
+    default: null,
+    choices: s.rules.map((v: { id: string }) => {
+      return {value: v.id}
+    })
+  })
+  return r
+}
+
 const typeList = async () => {
   let r: any = await select({
     message: 'Choose a type',
@@ -205,6 +221,7 @@ export {
   columnList,
   columnCheck,
   clientList,
+  ruleList,
   indexList,
   typeList,
   constraintList,

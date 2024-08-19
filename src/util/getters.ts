@@ -14,6 +14,12 @@ const clients = async (id?: string) => {
   return await get(response, 200)
 }
 
+const rules = async (id?: string) => {
+  const res = id ? `rules/${id}` : 'rules'
+  const response = await make('4', res, 'GET')
+  return await get(response, 200)
+}
+
 const schemas = async (id?: string) => {
   const res = id ? `schemas/${id}` : 'schemas'
   const response = await make('4', res, 'GET')
@@ -39,4 +45,4 @@ const privileges = async (schema: string, table: string) => {
   return await get(response, 200)
 }
 
-export {clients, schemas, tables, users, privileges}
+export {clients, rules, schemas, tables, users, privileges}

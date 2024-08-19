@@ -5,6 +5,7 @@
  *
  */
 
+import {input} from '@inquirer/prompts'
 import {Args, Command, Flags, ux as cli} from '@oclif/core'
 import chalk from 'chalk'
 import get from '../../util/get-response'
@@ -34,9 +35,7 @@ export default class Rename extends Command {
     const {args} = await this.parse(Rename)
 
     let schema = args?.schema || await schemasList()
-    const name = args?.name || await cli.prompt('Name', {required: true})
-
-
+    const name = args?.name || await input({message: 'New name', required: true})
     const response = await make('4', `schemas/${schema}`, 'PUT', {schema: name})
     await get(response, 303)
     this.log(`Schema relocated to here ${chalk.green(response.headers.get('Location'))}`)

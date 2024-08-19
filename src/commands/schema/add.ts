@@ -9,9 +9,10 @@ import {Args, Command, Flags, ux as cli} from '@oclif/core'
 import chalk from 'chalk'
 import get from '../../util/get-response'
 import make from '../../util/make-request'
+import {input} from '@inquirer/prompts'
 
 export default class Add extends Command {
-  static description = 'Create new schema'
+  static description = 'Create a new schema'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
@@ -19,13 +20,13 @@ export default class Add extends Command {
     schema: Args.string(
       {
         required: false,
-        description: 'name of schema',
+        description: 'Name of new schema',
       }
     )
   }
   async run() {
     const {args} = await this.parse(Add)
-    const schema = args?.schema || await cli.prompt('Name', {required: true})
+    const schema = args?.schema || await input({message: 'Name', required: true})
     const response = await make('4', `schemas`, 'POST', {schema})
     await get(response, 201)
     this.log(`Schema created here ${chalk.green(response.headers.get('Location'))}`)

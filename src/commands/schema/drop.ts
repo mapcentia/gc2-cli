@@ -10,9 +10,10 @@ import chalk from 'chalk'
 import get from '../../util/get-response'
 import {schemasList} from '../../util/lists'
 import make from '../../util/make-request'
+import {confirm} from '@inquirer/prompts'
 
 export default class Drop extends Command {
-  static description = 'Drop table'
+  static description = 'Drop schema.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
@@ -27,7 +28,7 @@ export default class Drop extends Command {
   async run() {
     const {args} = await this.parse(Drop)
     let schema = args?.schema || await schemasList()
-    if (!await ux.confirm('The whole schema will be deleted. Are you sure')) {
+    if (!await confirm({message: '⚠️ The whole schema will be deleted. Are you sure', default: false})) {
       this.exit();
     }
     const response = await make('4', `schemas/${schema}`, 'DELETE', null)
