@@ -7,7 +7,6 @@ import User from '../common/user'
 import EventEmitter = require('events')
 import {jwtDecode} from 'jwt-decode'
 
-
 const config: Configstore = new Configstore('gc2-env')
 let obj: User = config.all // User object or empty object
 
@@ -76,14 +75,24 @@ export const waitFor = <T>(
   })
 }
 
-export const isTokenExpired = (token: string) :boolean => {
+export const isTokenExpired = (token: string): boolean => {
 
-  let isJwtExpired = false;
-  const { exp } = jwtDecode(token);
-  const currentTime = new Date().getTime() / 1000;
+  let isJwtExpired = false
+  const {exp} = jwtDecode(token)
+  const currentTime = new Date().getTime() / 1000
 
   if (exp) {
-    if (currentTime > exp) isJwtExpired = true;
+    if (currentTime > exp) isJwtExpired = true
   }
-  return isJwtExpired;
+  return isJwtExpired
+}
+
+export const passwordIsStrongEnough = (password: string, allowNull: boolean = false) => {
+  const message = 'Entered password is too weak'
+  if (password === '' && allowNull) return true
+  if (password.length < 8) return message
+  if (!(/[A-Z]/.test(password))) return message
+  if (!(/[a-z]/.test(password))) return message
+  if (!(/\d/.test(password))) return message
+  return true
 }

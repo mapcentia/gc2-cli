@@ -5,12 +5,14 @@
  *
  */
 
-import {Args, Command, Flags, ux as cli} from '@oclif/core'
+import {input, password} from '@inquirer/prompts'
+import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import get from '../../util/get-response'
 import {users} from '../../util/getters'
 import {groupList, userList} from '../../util/lists'
 import make from '../../util/make-request'
+import {passwordIsStrongEnough} from '../../util/utils'
 
 export default class Update extends Command {
   static description = 'Update user'
@@ -26,7 +28,7 @@ export default class Update extends Command {
     name: Args.string(
       {
         required: false,
-        description: 'Name of user',
+        description: 'Name of user.',
       }
     ),
   }
@@ -36,11 +38,11 @@ export default class Update extends Command {
 
     const name = args?.name || await userList()
     const user = await users(name)
-    const password = flags?.password || await cli.prompt('Password', {required: false, type: 'hide', default: undefined})
-    const email = flags?.password || await cli.prompt('E-mail', {required: true, default: user.email})
+    const pwd = flags?.password || await password({message: 'Password', mask: true, validate: (t) => passwordIsStrongEnough(t, true)})
+    const email = flags?.password || await input({message: 'E-mail', required: true, default: user.email})
     const group = flags?.group || await groupList(name, user.user_group)
 
-    const p: string|null = password === '' ? null: password
+    const p: string|null = pwd === '' ? null: pwd
 
     const body = {
       email,

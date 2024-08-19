@@ -89,6 +89,9 @@
       },
       "index": {
         "description": "Create new indices on columns and drop existing ones"
+      },
+      "user": {
+        "description": "Create new users and update/drop existing ones."
       }
     },
     "additionalHelpFlags": [
