@@ -5,7 +5,8 @@
  *
  */
 
-import {Args, Command, Flags, ux as cli} from '@oclif/core'
+import {input, select} from '@inquirer/prompts'
+import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import get from '../../util/get-response'
 import {columnCheck, schemasList, tableList} from '../../util/lists'
@@ -25,13 +26,13 @@ let specific_args = {
     {
       required: false,
       description: 'Index method',
-      options: ['brin', 'btree', 'gin', 'gist', 'hash', 'gist']
+      options: ['btree', 'brin', 'gin', 'gist', 'hash']
     },
   ),
   name: Args.string(
     {
       required: false,
-      description: 'Name for index',
+      description: 'Name of index',
     },
   ),
 }
@@ -55,9 +56,18 @@ export default class Add extends Command {
     const schema = args?.schema || await schemasList()
     const table = args?.table || await tableList(schema)
     const columns = args?.columns || (await columnCheck(schema, table)).join(',')
-    const name = args?.name || await cli.prompt('Name', {required: false})
-    const method = args?.method || await cli.prompt('Method', {required: false})
-
+    const method = args?.method || await select({
+      message: 'Choose index method',
+      default: 'btree',
+      choices: [
+        {value: 'btree', name: 'Btree'},
+        {value: 'brin', name: 'Brin'},
+        {value: 'gin', name: 'Gin'},
+        {value: 'gist', name: 'Gist'},
+        {value: 'hash', name: 'Hash'},
+      ]
+    })
+    const name = args?.name || await input({message: 'Name of index', required: false, default: `${table}-${method}`})
     const body = {
       name,
       columns: columns.split(',').map((e: string) => e.trim()),

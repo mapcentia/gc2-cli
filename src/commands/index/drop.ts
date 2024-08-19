@@ -18,7 +18,7 @@ let specific_args = {
   name: Args.string(
     {
       required: false,
-      description: 'Name for index',
+      description: 'Name of index',
     },
   ),
 }

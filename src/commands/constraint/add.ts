@@ -69,7 +69,7 @@ export default class Add extends Command {
     const table = args?.table || await tableList(schema)
     const columns = args?.columns || (await columnCheck(schema, table)).join(',')
     const type = args?.type || await constraintTypeList()
-    const name = args?.name || await input({message: 'Name', required: false, default: `${table}_${type}`})
+    const name = args?.name || await input({message: 'Name', required: false, default: `${table}-${type}`})
 
     let body = {
       name,
