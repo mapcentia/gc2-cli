@@ -5,6 +5,7 @@
  *
  */
 
+import {input} from '@inquirer/prompts'
 import {Command, Flags, ux as cli} from '@oclif/core'
 import Configstore from 'configstore'
 
@@ -28,7 +29,7 @@ export default class Connect extends Command {
       return
     }
 
-    let host = flags?.host ? flags.host : await cli.prompt('Host', {required: true, default: config.all.host})
+    let host = flags?.host ? flags.host : await input({message: 'Host', required: true, default: config.all.host})
     if (host) {
       host = host.replace(/\/$/, '')
       config.set({host})

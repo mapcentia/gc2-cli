@@ -5,7 +5,7 @@
  *
  */
 
-import {select} from '@inquirer/prompts'
+import {input, password, select} from '@inquirer/prompts'
 import {Command, Flags} from '@oclif/core'
 import {exit} from '@oclif/core/lib/errors'
 import chalk from 'chalk'
@@ -65,7 +65,7 @@ export default class Login extends Command {
     let data
     if (flags.flow === 'password') {
       if (obj.user === '' && !flags?.user) {
-        obj.user = await cli.prompt('User')
+        obj.user = await input({message: 'User', required: true})
       }
       const user: string = flags?.user || obj.user
 
@@ -91,13 +91,13 @@ export default class Login extends Command {
           return
         }
       }
-      const password: string = flags?.password ? flags.password : await cli.prompt('Password', {type: 'hide'})
+      const pwd: string = flags?.password ? flags.password : await password({message: 'Password', mask:true})
       // Warn about using pwd on the command line
       if (flags?.password) {
         this.log(chalk.yellow('Warning: Using a password on the command line interface can be insecure.'))
       }
       try {
-        data = await this.startPasswordFlow(user, password, obj.database)
+        data = await this.startPasswordFlow(user, pwd, obj.database)
       } catch (error: any) {
         this.log(error.response.data.error_description)
         exit(1);
@@ -112,7 +112,7 @@ export default class Login extends Command {
     config.set({token: data.access_token})
     config.set({refresh_token: data.refresh_token})
     config.set({superUser})
-    cli.action.start(`Signing into ${chalk.yellow(obj?.host)} with ${chalk.yellow(user)}`)
+    cli.action.start(`Signing with ${chalk.yellow(user)}`)
     cli.action.stop(chalk.green('success'))
   }
 
