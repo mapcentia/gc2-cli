@@ -1,3 +1,10 @@
+/**
+ * @author     Martin Høgh <mh@mapcentia.com>
+ * @copyright  2013-2024 MapCentia ApS
+ * @license    http://www.gnu.org/licenses/#AGPL  GNU AFFERO GENERAL PUBLIC LICENSE 3
+ *
+ */
+
 import {Command, Flags} from '@oclif/core'
 import base64url from 'base64url'
 import chalk from 'chalk'
@@ -21,8 +28,8 @@ export default class Sql extends Command {
   static flags = {
     statement: Flags.string({char: 's', description: 'SQL statement'}),
     srs: Flags.integer({char: 'c', description: 'Output spatial reference system. Use EPSG codes.', default: 4326}),
-    format: Flags.string({char: 'f', description: 'Output file format.', default: 'ogr/GPKG'}),
-    path: Flags.string({char: 'p', description: 'Output path to file. If omitted file is saved in current folder.'}),
+    format: Flags.string({char: 'f', description: 'Output file format.', default: 'csv'}),
+    path: Flags.string({char: 'p', description: 'Output path to file. If omitted file is saved in current folder.', default: '.'}),
     help: Flags.help({char: 'h'}),
   }
 
@@ -37,17 +44,23 @@ export default class Sql extends Command {
       }
 
       const res = await make('4', `sql`, 'POST', statement)
-      const data = await get(res, 200)
 
       // If we get JSON, when affected rows
       if (res.headers.get('content-type')?.startsWith('application/json')) {
+        const data = await get(res, 200)
         this.log(chalk.green('Affected rows: ' + data.affected_rows))
         return
       }
 
       // We get a file
       let fileStream: any
-      const fileName = res.headers.get('content-disposition')?.split('=')[1].replace(/"/g, '')
+      let fileName: string;
+
+      if (flags.format === 'csv' || flags.format === 'ndjson') {
+        fileName = 'file.' + flags.format
+      } else {
+        fileName = res.headers.get('content-disposition')?.split('=')[1].replace(/"/g, '')
+      }
       if (flags.path) {
         try {
           const stat = fs.lstatSync(flags.path + '')
@@ -71,6 +84,7 @@ export default class Sql extends Command {
           this.log(chalk.red(e.message))
         })
         fileStream.on('finish', resolve)
+        this.log(chalk.green(fileName) + ` downloaded to ` + flags.path)
       })
 
     } else {
@@ -85,28 +99,29 @@ export default class Sql extends Command {
           base64: true
         }
         const response = await make('4', `sql`, 'POST', statement)
-        const data = await get(response, 200)
-        if (data.success) {
-          if (data?.affected_rows) {
-            this.log(chalk.green('Affected rows: ' + data.affected_rows))
-          } else {
-            type columns = {
-              [key: string]: any
-            }
-            const columns: columns = {}
-            data.forStore.forEach((e: { name: string, type: string }) => {
-              if (e.type !== 'geometry') {
-                columns[e.name] = ({} as string)
-              }
-            })
-            const features: any[] = []
-            data.features.forEach((e: { type: string, geometry: object, properties: any }) => {
-              features.push(e.properties)
-            })
-            cli.table(features, columns)
-          }
+        const data = await get(response, 200, true)
+
+        if (response.status !== 200) {
+          continue
+        }
+
+        if (data?.affected_rows) {
+          this.log(chalk.green('Affected rows: ' + data.affected_rows))
         } else {
-          this.log(chalk.red(data.message))
+          type columns = {
+            [key: string]: any
+          }
+          const columns: columns = {}
+          data.forStore.forEach((e: { name: string, type: string }) => {
+            if (e.type !== 'geometry') {
+              columns[e.name] = ({} as string)
+            }
+          })
+          const features: any[] = []
+          data.features.forEach((e: { type: string, geometry: object, properties: any }) => {
+            features.push(e.properties)
+          })
+          cli.table(features, columns)
         }
       }
     }
