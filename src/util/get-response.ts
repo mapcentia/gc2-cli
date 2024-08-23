@@ -17,9 +17,10 @@ import {exit} from '@oclif/core/lib/errors'
  *
  * @param {Response} response - The response object containing the response from the GET request.
  * @param expectedCode
+ * @param doNotExit
  * @returns {Promise<any>} - A promise that resolves with the response body.
  */
-const get = async (response: Response, expectedCode: number): Promise<any> => {
+const get = async (response: Response, expectedCode: number, doNotExit:boolean = false): Promise<any> => {
   let res = null
   // Handle case of No Content
   if (expectedCode !== 204) {
@@ -32,7 +33,9 @@ const get = async (response: Response, expectedCode: number): Promise<any> => {
       res = await response.json()
     }
     ux.log('⚠️ ' + chalk.red(res.message || res.error))
-    exit(1)
+    if (!doNotExit) {
+      exit(1)
+    }
   }
   return res
 }
