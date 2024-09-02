@@ -1,6 +1,6 @@
 process.env.NODE_DEBUG = 'http'
 
-import {Command, Flags} from '@oclif/core'
+import {Args, Command, Flags} from '@oclif/core'
 import {exit} from '@oclif/core/lib/errors'
 import cli from 'cli-ux'
 import Configstore from 'configstore'
@@ -19,27 +19,36 @@ export default class Import extends Command {
   static description = 'Import files to GC2. Set path to a file or folder, which will be compressed, uploaded and imported into GC2'
   static flags = {
     srs: Flags.integer({char: 'c', description: 'Output spatial reference system. Use EPSG codes.', default: 4326}),
-    input: Flags.string({char: 'p', description: 'Input path to file or folder.', required: true}),
     help: Flags.help({char: 'h'}),
   }
 
+  static args = {
+    schema: Args.string(
+      {
+        required: true,
+        description: 'Upload to this schema.',
+      },
+    ),
+    path: Args.string(
+      {
+        required: true,
+        description: 'Input path to file or folder.',
+      },
+    ),
+  }
+
   async run() {
-    const {flags} = await this.parse(Import)
-    const config: Configstore = new Configstore('gc2-env')
-    const user: User = config.all
-    const url = user.host + '/api/v4/import'
+    const {flags, args} = await this.parse(Import)
     let tmpDir
     let tmpFile
     let tmpPath
     const appPrefix = 'gc2-cli-'
     const chunkSize = 1000000
-
-    const inputPath = flags.input
+    const inputPath = args.path
     try {
       tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix))
       tmpFile = uuidv4() + '.zip'
       tmpPath = tmpDir + '/' + tmpFile
-      console.log(tmpPath)
 
       cli.action.start('Compressing files')
       await this.createZipArchive(inputPath, tmpPath)
@@ -63,16 +72,15 @@ export default class Import extends Command {
           name: 'file',
           filename: 'file'
         })
-        const res = await make('4', `import`, 'POST', form, true, 'ss')
+        const res = await make('4', `import/${args.schema}`, 'POST', form, true, 'ss')
         const data = await get(res, 200)
-        console.log(data)
         chunkCount++
       }
       cli.action.stop()
       cli.action.start('Server importing files')
-      const res = await make('4', `import/${tmpFile}`, 'GET', null)
+      const res = await make('4', `import/${args.schema}/${tmpFile}`, 'GET', null)
       const data = await get(res, 200)
-      // this.log(data)
+      this.log(data)
       cli.action.stop()
     } catch (e) {
       console.log(e)
