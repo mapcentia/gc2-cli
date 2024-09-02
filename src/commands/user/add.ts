@@ -36,7 +36,7 @@ export default class Add extends Command {
 
     const name = args?.name || await input({message: 'Username', required: true})
     const pwd = flags?.password || await password({message: 'Password', mask:true, validate: passwordIsStrongEnough})
-    const email = flags?.password || await input({message: 'E-mail', required: true})
+    const email = flags?.email || await input({message: 'E-mail', required: true})
 
     const body = {
       name,
