@@ -1,18 +1,19 @@
-process.env.NODE_DEBUG = 'http'
+/**
+ * @author     Martin Høgh <mh@mapcentia.com>
+ * @copyright  2013-2024 MapCentia ApS
+ * @license    http://www.gnu.org/licenses/#AGPL  GNU AFFERO GENERAL PUBLIC LICENSE 3
+ *
+ */
 
 import {Args, Command, Flags} from '@oclif/core'
 import {exit} from '@oclif/core/lib/errors'
-import chalk from 'chalk'
 import cli from 'cli-ux'
-import Configstore from 'configstore'
 import AdmZip from 'adm-zip'
 import * as os from 'os'
 import {v4 as uuidv4} from 'uuid'
 import FormData from 'form-data'
 import * as fs from 'fs'
 import * as path from 'path'
-
-import User from '../common/user'
 import get from '../util/get-response'
 import make from '../util/make-request'
 
@@ -22,7 +23,6 @@ export default class Import extends Command {
     srs: Flags.integer({char: 'c', description: 'Output spatial reference system. Use EPSG codes.', default: 4326}),
     help: Flags.help({char: 'h'}),
   }
-
   static args = {
     schema: Args.string(
       {
