@@ -2,6 +2,7 @@ process.env.NODE_DEBUG = 'http'
 
 import {Args, Command, Flags} from '@oclif/core'
 import {exit} from '@oclif/core/lib/errors'
+import chalk from 'chalk'
 import cli from 'cli-ux'
 import Configstore from 'configstore'
 import AdmZip from 'adm-zip'
@@ -73,15 +74,47 @@ export default class Import extends Command {
           filename: 'file'
         })
         const res = await make('4', `import/${args.schema}`, 'POST', form, true, 'ss')
-        const data = await get(res, 200)
+        await get(res, 200)
         chunkCount++
       }
       cli.action.stop()
       cli.action.start('Server importing files')
       const res = await make('4', `import/${args.schema}/${tmpFile}`, 'GET', null)
       const data = await get(res, 200)
-      this.log(data)
+      type tables = {
+        [key: string]: any
+      }
+      type table = {
+        driver: string;
+        featureCount: number;
+        type: string;
+        layerIndex: number;
+        layerName: string;
+        hasWkt: boolean;
+        authStr: string;
+        error: string;
+      }
+      const rows: object[] = []
+      const tables: tables = {driver: {}, count: {}, type: {}, index: {}, name: {}, hasWkt: {}, authStr: {}, error: {}, }
+      for (const c in data.data) {
+        const v: table = data.data[c]
+        rows.push({
+          driver: v.driver,
+          count: v.featureCount,
+          type: v.type,
+          index: v.layerIndex,
+          name: v.layerName,
+          hasWkt: v.hasWkt,
+          authStr: v.authStr,
+          error: v.error,
+
+        })
+      }
       cli.action.stop()
+      this.log('')
+      cli.table(rows, tables, {
+        printLine: this.log.bind(this)
+      })
     } catch (e) {
       console.log(e)
       exit(1)
