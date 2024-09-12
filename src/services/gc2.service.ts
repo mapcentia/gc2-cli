@@ -200,6 +200,7 @@ export class Gc2Service {
       })
   }
 
+  // TODO use v4 when all has updated GC2
   async getPasswordToken(username: string, password: string, database: string): Promise<GetTokenResponse> {
     return this.http
       .post(
