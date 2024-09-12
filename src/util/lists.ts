@@ -10,10 +10,10 @@ import {ux} from '@oclif/core'
 import {exit} from '@oclif/core/lib/errors'
 import {checkbox, select} from '@inquirer/prompts'
 
-const schemasList = async () => {
+const schemasList = async (message: string = 'Choose a schema') => {
   const s: any = await schemas()
   let r: any = await select({
-    message: 'Choose a schema',
+    message,
     default: null,
     choices: s.schemas.map((v: { schema: string }) => {
       return {value: v.schema}
