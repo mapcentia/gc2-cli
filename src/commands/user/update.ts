@@ -8,48 +8,72 @@
 import {input, password} from '@inquirer/prompts'
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
+import Configstore from 'configstore'
+import User from '../../common/user'
 import get from '../../util/get-response'
 import {users} from '../../util/getters'
 import {groupList, userList} from '../../util/lists'
 import make from '../../util/make-request'
 import {passwordIsStrongEnough} from '../../util/utils'
 
+const config: Configstore = new Configstore('gc2-env')
+const userConfig: User = config.all
+
+let args: any = {}
+if (userConfig.superUser) {
+  args.name = Args.string(
+    {
+      required: false,
+      description: 'Name of user.',
+    }
+  )
+} else {
+  args = null
+}
+
+let flags: any = {
+  help: Flags.help({char: 'h'}),
+  password: Flags.string({char: 'p', description: 'New password', required: false}),
+}
+if (userConfig.superUser) {
+  flags.properties = Flags.string({char: 'e', description: 'New properties', required: false})
+  flags.group = Flags.string({char: 'g', description: 'New group', required: false})
+}
+
 export default class Update extends Command {
   static description = 'Update user'
-
-  static flags = {
-    help: Flags.help({char: 'h'}),
-    password: Flags.string({char: 'p', description: 'New password', required: false}),
-    email: Flags.string({char: 'e', description: 'New e-mail', required: false}),
-    properties: Flags.string({char: 'e', description: 'New properties', required: false}),
-    group: Flags.string({char: 'g', description: 'New group', required: false}),
-  }
-  static args = {
-    name: Args.string(
-      {
-        required: false,
-        description: 'Name of user.',
-      }
-    ),
-  }
+  static flags = flags
+  static args = args
 
   async run() {
     let {args, flags} = await this.parse(Update)
+    let name
+    let user
+    let group
 
-    const name = args?.name || await userList()
-    const user = await users(name)
+    if (userConfig.superUser) {
+      name = args?.name || await userList()
+    } else {
+      name = userConfig.user
+    }
+    user = await users(name)
     const pwd = flags?.password || await password({message: 'Password', mask: true, validate: (t) => passwordIsStrongEnough(t, true)})
     const email = flags?.password || await input({message: 'E-mail', required: true, default: user.email})
-    const group = flags?.group || await groupList(name, user.user_group)
+    if (userConfig.superUser) {
+      group = flags?.group || await groupList(name, user.user_group)
+    }
 
     const p: string|null = pwd === '' ? null: pwd
 
-    const body = {
+    let body: any = {
       email,
       password: p,
-      user_group: group,
       properties: flags.properties,
     }
+    if (userConfig.superUser) {
+      body.user_group = group
+    }
+
     const response = await make('4', `users/${name}`, 'PUT', body)
     await get(response, 303)
     this.log(`User is here ${chalk.green(response.headers.get('Location'))}`)
