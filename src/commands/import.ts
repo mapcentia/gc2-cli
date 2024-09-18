@@ -9,34 +9,46 @@ import {Args, Command, Flags} from '@oclif/core'
 import {exit} from '@oclif/core/lib/errors'
 import cli from 'cli-ux'
 import AdmZip from 'adm-zip'
+import Configstore from 'configstore'
 import * as os from 'os'
 import {v4 as uuidv4} from 'uuid'
 import FormData from 'form-data'
 import * as fs from 'fs'
 import * as path from 'path'
+import User from '../common/user'
 import get from '../util/get-response'
+import {schemasList} from '../util/lists'
 import make from '../util/make-request'
+
+const config: Configstore = new Configstore('gc2-env')
+const userConfig: User = config.all
+
+let args: any = {}
+if (userConfig.superUser) {
+  args.schema = Args.string(
+    {
+      required: true,
+      description: 'Name of user.',
+    }
+  )
+}
+args.path = Args.string(
+  {
+    required: true,
+    description: 'Input path to file or folder.',
+  },
+)
 
 export default class Import extends Command {
   static description = 'Import files to GC2. Set path to a file or folder, which will be compressed, uploaded and imported into GC2'
   static flags = {
-    srs: Flags.integer({char: 'c', description: 'Output spatial reference system. Use EPSG codes.', default: 4326}),
+    s_srs: Flags.string({char: 's', description: 'Source spatial reference system. Use EPSG codes.'}),
+    t_srs: Flags.string({char: 't', description: 'Target spatial reference system. Use EPSG codes.'}),
+    dry_run: Flags.boolean({char: 'd', description: 'Dry run. Only analyse files with no import.'}),
+
     help: Flags.help({char: 'h'}),
   }
-  static args = {
-    schema: Args.string(
-      {
-        required: true,
-        description: 'Upload to this schema.',
-      },
-    ),
-    path: Args.string(
-      {
-        required: true,
-        description: 'Input path to file or folder.',
-      },
-    ),
-  }
+  static args = args
 
   async run() {
     const {flags, args} = await this.parse(Import)
@@ -46,6 +58,8 @@ export default class Import extends Command {
     const appPrefix = 'gc2-cli-'
     const chunkSize = 1000000
     const inputPath = args.path
+    const schema = userConfig.superUser ? args?.schema : userConfig.user
+
     try {
       tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix))
       tmpFile = uuidv4() + '.zip'
@@ -73,13 +87,17 @@ export default class Import extends Command {
           name: 'file',
           filename: 'file'
         })
-        const res = await make('4', `import/${args.schema}`, 'POST', form, true, 'ss')
+        const res = await make('4', `import/${schema}`, 'POST', form, true, 'ss')
         await get(res, 200)
         chunkCount++
       }
       cli.action.stop()
-      cli.action.start('Server importing files')
-      const res = await make('4', `import/${args.schema}/${tmpFile}`, 'GET', null)
+
+      let body: any = flags
+      if (!flags.dry_run) {
+        body.import = true
+      }
+      const res = await make('4', `import/${schema}/${tmpFile}`, 'PUT', body)
       const data = await get(res, 200)
       type tables = {
         [key: string]: any
@@ -110,7 +128,7 @@ export default class Import extends Command {
 
         })
       }
-      cli.action.stop()
+    //  cli.action.stop()
       this.log('')
       cli.table(rows, tables, {
         printLine: this.log.bind(this)
