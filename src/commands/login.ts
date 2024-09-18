@@ -108,7 +108,10 @@ export default class Login extends Command {
       data = await this.startDeviceCodeFlow()
     }
     const user = JSON.parse(atob(data.access_token.split('.')[1])).uid
+    const database = JSON.parse(atob(data.access_token.split('.')[1])).database
     const superUser = JSON.parse(atob(data.access_token.split('.')[1])).superUser
+    config.set({user: user})
+    config.set({database: database})
     config.set({token: data.access_token})
     config.set({refresh_token: data.refresh_token})
     config.set({superUser})
