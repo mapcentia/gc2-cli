@@ -29,14 +29,17 @@ USAGE
 # Commands
 <!-- commands -->
 * [`gc2 admin`](#gc2-admin)
+* [`gc2 autocomplete [SHELL]`](#gc2-autocomplete-shell)
 * [`gc2 client add [NAME]`](#gc2-client-add-name)
 * [`gc2 client drop [ID]`](#gc2-client-drop-id)
 * [`gc2 client get [ID]`](#gc2-client-get-id)
 * [`gc2 client update [ID]`](#gc2-client-update-id)
 * [`gc2 column add [TABLE] [COLUMN] [TYPE]`](#gc2-column-add-table-column-type)
+* [`gc2 column default [TABLE] [COLUMN] [DEFAULT]`](#gc2-column-default-table-column-default)
 * [`gc2 column drop [TABLE] [COLUMN]`](#gc2-column-drop-table-column)
 * [`gc2 column nullable [TABLE] [COLUMN] [NULLABLE]`](#gc2-column-nullable-table-column-nullable)
 * [`gc2 column rename [TABLE] [COLUMN] [NAME]`](#gc2-column-rename-table-column-name)
+* [`gc2 column type [TABLE] [COLUMN] [TYPE]`](#gc2-column-type-table-column-type)
 * [`gc2 connect`](#gc2-connect)
 * [`gc2 constraint add [TABLE] [COLUMNS] [TYPE] [NAME]`](#gc2-constraint-add-table-columns-type-name)
 * [`gc2 constraint drop [TABLE] [NAME]`](#gc2-constraint-drop-table-name)
@@ -45,7 +48,7 @@ USAGE
 * [`gc2 foreign materialize FROM [TO] [INCLUDE]`](#gc2-foreign-materialize-from-to-include)
 * [`gc2 grid`](#gc2-grid)
 * [`gc2 help [COMMANDS]`](#gc2-help-commands)
-* [`gc2 import`](#gc2-import)
+* [`gc2 import PATH`](#gc2-import-path)
 * [`gc2 index add [TABLE] [COLUMNS] [METHOD] [NAME]`](#gc2-index-add-table-columns-method-name)
 * [`gc2 index drop [TABLE] [NAME]`](#gc2-index-drop-table-name)
 * [`gc2 login`](#gc2-login)
@@ -66,15 +69,17 @@ USAGE
 * [`gc2 seed start`](#gc2-seed-start)
 * [`gc2 seed stop`](#gc2-seed-stop)
 * [`gc2 sql`](#gc2-sql)
+* [`gc2 stat`](#gc2-stat)
 * [`gc2 symbol PATH`](#gc2-symbol-path)
 * [`gc2 table add [TABLE]`](#gc2-table-add-table)
 * [`gc2 table drop [TABLE]`](#gc2-table-drop-table)
 * [`gc2 table get [TABLE]`](#gc2-table-get-table)
+* [`gc2 table move [TABLE] [DESTINATION]`](#gc2-table-move-table-destination)
 * [`gc2 table rename [TABLE] [NAME]`](#gc2-table-rename-table-name)
 * [`gc2 update [CHANNEL]`](#gc2-update-channel)
 * [`gc2 user add [NAME]`](#gc2-user-add-name)
 * [`gc2 user drop [NAME]`](#gc2-user-drop-name)
-* [`gc2 user update [NAME]`](#gc2-user-update-name)
+* [`gc2 user update`](#gc2-user-update)
 * [`gc2 view backup SCHEMAS`](#gc2-view-backup-schemas)
 * [`gc2 view get SCHEMA`](#gc2-view-get-schema)
 * [`gc2 view refresh SCHEMAS [INCLUDE]`](#gc2-view-refresh-schemas-include)
@@ -99,6 +104,37 @@ DESCRIPTION
 ```
 
 _See code: [src/commands/admin.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.6.0/src/commands/admin.ts)_
+
+## `gc2 autocomplete [SHELL]`
+
+Display autocomplete installation instructions.
+
+```
+USAGE
+  $ gc2 autocomplete [SHELL] [-r]
+
+ARGUMENTS
+  SHELL  (zsh|bash|powershell) Shell type
+
+FLAGS
+  -r, --refresh-cache  Refresh cache (ignores displaying instructions)
+
+DESCRIPTION
+  Display autocomplete installation instructions.
+
+EXAMPLES
+  $ gc2 autocomplete
+
+  $ gc2 autocomplete bash
+
+  $ gc2 autocomplete zsh
+
+  $ gc2 autocomplete powershell
+
+  $ gc2 autocomplete --refresh-cache
+```
+
+_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v3.2.4/src/commands/autocomplete/index.ts)_
 
 ## `gc2 client add [NAME]`
 
@@ -209,6 +245,28 @@ DESCRIPTION
 
 _See code: [src/commands/column/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.6.0/src/commands/column/add.ts)_
 
+## `gc2 column default [TABLE] [COLUMN] [DEFAULT]`
+
+Set default value for column
+
+```
+USAGE
+  $ gc2 column default [TABLE] [COLUMN] [DEFAULT] [-h]
+
+ARGUMENTS
+  TABLE    Name of table
+  COLUMN   Name of column
+  DEFAULT  Default value. Set to 'null' for removing an already set value
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Set default value for column
+```
+
+_See code: [src/commands/column/default.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.6.0/src/commands/column/default.ts)_
+
 ## `gc2 column drop [TABLE] [COLUMN]`
 
 Drop a column
@@ -273,6 +331,28 @@ DESCRIPTION
 ```
 
 _See code: [src/commands/column/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.6.0/src/commands/column/rename.ts)_
+
+## `gc2 column type [TABLE] [COLUMN] [TYPE]`
+
+Rename column
+
+```
+USAGE
+  $ gc2 column type [TABLE] [COLUMN] [TYPE] [-h]
+
+ARGUMENTS
+  TABLE   Name of table
+  COLUMN  Name of column
+  TYPE    New type for column
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Rename column
+```
+
+_See code: [src/commands/column/type.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.6.0/src/commands/column/type.ts)_
 
 ## `gc2 connect`
 
@@ -453,18 +533,22 @@ DESCRIPTION
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.0.1/src/commands/help.ts)_
 
-## `gc2 import`
+## `gc2 import PATH`
 
 Import files to GC2. Set path to a file or folder, which will be compressed, uploaded and imported into GC2
 
 ```
 USAGE
-  $ gc2 import -p <value> [-c <value>] [-h]
+  $ gc2 import PATH [-s <value>] [-t <value>] [-d] [-h]
+
+ARGUMENTS
+  PATH  Input path to file or folder.
 
 FLAGS
-  -c, --srs=<value>    [default: 4326] Output spatial reference system. Use EPSG codes.
+  -d, --dry_run        Dry run. Only analyse files with no import.
   -h, --help           Show CLI help.
-  -p, --input=<value>  (required) Input path to file or folder.
+  -s, --s_srs=<value>  Source spatial reference system. Use EPSG codes.
+  -t, --t_srs=<value>  Target spatial reference system. Use EPSG codes.
 
 DESCRIPTION
   Import files to GC2. Set path to a file or folder, which will be compressed, uploaded and imported into GC2
@@ -887,9 +971,9 @@ USAGE
 
 FLAGS
   -c, --srs=<value>        [default: 4326] Output spatial reference system. Use EPSG codes.
-  -f, --format=<value>     [default: ogr/GPKG] Output file format.
+  -f, --format=<value>     [default: csv] Output file format.
   -h, --help               Show CLI help.
-  -p, --path=<value>       Output path to file. If omitted file is saved in current folder.
+  -p, --path=<value>       [default: .] Output path to file. If omitted file is saved in current folder.
   -s, --statement=<value>  SQL statement
 
 DESCRIPTION
@@ -897,6 +981,23 @@ DESCRIPTION
 ```
 
 _See code: [src/commands/sql.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.6.0/src/commands/sql.ts)_
+
+## `gc2 stat`
+
+Get usage statistics.
+
+```
+USAGE
+  $ gc2 stat [-h]
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Get usage statistics.
+```
+
+_See code: [src/commands/stat.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.6.0/src/commands/stat.ts)_
 
 ## `gc2 symbol PATH`
 
@@ -988,6 +1089,27 @@ DESCRIPTION
 ```
 
 _See code: [src/commands/table/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.6.0/src/commands/table/get.ts)_
+
+## `gc2 table move [TABLE] [DESTINATION]`
+
+Move table to another schema.
+
+```
+USAGE
+  $ gc2 table move [TABLE] [DESTINATION] [-h]
+
+ARGUMENTS
+  TABLE        Name of table
+  DESTINATION  Destination schema
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Move table to another schema.
+```
+
+_See code: [src/commands/table/move.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.6.0/src/commands/table/move.ts)_
 
 ## `gc2 table rename [TABLE] [NAME]`
 
@@ -1090,23 +1212,17 @@ DESCRIPTION
 
 _See code: [src/commands/user/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.6.0/src/commands/user/drop.ts)_
 
-## `gc2 user update [NAME]`
+## `gc2 user update`
 
 Update user
 
 ```
 USAGE
-  $ gc2 user update [NAME] [-h] [-p <value>] [-e <value>] [-e <value>] [-g <value>]
-
-ARGUMENTS
-  NAME  Name of user.
+  $ gc2 user update [-h] [-p <value>]
 
 FLAGS
-  -e, --email=<value>       New e-mail
-  -e, --properties=<value>  New properties
-  -g, --group=<value>       New group
-  -h, --help                Show CLI help.
-  -p, --password=<value>    New password
+  -h, --help              Show CLI help.
+  -p, --password=<value>  New password
 
 DESCRIPTION
   Update user

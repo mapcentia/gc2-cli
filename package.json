@@ -13,7 +13,9 @@
     "@oclif/command": "^1.8.36",
     "@oclif/core": "^3.23.0",
     "@oclif/parser": "^3.8.17",
+    "@oclif/plugin-autocomplete": "^3.2.4",
     "@oclif/plugin-help": "^6.0.1",
+    "@oclif/plugin-not-found": "^3.2.21",
     "@oclif/plugin-update": "^3.0.0",
     "@types/adm-zip": "^0.5.0",
     "@types/configstore": "^4.0.0",
@@ -111,7 +113,9 @@
     "bin": "gc2",
     "plugins": [
       "@oclif/plugin-help",
-      "@oclif/plugin-update"
+      "@oclif/plugin-update",
+      "@oclif/plugin-not-found",
+      "@oclif/plugin-autocomplete"
     ],
     "update": {
       "s3": {
