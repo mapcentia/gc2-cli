@@ -10,7 +10,6 @@ import chalk from 'chalk'
 import {Response} from 'node-fetch'
 import {exit} from '@oclif/core/lib/errors'
 
-
 /**
  * Asynchronously sends a GET request and returns the response body if the
  * request is successful.
@@ -20,7 +19,7 @@ import {exit} from '@oclif/core/lib/errors'
  * @param doNotExit
  * @returns {Promise<any>} - A promise that resolves with the response body.
  */
-const get = async (response: Response, expectedCode: number, doNotExit:boolean = false): Promise<any> => {
+const get = async (response: Response, expectedCode: number, doNotExit: boolean = false): Promise<any> => {
   let res = null
   // Handle case of No Content
   if (expectedCode !== 204) {

@@ -53,10 +53,11 @@ export default class Get extends Command {
       is_primary: boolean;
       is_unique: boolean;
       default_value: string;
-      index_method?: string;
+      index_method?: any;
+      checks?: any;
     }
     const data: object[] = []
-    const columns: columns = {column: {}, type: {}, unique: {} , nullable: {}, index_method: {extended: true}, foreign_key: {extended: true}}
+    const columns: columns = {column: {}, type: {}, unique: {} , nullable: {}, index_method: {}, foreign_key: {}, checks: {}}
     for (const c in res.columns) {
       const v: column = res.columns[c]
       data.push({
@@ -64,13 +65,31 @@ export default class Get extends Command {
         type: v.full_type,
         unique: v.is_unique,
         nullable: v.is_nullable,
-        index_method: v.index_method || '',
+        index_method: v.index_method ? v.index_method.join(', ') : '',
         foreign_key: v.reference || '',
+        checks: v.checks ? v.checks.join(', ') : '',
       })
     }
     cli.table(data, columns, {
       printLine: this.log.bind(this),
       ...flags
     })
+    this.log('\nIndices:')
+    for (const i in res.indices) {
+      const v = res.indices[i]
+      this.log(`  ${v.method} on: ${v.columns.join(', ')} (${v.name})`)
+    }
+    this.log('\nconstraints:')
+    for (const i in res.constraints) {
+      const v = res.constraints[i]
+      let pre;
+      if (v?.columns) {
+        pre = `on ${v.columns.join(', ')}`
+      }
+      if (v?.check) {
+        pre = `on ${v.check}`
+      }
+      this.log(`  ${v.constraint} ${pre} (${v.name})`)
+    }
   }
 }

@@ -6,7 +6,6 @@
  */
 
 import {Args, Command, Flags} from '@oclif/core'
-import {exit} from '@oclif/core/lib/errors'
 import cli from 'cli-ux'
 import AdmZip from 'adm-zip'
 import Configstore from 'configstore'
@@ -17,7 +16,6 @@ import * as fs from 'fs'
 import * as path from 'path'
 import User from '../common/user'
 import get from '../util/get-response'
-import {schemasList} from '../util/lists'
 import make from '../util/make-request'
 
 const config: Configstore = new Configstore('gc2-env')
@@ -88,7 +86,7 @@ export default class Import extends Command {
           filename: 'file'
         })
         const res = await make('4', `import/${schema}`, 'POST', form, true, 'ss')
-        await get(res, 200)
+        await get(res, 201)
         chunkCount++
       }
       cli.action.stop()
@@ -98,7 +96,7 @@ export default class Import extends Command {
         body.import = true
       }
       const res = await make('4', `import/${schema}/${tmpFile}`, 'PUT', body)
-      const data = await get(res, 200)
+      const data = await get(res, 201)
       type tables = {
         [key: string]: any
       }
@@ -135,7 +133,7 @@ export default class Import extends Command {
       })
     } catch (e) {
       console.log(e)
-      exit(1)
+      this.exit(1)
     } finally {
       try {
         if (tmpDir) {
@@ -146,7 +144,7 @@ export default class Import extends Command {
         console.error(`An error has occurred while removing the temp folder at ${tmpDir}. Please remove it manually. Error: ${e}`)
       }
     }
-    exit(0)
+    this.exit(0)
   }
 
   async createZipArchive(path: string, outputFile: string) {
