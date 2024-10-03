@@ -40,6 +40,7 @@ const make = async (version: string, resource: string, method: Method, payload?:
       exit(1)
     }
   }
+  headers['Content-Type'] = 'application/json'
   let request: RequestInit = {
     method: method,
     headers: headers,
