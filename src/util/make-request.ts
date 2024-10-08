@@ -13,7 +13,7 @@ import fetch, {RequestInit} from 'node-fetch'
 import getHeaders from './request-headers'
 import Method from '../common/http-verbs'
 import User from '../common/user'
-import {isTokenExpired} from './utils'
+import {isTokenExpired, noLogin, GC2_SERVER_ADDRESS} from './utils'
 import {Gc2Service} from '../services/gc2.service'
 
 const make = async (version: string, resource: string, method: Method, payload?: any, checkConnection: boolean = true, contentType: string = 'application/json', host: string | null = null): Promise<any> => {
@@ -21,8 +21,7 @@ const make = async (version: string, resource: string, method: Method, payload?:
   const user: User = config.all
   const headers = getHeaders(contentType)
   if (!headers.Authorization && checkConnection) {
-    logToStderr(chalk.red('No login. Use \'connect\' command'))
-    exit(1)
+    noLogin()
   }
   // We check is token needs refreshing
   if (checkConnection && isTokenExpired(user.token)) {
@@ -49,6 +48,7 @@ const make = async (version: string, resource: string, method: Method, payload?:
   if (payload) {
     request.body = contentType === 'application/json' ? JSON.stringify(payload) : payload
   }
-  return await fetch((host || user.host) + `/api/v${version}/${resource}`, request)
+
+  return await fetch((host || GC2_SERVER_ADDRESS) + `/api/v${version}/${resource}`, request)
 }
 export default make

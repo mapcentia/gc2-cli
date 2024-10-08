@@ -1,3 +1,6 @@
+import {logToStderr} from '@oclif/core/lib/cli-ux'
+import {exit} from '@oclif/core/lib/errors'
+import chalk from 'chalk'
 import * as crypto from 'crypto'
 import * as fs from 'fs'
 import * as os from 'os'
@@ -13,7 +16,7 @@ let obj: User = config.all // User object or empty object
 const CONFIG_PATH = path.resolve(os.homedir(), '.clirc')
 export const CLI_SERVER_ADDRESS = 'http://127.0.0.1:5657'
 export const CLI_SERVER_ADDRESS_CALLBACK = `${CLI_SERVER_ADDRESS}/auth/callback`
-export const GC2_SERVER_ADDRESS = obj.host
+export const GC2_SERVER_ADDRESS = 'https://centia.io'
 
 export type UserCredentials = {
   accessToken: string;
@@ -95,4 +98,9 @@ export const passwordIsStrongEnough = (password: string, allowNull: boolean = fa
   if (!(/[a-z]/.test(password))) return message
   if (!(/\d/.test(password))) return message
   return true
+}
+
+export const noLogin = () => {
+  logToStderr(chalk.red("You're not logged in. Please use the 'login' command."))
+  exit(1)
 }

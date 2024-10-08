@@ -7,10 +7,16 @@
 
 import Configstore from 'configstore'
 import User from '../common/user'
+import {noLogin} from './utils'
+
 
 const config: Configstore = new Configstore('gc2-env')
 const user: User = config.all
+
 const setSchema: any = (args: any) => {
+  if (!user?.token) {
+    noLogin()
+  }
   if (!args?.schema && !user.superUser) {
     args.schema = JSON.parse(atob(user.token.split('.')[1])).uid
   }
