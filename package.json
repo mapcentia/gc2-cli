@@ -1,7 +1,7 @@
 {
   "name": "gc2",
-  "description": "Centia CLI",
-  "version": "2024.6.0",
+  "description": "GC2 CLI",
+  "version": "2024.10.0",
   "author": "Martin Høgh @mapcentia",
   "bin": {
     "cen": "./bin/run"
@@ -111,7 +111,7 @@
     ],
     "topicSeparator": " ",
     "commands": "./lib/commands",
-    "bin": "centia",
+    "bin": "gc2",
     "plugins": [
       "@oclif/plugin-help",
       "@oclif/plugin-update",
