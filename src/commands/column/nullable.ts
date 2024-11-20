@@ -46,7 +46,7 @@ export default class Nullable extends Command {
     const column = args?.column || await columnList(schema, table)
 
     const res = await tables(schema, table)
-    const c = res.columns.filter((e: { column: any }) => e.column === column)[0]
+    const c = res.columns.filter((e: { name: any }) => e.name === column)[0]
 
     const nullable = args?.nullable || (await select({
       message: 'Nullable',
@@ -57,7 +57,7 @@ export default class Nullable extends Command {
     const body = {
       is_nullable: nullable === 'true'
     }
-    const response = await make('4', `schemas/${schema}/tables/${table}/columns/${column}`, 'PUT', body)
+    const response = await make('4', `schemas/${schema}/tables/${table}/columns/${column}`, 'PATCH', body)
     await get(response, 303)
     this.log(`Column ${chalk.green(column)} is now ${nullable !== 'true' ? chalk.red('NOT ') : ''}nullable`)
   }

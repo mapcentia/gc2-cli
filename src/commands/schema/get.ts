@@ -44,7 +44,7 @@ export default class Get extends Command {
     for (const c in res.tables) {
       const v: tables = res.tables[c]
       data.push({
-        table: v.table.split('.').reverse()[0],
+        table: v.name.split('.').reverse()[0],
 
       })
     }

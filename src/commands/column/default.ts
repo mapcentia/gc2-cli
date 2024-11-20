@@ -45,7 +45,7 @@ export default class Default extends Command {
     const table = args?.table || await tableList(schema)
     const column = args?.column || await columnList(schema, table)
     const res = await tables(schema, table)
-    const c = res.columns.filter((e: { column: any }) => e.column === column)[0]
+    const c = res.columns.filter((e: { name: any }) => e.name === column)[0]
     const defaultValue = args?.default || await input({
       message: 'Default value',
       default: c.default_value,
@@ -54,7 +54,7 @@ export default class Default extends Command {
     const body = {
       default_value: defaultValue
     }
-    const response = await make('4', `schemas/${schema}/tables/${table}/columns/${column}`, 'PUT', body)
+    const response = await make('4', `schemas/${schema}/tables/${table}/columns/${column}`, 'PATCH', body)
     await get(response, 303)
     this.log(`Column ${chalk.green(column)} has now default value` )
   }

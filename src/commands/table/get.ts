@@ -37,7 +37,7 @@ export default class Get extends Command {
       [key: string]: any
     }
     type column = {
-      column: string;
+      name: string;
       num: number;
       type: string;
       full_type: string;
@@ -61,7 +61,7 @@ export default class Get extends Command {
     for (const c in res.columns) {
       const v: column = res.columns[c]
       data.push({
-        column: (v.is_primary ? chalk.green(v.column) : v.column) + (v.default_value ? ' = ' + v.default_value : ''),
+        column: (v.is_primary ? chalk.green(v.name) : v.name) + (v.default_value ? ' = ' + v.default_value : ''),
         type: v.full_type,
         unique: v.is_unique,
         nullable: v.is_nullable,
@@ -75,21 +75,30 @@ export default class Get extends Command {
       ...flags
     })
     this.log('\nIndices:')
-    for (const i in res.indices) {
-      const v = res.indices[i]
-      this.log(`  ${v.method} on: ${v.columns.join(', ')} (${v.name})`)
+    if (res.indices.length === 0) {
+      this.log(` none`)
+    } else {
+      for (const i in res.indices) {
+        const v = res.indices[i]
+        this.log(`  ${v.method} on: ${v.columns.join(', ')} (${v.name})`)
+      }
     }
+
     this.log('\nconstraints:')
-    for (const i in res.constraints) {
-      const v = res.constraints[i]
-      let pre;
-      if (v?.columns) {
-        pre = `on ${v.columns.join(', ')}`
+    if (res.constraints.length === 0)  {
+      this.log(` none`)
+    } else {
+      for (const i in res.constraints) {
+        const v = res.constraints[i]
+        let pre;
+        if (v?.columns) {
+          pre = `on ${v.columns.join(', ')}`
+        }
+        if (v?.check) {
+          pre = `on ${v.check}`
+        }
+        this.log(`  ${v.constraint} ${pre} (${v.name})`)
       }
-      if (v?.check) {
-        pre = `on ${v.check}`
-      }
-      this.log(`  ${v.constraint} ${pre} (${v.name})`)
     }
   }
 }

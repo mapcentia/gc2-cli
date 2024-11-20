@@ -36,7 +36,7 @@ export default class Rename extends Command {
 
     let schema = args?.schema || await schemasList()
     const name = args?.name || await input({message: 'New name', required: true})
-    const response = await make('4', `schemas/${schema}`, 'PUT', {schema: name})
+    const response = await make('4', `schemas/${schema}`, 'PATCH', {name})
     await get(response, 303)
     this.log(`Schema relocated to here ${chalk.green(response.headers.get('Location'))}`)
   }

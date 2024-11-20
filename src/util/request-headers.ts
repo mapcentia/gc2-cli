@@ -12,8 +12,9 @@ const config: Configstore = new Configstore('gc2-env')
 const user: User = config.all
 const getHeaders: any = (contentType: string = 'application/json') => {
   return {
-  //  'Content-Type': contentType,
-    Authorization: user?.token ? 'Bearer ' + user.token : null
+    'Content-Type': contentType,
+    Accept: 'application/json',
+    Authorization: user?.token ? 'Bearer ' + user.token : null,
   }
 }
 export default getHeaders

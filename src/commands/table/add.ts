@@ -30,9 +30,9 @@ export default class Add extends Command {
 
     // Interactive
     const schema = args?.schema || await schemasList()
-    const table = args?.table || await input({message: 'Table', required: true})
+    const name = args?.table || await input({message: 'Table', required: true})
 
-    const response = await make('4', `schemas/${schema}/tables`, 'POST', {table})
+    const response = await make('4', `schemas/${schema}/tables`, 'POST', {name})
     await get(response, 201)
     this.log(`Table created here ${chalk.green(response.headers.get('Location'))}`)
   }

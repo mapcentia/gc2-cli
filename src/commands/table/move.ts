@@ -38,7 +38,7 @@ export default class Move extends Command {
     const table = args?.table || await tableList(schema)
     const destination = args?.destination || await schemasList('Choose a destination schema')
 
-    const response = await make('4', `schemas/${schema}/tables/${table}`, 'PUT', {schema: destination})
+    const response = await make('4', `schemas/${schema}/tables/${table}`, 'PATCH', {schema: destination})
     await get(response, 303)
     this.log(`Table relocated to here ${chalk.green(response.headers.get('Location'))}`)
   }

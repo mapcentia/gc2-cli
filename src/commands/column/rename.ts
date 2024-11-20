@@ -46,7 +46,7 @@ export default class Rename extends Command {
     const column = args?.column || await columnList(schema, table)
     const name = args?.name || await input({message: 'New name', required: true})
 
-    const response = await make('4', `schemas/${schema}/tables/${table}/columns/${column}`, 'PUT', {column: name})
+    const response = await make('4', `schemas/${schema}/tables/${table}/columns/${column}`, 'PATCH', {column: name})
     await get(response, 303)
     this.log(`Column relocated to here ${chalk.green(response.headers.get('Location'))}`)
   }

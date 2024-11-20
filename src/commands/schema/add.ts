@@ -26,8 +26,8 @@ export default class Add extends Command {
   }
   async run() {
     const {args} = await this.parse(Add)
-    const schema = args?.schema || await input({message: 'Name', required: true})
-    const response = await make('4', `schemas`, 'POST', {schema})
+    const name = args?.schema || await input({message: 'Name', required: true})
+    const response = await make('4', `schemas`, 'POST', {name})
     await get(response, 201)
     this.log(`Schema created here ${chalk.green(response.headers.get('Location'))}`)
   }

@@ -43,11 +43,11 @@ export default class Add extends Command {
     args = setSchema(args)
     const schema = args?.schema || await schemasList()
     const table = args?.table || await tableList(schema)
-    const column = args?.column || await input({message: 'Name', required: true})
+    const name = args?.column || await input({message: 'Name', required: true})
     const type = args?.type || await typeList()
 
     const body = {
-      column,
+      name,
       type,
     }
     const response = await make('4', `schemas/${schema}/tables/${table}/columns`, 'POST', body)

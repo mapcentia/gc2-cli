@@ -47,7 +47,7 @@ export default class Get extends Command {
     }
     const props: object[] = []
     const rows: row = {prop: {}, value: {}}
-    props.push({prop: 'Column', value: res.column})
+    props.push({prop: 'Name', value: res.name})
     props.push({prop: 'Type', value: res.full_type})
     props.push({prop: 'Is primary', value: res.is_primary})
     props.push({prop: 'Is unique', value: res.is_unique})

@@ -15,8 +15,8 @@ const schemasList = async (message: string = 'Choose a schema') => {
   let r: any = await select({
     message,
     default: null,
-    choices: s.schemas.map((v: { schema: string }) => {
-      return {value: v.schema}
+    choices: s.schemas.map((v: { name: string }) => {
+      return {value: v.name}
     })
   })
   return r
@@ -24,15 +24,11 @@ const schemasList = async (message: string = 'Choose a schema') => {
 
 const tableList = async (schema: string) => {
   const s: any = await tables(schema)
-  if (s.tables.length < 1) {
-    ux.log(`⚠️ No tables found for schema ${schema}`)
-    exit(0)
-  }
   let r: any = await select({
     message: 'Choose a table',
     default: null,
-    choices: s.tables.map((v: { table: string }) => {
-      return {value: v.table.split('.').reverse()[0]}
+    choices: s.tables.map((v: { name: string }) => {
+      return {value: v.name.split('.').reverse()[0]}
     })
   })
   return r
@@ -47,8 +43,8 @@ const columnList = async (schema: string, table: string) => {
   let r: any = await select({
     message: 'Choose a column',
     default: null,
-    choices: s.columns.map((v: { column: string, type: string }) => {
-      const c = v.column.split('.').reverse()[0]
+    choices: s.columns.map((v: { name: string, type: string }) => {
+      const c = v.name.split('.').reverse()[0]
       return {value: c, name: c + ` (${v.type})`}
     })
   })
@@ -64,8 +60,8 @@ const columnCheck = async (schema: string, table: string) => {
   const r: any = await checkbox({
     message: 'Choose one or more columns',
     required: true,
-    choices: s.columns.map((v: { column: string, type: string }) => {
-      const c = v.column.split('.').reverse()[0]
+    choices: s.columns.map((v: { name: string, type: string }) => {
+      const c = v.name.split('.').reverse()[0]
       return {value: c, name: c + ` (${v.type})`}
     })
   })

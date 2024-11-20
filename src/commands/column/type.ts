@@ -46,7 +46,7 @@ export default class Type extends Command {
     const column = args?.column || await columnList(schema, table)
     const type = args?.type || await typeList()
 
-    const response = await make('4', `schemas/${schema}/tables/${table}/columns/${column}`, 'PUT', {type})
+    const response = await make('4', `schemas/${schema}/tables/${table}/columns/${column}`, 'PATCH', {type})
     await get(response, 303)
     this.log(`Column relocated to here ${chalk.green(response.headers.get('Location'))}`)
   }

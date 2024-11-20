@@ -38,7 +38,7 @@ export default class Rename extends Command {
     const table = args?.table || await tableList(schema)
     const name = args?.name || await input({message: 'New name', required: true})
 
-    const response = await make('4', `schemas/${schema}/tables/${table}`, 'PUT', {table: name})
+    const response = await make('4', `schemas/${schema}/tables/${table}`, 'PATCH', {name})
     await get(response, 303)
     this.log(`Table relocated to here ${chalk.green(response.headers.get('Location'))}`)
   }

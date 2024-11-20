@@ -74,8 +74,8 @@ export default class Update extends Command {
       body.user_group = group
     }
 
-    const response = await make('4', `users/${name}`, 'PUT', body)
-    await get(response, 303)
+    const response = await make('4', `users/${name}`, 'PATCH', body)
+    await get(response, 204)
     this.log(`User is here ${chalk.green(response.headers.get('Location'))}`)
   }
 }
