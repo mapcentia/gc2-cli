@@ -84,7 +84,7 @@ export default class Import extends Command {
         form.append('filename', chunk, {
           filename: tmpFile
         })
-        const res = await make('4', `import/${schema}`, 'POST', form, true, 'multipart/form-data; boundary=boundary')
+        const res = await make('4', `import/${schema}`, 'POST', form, true, null)
         await get(res, 201)
         chunkCount++
       }

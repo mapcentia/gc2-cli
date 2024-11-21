@@ -16,7 +16,7 @@ import User from '../common/user'
 import {isTokenExpired, noLogin, GC2_SERVER_ADDRESS} from './utils'
 import {Gc2Service} from '../services/gc2.service'
 
-const make = async (version: string, resource: string, method: Method, payload?: any, checkConnection: boolean = true, contentType: string = 'application/json', host: string | null = null): Promise<any> => {
+const make = async (version: string, resource: string, method: Method, payload?: any, checkConnection: boolean = true, contentType: string | null = 'application/json', host: string | null = null): Promise<any> => {
   const config: Configstore = new Configstore('gc2-env')
   const user: User = config.all
   const headers = getHeaders(contentType)
@@ -39,8 +39,6 @@ const make = async (version: string, resource: string, method: Method, payload?:
       exit(1)
     }
   }
-  console.log(headers)
-  // headers['Content-Type'] = 'application/json'
   let request: RequestInit = {
     method: method,
     headers: headers,
@@ -49,7 +47,6 @@ const make = async (version: string, resource: string, method: Method, payload?:
   if (payload) {
     request.body = contentType === 'application/json' ? JSON.stringify(payload) : payload
   }
-
   return await fetch((host || GC2_SERVER_ADDRESS) + `/api/v${version}/${resource}`, request)
 }
 export default make

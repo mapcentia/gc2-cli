@@ -25,8 +25,6 @@ const get = async (response: Response, expectedCode: number, doNotExit: boolean 
   if (![204, 303].includes(expectedCode)) {
     res = await response.json()
   }
-  console.log(response.status, expectedCode)
-
   if (response.status !== expectedCode) {
     if (res === null) {
       res = await response.json()
