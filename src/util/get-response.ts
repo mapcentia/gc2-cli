@@ -22,10 +22,10 @@ import {exit} from '@oclif/core/lib/errors'
 const get = async (response: Response, expectedCode: number, doNotExit: boolean = false): Promise<any> => {
   let res = null
   // Handle case of No Content
-  if (expectedCode !== 204) {
+  if (![204, 303].includes(expectedCode)) {
     res = await response.json()
   }
-  //console.log(response.status, expectedCode)
+  console.log(response.status, expectedCode)
 
   if (response.status !== expectedCode) {
     if (res === null) {

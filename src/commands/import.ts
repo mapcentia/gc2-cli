@@ -63,6 +63,8 @@ export default class Import extends Command {
       tmpFile = uuidv4() + '.zip'
       tmpPath = tmpDir + '/' + tmpFile
 
+      console.log(tmpPath)
+
       cli.action.start('Compressing files')
       await this.createZipArchive(inputPath, tmpPath)
       cli.action.stop()
@@ -77,15 +79,12 @@ export default class Import extends Command {
       for (let start = 0; start < fileSizeInBytes; start += chunkSize) {
         const form = new FormData()
         const chunk = file.slice(start, start + chunkSize)
-        form.append('name', tmpFile)
         form.append('chunk', chunkCount)
         form.append('chunks', chunks)
-        form.append('file', chunk, {
-          // @ts-ignore
-          name: 'file',
-          filename: 'file'
+        form.append('filename', chunk, {
+          filename: tmpFile
         })
-        const res = await make('4', `import/${schema}`, 'POST', form, true, 'ss')
+        const res = await make('4', `import/${schema}`, 'POST', form, true, 'multipart/form-data; boundary=boundary')
         await get(res, 201)
         chunkCount++
       }
@@ -95,7 +94,7 @@ export default class Import extends Command {
       if (!flags.dry_run) {
         body.import = true
       }
-      const res = await make('4', `import/${schema}/${tmpFile}`, 'PUT', body)
+      const res = await make('4', `import/${schema}/${tmpFile}`, 'PATCH', body)
       const data = await get(res, 201)
       type tables = {
         [key: string]: any
