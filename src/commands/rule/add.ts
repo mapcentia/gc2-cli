@@ -31,7 +31,9 @@ export default class Add extends Command {
     const {flags} = await this.parse(Add)
 
     // Interactive
-    const priority = flags?.priority || await input({message: 'Priority', required: true})
+    const priority = flags?.priority || parseInt(await input({message: 'Priority', required: true, validate: async (input) => {
+        return Number.isInteger(parseInt(input));
+      }}))
     const username = flags?.username || await input({message: 'Username', required: false, default: '*'})
     const service = flags?.service || await serviceList()
     const request = flags?.request ||  await requestList()
