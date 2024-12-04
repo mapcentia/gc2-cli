@@ -12,7 +12,7 @@ import get from '../../util/get-response'
 import make from '../../util/make-request'
 
 export default class Add extends Command {
-  static description = 'Create new client'
+  static description = 'Create new client.'
 
   static args = {
     name: Args.string(
@@ -35,10 +35,10 @@ export default class Add extends Command {
     const {flags} = await this.parse(Add)
 
     const name = flags?.name || await input({message: 'Client name', required: true})
-    const description = flags?.description || await input({message: 'description', required: false})
+    const description = flags?.description || await input({message: 'description', required: true})
     const redirect_uri_str = flags?.redirect_uri || await input({
       message: 'Redirect uri (comma separated)',
-      required: false
+      required: true
     })
     const homepage = flags?.homepage || await input({message: 'homepage', required: false})
 
@@ -48,6 +48,6 @@ export default class Add extends Command {
     }
     const response = await make('4', `clients`, 'POST', {name, description, redirect_uri, homepage})
     const data = await get(response, 200)
-    this.log(`Client created with secret:\n${chalk.green(data.secret)}\nThis secret will can not be retrieved, so please keep it save.`)
+    this.log(`Client ${chalk.green(name)} created with:\n id: ${chalk.green(data.id)}\nsecret ${chalk.green(data.secret)}\nThis secret will can not be retrieved, so please keep it save.`)
   }
 }

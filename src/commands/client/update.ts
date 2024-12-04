@@ -17,6 +17,7 @@ export default class Update extends Command {
   static description = 'Update a client.'
 
   static flags = {
+    name: Flags.string({char: 'n', description: 'Description', required: false}),
     description: Flags.string({char: 'd', description: 'Description', required: false}),
     redirect_uri: Flags.string({char: 'r', description: 'Redirect uri', required: false}),
     homepage: Flags.string({char: 'p', description: 'Homepage', required: false}),
@@ -40,12 +41,12 @@ export default class Update extends Command {
     const name = flags?.name || await input({message: 'Name', required: false, default: cl.name})
     const description = flags?.description || await input({
       message: 'Description',
-      required: false,
+      required: true,
       default: cl.description
     })
     const redirect_uri_str = flags?.redirect_uri || await input({
       message: 'Redirect uri (comma separated)',
-      required: false,
+      required: true,
       default: cl.redirect_uri?.join(',')
     })
     const homepage = flags?.homepage || await input({message: 'homepage', required: false, default: cl.homepage})
@@ -55,7 +56,7 @@ export default class Update extends Command {
       redirect_uri = redirect_uri_str.split(',').map((e: string) => e.trim())
     }
     const response = await make('4', `clients/${id}`, 'PATCH', {name, description, redirect_uri, homepage})
-    await get(response, 204)
+    await get(response, 303)
     this.log(`Client is here ${chalk.green(response.headers.get('Location'))}`)
   }
 }

@@ -97,7 +97,7 @@
         "description": "Create new users and update/drop existing ones."
       },
       "client": {
-        "description": "Create new clients and update/drop existing ones."
+        "description": "Create new OAuth clients and update/drop existing ones."
       },
       "foreign": {
         "description": "Import foreign tables and materialize them."
@@ -113,9 +113,6 @@
       },
       "seed": {
         "description": "Start tile cache seeding for layers"
-      },
-      "user": {
-        "description": "User management."
       },
       "view": {
         "description": "Backup views definitions and refresh materialized views."
