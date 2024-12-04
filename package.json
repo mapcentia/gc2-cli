@@ -3,7 +3,6 @@
   "description": "GC2 CLI",
   "version": "2024.10.2",
   "author": "Martin Høgh @mapcentia",
-  "type": "module",
   "bin": {
     "gc2": "./bin/run"
   },
@@ -12,7 +11,7 @@
   },
   "dependencies": {
     "@oclif/command": "^1.8.36",
-    "@oclif/core": "^3.23.0",
+    "@oclif/core": "^3.27.0",
     "@oclif/parser": "^3.8.17",
     "@oclif/plugin-autocomplete": "^3.2.4",
     "@oclif/plugin-help": "^6.0.1",
