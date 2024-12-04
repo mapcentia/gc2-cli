@@ -19,19 +19,19 @@ let specific_args = {
   column: Args.string(
     {
       required: false,
-      description: 'Existing Name of column',
+      description: 'Existing name of column.',
     },
   ),
   name: Args.string(
     {
       required: false,
-      description: 'New name for column',
+      description: 'New name for column.',
     },
   ),
 }
 
 export default class Rename extends Command {
-  static description = 'Rename column'
+  static description = 'Rename a column.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
@@ -46,8 +46,8 @@ export default class Rename extends Command {
     const column = args?.column || await columnList(schema, table)
     const name = args?.name || await input({message: 'New name', required: true})
 
-    const response = await make('4', `schemas/${schema}/tables/${table}/columns/${column}`, 'PATCH', {column: name})
+    const response = await make('4', `schemas/${schema}/tables/${table}/columns/${column}`, 'PATCH', {name})
     await get(response, 303)
-    this.log(`Column relocated to here ${chalk.green(response.headers.get('Location'))}`)
+    this.log(`Column relocated to here: ${chalk.green(response.headers.get('Location'))}`)
   }
 }

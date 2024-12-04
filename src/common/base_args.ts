@@ -23,14 +23,14 @@ if (user.superUser) {
   obj.schema = Args.string(
     {
       required: false,
-      description: 'Name of schema',
+      description: 'Name of schema.',
     },
   )
 }
 obj.table = Args.string(
   {
     required: false,
-    description: 'Name of table',
+    description: 'Name of table.',
   },
 )
 const args: BaseArgs = obj

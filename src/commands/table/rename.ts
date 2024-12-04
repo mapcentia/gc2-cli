@@ -19,7 +19,7 @@ let specific_args = {
   name: Args.string(
     {
       required: false,
-      description: 'New name for table'
+      description: 'New name for table.'
     }
   ),
 }

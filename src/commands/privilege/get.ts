@@ -16,7 +16,7 @@ let base_args = args
 let specific_args = {}
 
 export default class Get extends Command {
-  static description = 'Get privileges on table.'
+  static description = 'Get user privileges on table.'
 
   static flags = {
     help: Flags.help({char: 'h'}),
@@ -41,16 +41,16 @@ export default class Get extends Command {
     }
     type user = {
       subuser: string;
-      privileges: string;
+      privilege: string;
       group?: string;
     }
     const data: object[] = []
-    const rows: row = {subuser: {}, privileges: {}, group: {}}
+    const rows: row = {subuser: {}, privilege: {}, group: {}}
     for (const c in res.privileges) {
       const v: user = res.privileges[c]
       data.push({
         subuser: v.subuser,
-        privileges: v.privileges,
+        privilege: v.privilege,
         group: v.group || '',
       })
     }

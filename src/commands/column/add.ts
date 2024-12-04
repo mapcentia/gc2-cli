@@ -19,19 +19,19 @@ let specific_args = {
   column: Args.string(
     {
       required: false,
-      description: 'Name of new column',
+      description: 'Name of new column.',
     },
   ),
   type: Args.string(
     {
       required: false,
-      description: 'Type of new column',
+      description: 'Data type of new column.',
     },
   ),
 }
 
 export default class Add extends Command {
-  static description = 'Add a new column'
+  static description = 'Add a new column to a table.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
@@ -52,6 +52,6 @@ export default class Add extends Command {
     }
     const response = await make('4', `schemas/${schema}/tables/${table}/columns`, 'POST', body)
     await get(response, 201)
-    this.log(`Column created here ${chalk.green(response.headers.get('Location'))}`)
+    this.log(`Column created here: ${chalk.green(response.headers.get('Location'))}`)
   }
 }

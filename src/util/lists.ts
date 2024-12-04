@@ -166,7 +166,7 @@ const privilegeList = async (defaultValue: string = 'none') => {
     choices: [
       {value: 'none', name: 'No privileges'},
       {value: 'read', name: 'Read privileges'},
-      {value: 'read/write', name: 'Read and write privileges'},
+      {value: 'write', name: 'Read and write privileges'},
     ]
   })
   return r
@@ -253,6 +253,23 @@ const accessList = async (defaultValue: string = 'deny') => {
   return r
 }
 
+const outputFormatList = async (defaultValue: string = 'csv') => {
+  let r: any = await select({
+    message: 'Choose output format',
+    default: defaultValue,
+    choices: [
+      {value: 'csv', name: 'CSV file (csv)'},
+      {value: 'excel', name: 'MS Excel file (excel)'},
+      {value: 'geojson', name: 'GeoJson (geojson)'},
+      {value: 'ogr/ESRI Shapefile', name: 'ogr/ESRI Shapefile'},
+      {value: 'ogr/GPKG', name: 'ogr/GPKG'},
+      {value: 'ogr/FlatGeobuf', name: 'ogr/FlatGeobuf'},
+      {value: 'ogr/GPX', name: 'ogr/GPX'},
+    ]
+  })
+  return r
+}
+
 export {
   schemasList,
   tableList,
@@ -270,4 +287,5 @@ export {
   serviceList,
   requestList,
   accessList,
+  outputFormatList,
 }

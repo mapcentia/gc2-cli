@@ -13,7 +13,7 @@ import {schemasList} from '../../util/lists'
 import make from '../../util/make-request'
 
 export default class Rename extends Command {
-  static description = 'Rename schema'
+  static description = 'Rename schema.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
@@ -21,13 +21,13 @@ export default class Rename extends Command {
     schema: Args.string(
       {
         required: false,
-        description: 'Name of schema',
+        description: 'Name of schema.',
       }
     ),
     name: Args.string(
       {
         required: false,
-        description: 'New name for schema',
+        description: 'New name for schema.',
       }
     )
   }

@@ -17,17 +17,17 @@ export default class Update extends Command {
   static description = 'Update a client.'
 
   static flags = {
-    name: Flags.string({char: 'n', description: 'Description', required: false}),
-    description: Flags.string({char: 'd', description: 'Description', required: false}),
-    redirect_uri: Flags.string({char: 'r', description: 'Redirect uri', required: false}),
-    homepage: Flags.string({char: 'p', description: 'Homepage', required: false}),
+    name: Flags.string({char: 'n', description: 'New name ofclient.', required: false}),
+    description: Flags.string({char: 'd', description: 'Description of new client.', required: false}),
+    redirect_uri: Flags.string({char: 'r', description: 'Redirect uri. Redirects will only be allowed to an uri in this list.', required: false}),
+    homepage: Flags.string({char: 'p', description: 'Homepage of the application.', required: false}),
     help: Flags.help({char: 'h'}),
   }
   static args = {
     id: Args.string(
       {
         required: false,
-        description: 'Id of client',
+        description: 'Id of client.',
       },
     )
   }

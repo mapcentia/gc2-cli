@@ -21,7 +21,7 @@ export default class Drop extends Command {
     name: Args.string(
       {
         required: false,
-        description: 'Name of user to drop',
+        description: 'Name of user to drop.',
       }
     ),
   }
@@ -33,6 +33,6 @@ export default class Drop extends Command {
     }
     const response = await make('4', `users/${name}`, 'DELETE', null)
     await get(response, 204)
-    this.log(`User ${chalk.green(name)} dropped`)
+    this.log(`User ${chalk.green(name)} dropped.`)
   }
 }

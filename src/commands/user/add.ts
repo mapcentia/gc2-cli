@@ -26,9 +26,9 @@ export default class Add extends Command {
 
   static flags = {
     help: Flags.help({char: 'h'}),
-    password: Flags.string({char: 'p', description: 'password of new user', required: false}),
-    email: Flags.string({char: 'e', description: 'email of new user', required: false}),
-    properties: Flags.string({char: 'e', description: 'properties of new user', required: false}),
+    password: Flags.string({char: 'p', description: 'password for new user.', required: false}),
+    email: Flags.string({char: 'e', description: 'E-mail for new user', required: false}),
+    properties: Flags.string({char: 'e', description: 'Properties for new user', required: false}),
   }
 
   async run() {

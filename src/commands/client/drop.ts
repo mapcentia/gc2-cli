@@ -20,7 +20,7 @@ export default class Drop extends Command {
     id: Args.string(
       {
         required: false,
-        description: 'Id of client',
+        description: 'Id of client.',
       },
     )
   }
@@ -33,6 +33,6 @@ export default class Drop extends Command {
     }
     const response = await make('4', `clients/${id}`, 'DELETE')
     await get(response, 204)
-    this.log(`Client is dropped`)
+    this.log(`Client is dropped.`)
   }
 }

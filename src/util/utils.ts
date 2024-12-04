@@ -93,7 +93,7 @@ export const isTokenExpired = (token: string): boolean => {
 export const passwordIsStrongEnough = (password: string, allowNull: boolean = false) => {
   const message = 'Entered password is too weak'
   if (password === '' && allowNull) return true
-  if (password.length < 8) return message
+  if (password.length < 9) return message
   if (!(/[A-Z]/.test(password))) return message
   if (!(/[a-z]/.test(password))) return message
   if (!(/\d/.test(password))) return message

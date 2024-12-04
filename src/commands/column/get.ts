@@ -18,13 +18,13 @@ let specific_args = {
   column: Args.string(
     {
       required: false,
-      description: 'Column',
+      description: 'Name of column.',
     },
   ),
 }
 
 export default class Get extends Command {
-  static description = 'Get a column'
+  static description = 'Get description of a column.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }

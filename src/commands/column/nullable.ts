@@ -20,18 +20,19 @@ let specific_args = {
   column: Args.string(
     {
       required: false,
-      description: 'Name of column',
+      description: 'Name of column.',
     },
   ),
   nullable: Args.string(
     {
       required: false,
+      description: 'Set column to nullable.',
       options: ['true', 'false']
     },
   ),
 }
 export default class Nullable extends Command {
-  static description = 'Set column to nullable'
+  static description = 'Set nullable on column. If set the column can\'t be empty.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
@@ -59,6 +60,6 @@ export default class Nullable extends Command {
     }
     const response = await make('4', `schemas/${schema}/tables/${table}/columns/${column}`, 'PATCH', body)
     await get(response, 303)
-    this.log(`Column ${chalk.green(column)} is now ${nullable !== 'true' ? chalk.red('NOT ') : ''}nullable`)
+    this.log(`Column ${chalk.green(column)} is now ${nullable !== 'true' ? chalk.red('NOT ') : ''}nullable.`)
   }
 }

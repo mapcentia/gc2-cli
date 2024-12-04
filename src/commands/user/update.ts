@@ -33,15 +33,15 @@ if (userConfig.superUser) {
 
 let flags: any = {
   help: Flags.help({char: 'h'}),
-  password: Flags.string({char: 'p', description: 'New password', required: false}),
+  password: Flags.string({char: 'p', description: 'New password for user.', required: false}),
 }
 if (userConfig.superUser) {
-  flags.properties = Flags.string({char: 'e', description: 'New properties', required: false})
-  flags.group = Flags.string({char: 'g', description: 'New group', required: false})
+  flags.properties = Flags.string({char: 'e', description: 'New properties.', required: false})
+  flags.group = Flags.string({char: 'g', description: 'New group.', required: false})
 }
 
 export default class Update extends Command {
-  static description = 'Update user'
+  static description = 'Update user.'
   static flags = flags
   static args = args
 
@@ -75,7 +75,7 @@ export default class Update extends Command {
     }
 
     const response = await make('4', `users/${name}`, 'PATCH', body)
-    await get(response, 204)
+    await get(response, 303)
     this.log(`User is here ${chalk.green(response.headers.get('Location'))}`)
   }
 }

@@ -18,13 +18,13 @@ let specific_args = {
   id: Args.string(
     {
       required: false,
-      description: 'Rule id',
+      description: 'Rule id.',
     },
   ),
 }
 
 export default class Update extends Command {
-  static description = 'Update rule rule'
+  static description = 'Update a rule.'
   static args = {...specific_args}
   static flags = {
     priority: Flags.string({char: 'p', description: 'Priority'}),

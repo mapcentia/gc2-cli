@@ -19,8 +19,7 @@ let specific_args = {}
 export default class Get extends Command {
   static description = 'Get table definition.'
   static flags = {
-    help: Flags.help({char: 'h'}),
-    ...ux.table.flags()
+    help: Flags.help({char: 'h'})
   }
   static args = {...base_args, ...specific_args}
 
@@ -74,7 +73,7 @@ export default class Get extends Command {
       printLine: this.log.bind(this),
       ...flags
     })
-    this.log('\nIndices:')
+    this.log('Indices:')
     if (res.indices.length === 0) {
       this.log(` none`)
     } else {
@@ -84,7 +83,7 @@ export default class Get extends Command {
       }
     }
 
-    this.log('\nconstraints:')
+    this.log('constraints:')
     if (res.constraints.length === 0)  {
       this.log(` none`)
     } else {

@@ -18,13 +18,13 @@ let specific_args = {
   column: Args.string(
     {
       required: false,
-      description: 'Name of column to drop',
+      description: 'Name of column to drop.',
     },
   ),
 }
 
 export default class Drop extends Command {
-  static description = 'Drop a column'
+  static description = 'Drop a column from table.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }

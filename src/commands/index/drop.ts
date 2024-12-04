@@ -18,13 +18,13 @@ let specific_args = {
   name: Args.string(
     {
       required: false,
-      description: 'Name of index',
+      description: 'Name of index.',
     },
   ),
 }
 
 export default class Drop extends Command {
-  static description = 'Add column'
+  static description = 'Drop an index from table.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }

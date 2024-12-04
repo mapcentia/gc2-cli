@@ -19,19 +19,19 @@ let specific_args = {
   user: Args.string(
     {
       required: false,
-      description: 'Name of user',
+      description: 'Name of user.',
     },
   ),
-  privileges: Args.string(
+  privilege: Args.string(
     {
       required: false,
-      description: 'Which privileges',
+      description: 'Which privilege.',
     },
   )
 }
 
 export default class Set extends Command {
-  static description = 'Set privileges on table.'
+  static description = 'Set user privileges on table.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
@@ -46,10 +46,10 @@ export default class Set extends Command {
     const user = args?.user || await userList()
     const current = await privileges(schema, table)
     const v = current.privileges.filter((e: { subuser: any }) => user === e.subuser)[0]
-    const pr = args?.privileges || await privilegeList(v?.privileges)
+    const privilege = args?.privilege || await privilegeList(v?.privilege)
 
-    const response = await make('4', `schemas/${schema}/tables/${table}/privilege`, 'PATCH', {subuser: user, privileges: pr})
-    await get(response, 200)
+    const response = await make('4', `schemas/${schema}/tables/${table}/privilege`, 'PATCH', {subuser: user, privilege})
+    await get(response, 303)
     this.log(`Privileges update on ${chalk.green(table)}`)
   }
 }

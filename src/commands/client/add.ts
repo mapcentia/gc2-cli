@@ -18,16 +18,16 @@ export default class Add extends Command {
     name: Args.string(
       {
         required: false,
-        description: 'Name of new client',
+        description: 'Name of new client.',
       }
     ),
   }
 
   static flags = {
-    name: Flags.string({char: 'n', description: 'Name'}),
-    description: Flags.string({char: 'd', description: 'Description'}),
-    redirect_uri: Flags.string({char: 'r', description: 'Redirect uri'}),
-    homepage: Flags.string({char: 'p', description: 'Homepage'}),
+    name: Flags.string({char: 'n', description: 'Name of new client.'}),
+    description: Flags.string({char: 'd', description: 'Description of new client.'}),
+    redirect_uri: Flags.string({char: 'r', description: 'Redirect uri. Redirects will only be allowed to an uri in this list.'}),
+    homepage: Flags.string({char: 'p', description: 'Homepage of the application.'}),
     help: Flags.help({char: 'h'}),
   }
 

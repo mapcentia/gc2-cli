@@ -20,7 +20,7 @@ export default class Get extends Command {
     schema: Args.string(
       {
         required: false,
-        description: 'Name of schema',
+        description: 'Name of schema.',
       }
     )
   }

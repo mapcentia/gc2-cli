@@ -19,32 +19,32 @@ let specific_args = {
   columns: Args.string(
     {
       required: false,
-      description: 'Columns to index (comma separated)',
+      description: 'Columns to index (comma separated).',
     },
   ),
   method: Args.string(
     {
       required: false,
-      description: 'Index method',
+      description: 'Index method.',
       options: ['btree', 'brin', 'gin', 'gist', 'hash']
     },
   ),
   name: Args.string(
     {
       required: false,
-      description: 'Name of index',
+      description: 'Name of new index.',
     },
   ),
 }
 
 export default class Add extends Command {
-  static description = 'Add index'
+  static description = 'Add an new index to table.'
   static flags = {
-    unique: Flags.boolean({
-      char: 'u',
-      description: 'Causes the system to check for duplicate values in the table when the index is created',
-      required: false
-    }),
+    // unique: Flags.boolean({
+    //   char: 'u',
+    //   description: 'Causes the system to check for duplicate values in the table when the index is created.',
+    //   required: false
+    // }),
     help: Flags.help({char: 'h'}),
   }
   static args = {...base_args, ...specific_args}
@@ -67,7 +67,7 @@ export default class Add extends Command {
         {value: 'hash', name: 'Hash'},
       ]
     })
-    const name = args?.name || await input({message: 'Name of index', required: false, default: `${table}-${method}`})
+    const name = args?.name || await input({message: 'Name of new index', required: false, default: `${table}-${method}`})
     const body = {
       name,
       columns: columns.split(',').map((e: string) => e.trim()),
@@ -75,6 +75,6 @@ export default class Add extends Command {
     }
     const response = await make('4', `schemas/${schema}/tables/${table}/indices`, 'POST', body)
     await get(response, 201)
-    this.log(`Index created here ${chalk.green(response.headers.get('Location'))}`)
+    this.log(`Index created here: ${chalk.green(response.headers.get('Location'))}`)
   }
 }

@@ -28,28 +28,31 @@ export default class Stat extends Command {
       [key: string]: any
     }
     type table = {
-      tableName: string;
-      schemaName: string;
-      totalSize: string;
-      totalSizeIndices: string;
-      rowCount: number;
+      table_name: string;
+      schema_name: string;
+      total_size: string;
+      total_size_bytes: string;
+      table_size: string;
+      table_size_bytes: string;
+      indices_size: string;
+      indices_size_bytes: string;
+      row_count: number;
 
     }
     const rows: object[] = []
-    const tables: tables = {name: {}, schema:{}, total_size: {}, size_indices: {}, row_count: {}}
+    const tables: tables = {name: {}, schema:{}, total_size: {}, indices_size: {}, row_count: {}}
     for (const c in data.tables) {
       const v: table = data.tables[c]
       rows.push({
-        name: v.tableName,
-        schema: v.schemaName,
-        total_size: v.totalSize,
-        size_indices: v.totalSizeIndices,
-        row_count: v.rowCount,
+        name: v.table_name,
+        schema: v.schema_name,
+        total_size: v.total_size,
+        indices_size: v.indices_size,
+        row_count: v.row_count,
       })
     }
-    this.log('Number of tables: ' + data.numberOfTables )
-    this.log('Total size of all tables: ' + data.totalSizePretty )
-    this.log('')
+    this.log('Number of tables: ' + data.number_of_tables )
+    this.log('Total size of all tables: ' + data.total_size )
     cli.table(rows, tables, {
       printLine: this.log.bind(this)
     })

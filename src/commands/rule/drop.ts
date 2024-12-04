@@ -10,6 +10,7 @@ import {Args, Command, Flags, ux, ux as cli} from '@oclif/core'
 import get from '../../util/get-response'
 import {clientList, ruleList} from '../../util/lists'
 import make from '../../util/make-request'
+import chalk from "chalk";
 
 export default class Drop extends Command {
   static description = 'Drop a rule.'
@@ -33,6 +34,6 @@ export default class Drop extends Command {
     }
     const response = await make('4', `rules/${id}`, 'DELETE')
     await get(response, 204)
-    this.log(`Rule is dropped`)
+    this.log(`Rule ${chalk.green(id)} is dropped.`)
   }
 }

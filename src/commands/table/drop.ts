@@ -18,7 +18,7 @@ let base_args = args
 let specific_args = {}
 
 export default class Drop extends Command {
-  static description = 'Drop table'
+  static description = 'Drop a table.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }

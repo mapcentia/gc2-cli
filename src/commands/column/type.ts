@@ -19,19 +19,19 @@ let specific_args = {
   column: Args.string(
     {
       required: false,
-      description: 'Name of column',
+      description: 'Name of column.',
     },
   ),
   type: Args.string(
     {
       required: false,
-      description: 'New type for column',
+      description: 'New data type for column.',
     },
   ),
 }
 
 export default class Type extends Command {
-  static description = 'Rename column'
+  static description = 'Set the data on column. It might be, the existing data type can\'t be transformed to the chosen one.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }

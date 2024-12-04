@@ -19,7 +19,7 @@ let specific_args = {
   destination: Args.string(
     {
       required: false,
-      description: 'Destination schema'
+      description: 'Destination schema.'
     }
   ),
 }

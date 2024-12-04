@@ -12,7 +12,7 @@ import make from '../../util/make-request'
 import {input} from '@inquirer/prompts'
 
 export default class Add extends Command {
-  static description = 'Create a new schema'
+  static description = 'Create a new schema.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
@@ -20,7 +20,7 @@ export default class Add extends Command {
     schema: Args.string(
       {
         required: false,
-        description: 'Name of new schema',
+        description: 'Name of new schema.',
       }
     )
   }
@@ -29,6 +29,6 @@ export default class Add extends Command {
     const name = args?.schema || await input({message: 'Name', required: true})
     const response = await make('4', `schemas`, 'POST', {name})
     await get(response, 201)
-    this.log(`Schema created here ${chalk.green(response.headers.get('Location'))}`)
+    this.log(`Schema created here: ${chalk.green(response.headers.get('Location'))}`)
   }
 }

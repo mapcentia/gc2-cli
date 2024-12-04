@@ -20,18 +20,18 @@ let specific_args = {
   column: Args.string(
     {
       required: false,
-      description: 'Name of column',
+      description: 'Name of column.',
     },
   ),
   default: Args.string(
     {
       required: false,
-      description: 'Default value. Set to \'null\' for removing an already set value',
+      description: 'Default value. Set to \'null\' for removing an already set value.',
     },
   ),
 }
 export default class Default extends Command {
-  static description = 'Set default value for column'
+  static description = 'Set default value for column. The default value is set when inserting a new row without a value for the column.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
@@ -56,6 +56,10 @@ export default class Default extends Command {
     }
     const response = await make('4', `schemas/${schema}/tables/${table}/columns/${column}`, 'PATCH', body)
     await get(response, 303)
-    this.log(`Column ${chalk.green(column)} has now default value` )
+    if (defaultValue === 'null') {
+      this.log(`Column ${chalk.green(column)} has now NO default value.`)
+    } else {
+      this.log(`Column ${chalk.green(column)} has now default value.`)
+    }
   }
 }

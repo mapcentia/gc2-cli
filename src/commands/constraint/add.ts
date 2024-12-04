@@ -19,38 +19,38 @@ let specific_args = {
   columns: Args.string(
     {
       required: false,
-      description: 'Columns for use in the constraint (comma separated)',
+      description: 'Columns for use in the constraint (comma separated).',
     },
   ),
   type: Args.string(
     {
       required: false,
-      description: 'Type of constraint',
+      description: 'Type of constraint.',
       options: ['primary', 'unique', 'foreign', 'check'],
     },
   ),
   name: Args.string(
     {
       required: false,
-      description: 'Name for constraint',
+      description: 'Name for constraint.',
     },
   ),
 }
 
 export default class Add extends Command {
-  static description = 'Add a constraint'
+  static description = 'Add a constraint.'
   static flags = {
     help: Flags.help({char: 'h'}),
 
     referencedTable: Flags.string({
       helpGroup: 'Foreign key options',
       char: 't',
-      description: 'Referenced table',
+      description: 'Referenced table.',
     }),
     referencedColumns: Flags.string({
       helpGroup: 'Foreign key options',
       char: 'e',
-      description: 'Referenced columns',
+      description: 'Referenced columns.',
     }),
     check: Flags.string({
       helpGroup: 'Check options',

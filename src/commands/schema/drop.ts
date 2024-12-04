@@ -13,7 +13,7 @@ import make from '../../util/make-request'
 import {confirm} from '@inquirer/prompts'
 
 export default class Drop extends Command {
-  static description = 'Drop schema.'
+  static description = 'Drop a schema.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
@@ -21,7 +21,7 @@ export default class Drop extends Command {
     schema: Args.string(
       {
         required: false,
-        description: 'Name of schema',
+        description: 'Name of schema.',
       }
     )
   }
@@ -33,6 +33,6 @@ export default class Drop extends Command {
     }
     const response = await make('4', `schemas/${schema}`, 'DELETE', null)
     await get(response, 204)
-    this.log(`Schema ${chalk.green(schema)} dropped`)
+    this.log(`Schema ${chalk.green(schema)} dropped.`)
   }
 }

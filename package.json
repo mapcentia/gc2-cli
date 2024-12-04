@@ -88,10 +88,10 @@
         "description": "Create new columns on tables and alter/drop existing ones."
       },
       "constraint": {
-        "description": "Create new constraints on tables and drop existing ones."
+        "description": "Create new constraints on tables and drop existing ones. Constraints can limit the range of values, which are allowed in a column."
       },
       "index": {
-        "description": "Create new indices on tables and drop existing ones."
+        "description": "Create new indices on tables and drop existing ones. Indices can speed query time up and are essential for good performance."
       },
       "user": {
         "description": "Create new users and update/drop existing ones."
@@ -106,7 +106,7 @@
         "description": "Set and get user privileges for tables."
       },
       "rule": {
-        "description": "Create rules for accessing tables om row level."
+        "description": "Create rules for limiting tables access on row level."
       },
       "scheduler": {
         "description": "Start scheduler jobs. Single or for whole schemas."

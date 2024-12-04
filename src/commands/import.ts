@@ -26,7 +26,7 @@ if (userConfig.superUser) {
   args.schema = Args.string(
     {
       required: true,
-      description: 'Name of user.',
+      description: 'Destination schema.',
     }
   )
 }
@@ -38,10 +38,10 @@ args.path = Args.string(
 )
 
 export default class Import extends Command {
-  static description = 'Import files to GC2. Set path to a file or folder, which will be compressed, uploaded and imported into GC2'
+  static description = 'Import files. Set path to a file or folder, which will be compressed, uploaded and imported into GC2.'
   static flags = {
-    s_srs: Flags.string({char: 's', description: 'Source spatial reference system. Use EPSG codes.'}),
-    t_srs: Flags.string({char: 't', description: 'Target spatial reference system. Use EPSG codes.'}),
+    s_srs: Flags.string({char: 's', description: 'Fallback source SRS. Will be used if file doesn\'t contain projection information'}),
+    t_srs: Flags.string({char: 't', description: 'Fallback target SRS. Will be used if no authority name/code is available. Defaults to EPSG:4326.'}),
     dry_run: Flags.boolean({char: 'd', description: 'Dry run. Only analyse files with no import.'}),
 
     help: Flags.help({char: 'h'}),

@@ -18,13 +18,13 @@ let specific_args = {
   name: Args.string(
     {
       required: false,
-      description: 'Name for constraint',
+      description: 'Name of constraint.',
     },
   ),
 }
 
 export default class Drop extends Command {
-  static description = 'Drop a constraint'
+  static description = 'Drop a constraint.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }

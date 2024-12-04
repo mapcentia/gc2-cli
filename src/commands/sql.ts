@@ -12,12 +12,14 @@ import cli from 'cli-ux'
 import * as fs from 'fs'
 import get from '../util/get-response'
 import make from '../util/make-request'
+import {constraintTypeList, outputFormatList} from '../util/lists'
+
 
 interface Statement {
   q: string,
-  srs: number,
-  format: string,
-  geoformat?: string,
+  srs?: number,
+  output_format: string,
+  geo_format?: string,
   base64?: boolean,
   allstr?: boolean,
   lifetime?: number,
@@ -26,9 +28,10 @@ interface Statement {
 export default class Sql extends Command {
   static description = 'Run SQL statements. If run without --statement inactive mode will be enabled.'
   static flags = {
-    statement: Flags.string({char: 's', description: 'SQL statement'}),
+    statement: Flags.string({char: 's', description: 'SQL statement. Any select, insert, update and delete. No altering of schema is allowed.'}),
     srs: Flags.integer({char: 'c', description: 'Output spatial reference system. Use EPSG codes.', default: 4326}),
-    format: Flags.string({char: 'f', description: 'Output file format.', default: 'csv'}),
+    format: Flags.string({char: 'f', description: 'Output file format.'}),
+    geoformat: Flags.string({char: 'g', description: 'Output geometry in CSV and Excel.', options: ['wkt', 'geojson']}),
     path: Flags.string({char: 'p', description: 'Output path to file. If omitted file is saved in current folder.', default: '.'}),
     help: Flags.help({char: 'h'}),
   }
@@ -36,11 +39,15 @@ export default class Sql extends Command {
   async run() {
     const {flags} = await this.parse(Sql)
     if (flags.statement) {
+
+      const format = flags?.format || await outputFormatList()
+
       const statement: Statement = {
         q: base64url(flags.statement),
         srs: flags.srs,
-        format: flags.format,
+        output_format: format,
         base64: true,
+        geo_format: flags.geoformat,
       }
 
       const res = await make('4', `sql`, 'POST', statement)
@@ -94,7 +101,7 @@ export default class Sql extends Command {
         const statement: Statement = {
           q: base64url(sql),
           srs: 4326,
-          format: 'geojson',
+          output_format: 'geojson',
           lifetime: 0,
           base64: true
         }

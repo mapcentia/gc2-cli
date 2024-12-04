@@ -13,7 +13,7 @@ import {accessList, requestList, serviceList} from '../../util/lists'
 import make from '../../util/make-request'
 
 export default class Add extends Command {
-  static description = 'Create new rule'
+  static description = 'Create a new rule.'
   static flags = {
     priority: Flags.string({char: 'P', description: 'Priority'}),
     username: Flags.string({char: 'u', description: 'Username'}),
