@@ -48,7 +48,7 @@ export default class Set extends Command {
     const v = current.privileges.filter((e: { subuser: any }) => user === e.subuser)[0]
     const pr = args?.privileges || await privilegeList(v?.privileges)
 
-    const response = await make('4', `schemas/${schema}/tables/${table}/privilege`, 'PUT', {subuser: user, privileges: pr})
+    const response = await make('4', `schemas/${schema}/tables/${table}/privilege`, 'PATCH', {subuser: user, privileges: pr})
     await get(response, 200)
     this.log(`Privileges update on ${chalk.green(table)}`)
   }

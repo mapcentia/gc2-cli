@@ -62,7 +62,7 @@ export default class Update extends Command {
       }
     });
 
-    const response = await make('4', `rules/${id}`, 'PUT', body)
+    const response = await make('4', `rules/${id}`, 'PATCH', body)
     this.log(`Rule is here ${chalk.green(response.headers.get('Location'))}`)
   }
 }

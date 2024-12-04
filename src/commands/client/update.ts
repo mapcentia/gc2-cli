@@ -54,7 +54,7 @@ export default class Update extends Command {
     if (redirect_uri_str) {
       redirect_uri = redirect_uri_str.split(',').map((e: string) => e.trim())
     }
-    const response = await make('4', `clients/${id}`, 'PUT', {name, description, redirect_uri, homepage})
+    const response = await make('4', `clients/${id}`, 'PATCH', {name, description, redirect_uri, homepage})
     await get(response, 204)
     this.log(`Client is here ${chalk.green(response.headers.get('Location'))}`)
   }

@@ -79,28 +79,46 @@
   "oclif": {
     "topics": {
       "schema": {
-        "description": "Create new schemas and rename existing ones"
+        "description": "Create new schemas and rename existing ones."
       },
       "table": {
-        "description": "Create new tables and rename existing ones"
+        "description": "Create new tables and rename existing ones."
       },
       "column": {
-        "description": "Create new columns on tables and alter/drop existing ones"
+        "description": "Create new columns on tables and alter/drop existing ones."
       },
       "constraint": {
-        "description": "Create new constraints on tables and drop existing ones"
+        "description": "Create new constraints on tables and drop existing ones."
       },
       "index": {
-        "description": "Create new indices on columns and drop existing ones"
+        "description": "Create new indices on tables and drop existing ones."
       },
       "user": {
         "description": "Create new users and update/drop existing ones."
       },
       "client": {
-        "description": "Create new client and update/drop existing ones."
+        "description": "Create new clients and update/drop existing ones."
+      },
+      "foreign": {
+        "description": "Import foreign tables and materialize them."
       },
       "privilege": {
         "description": "Set and get user privileges for tables."
+      },
+      "rule": {
+        "description": "Create rules for accessing tables om row level."
+      },
+      "scheduler": {
+        "description": "Start scheduler jobs. Single or for whole schemas."
+      },
+      "seed": {
+        "description": "Start tile cache seeding for layers"
+      },
+      "user": {
+        "description": "User management."
+      },
+      "view": {
+        "description": "Backup views definitions and refresh materialized views."
       }
     },
     "additionalHelpFlags": [

@@ -33,7 +33,7 @@ export default class Refresh extends Command {
     const {args} = await this.parse(Refresh)
     const schemas = args.schemas.split(',').map(s => s.trim())
     const include = args?.include ? args.include.split(',').map(s => s.trim()) : null
-    const response = await make('3', `view/refresh`, 'PUT',{schemas, include})
+    const response = await make('3', `view/refresh`, 'PATCH',{schemas, include})
     const res = await get(response, 200)
     this.log(`${chalk.green(res.count)} views refreshed`)
   }
