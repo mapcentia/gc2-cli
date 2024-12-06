@@ -241,7 +241,7 @@ const requestList = async (defaultValue: string = '*') => {
 }
 
 const accessList = async (defaultValue: string = 'deny') => {
-  let r: any =select({
+  let r: any = select({
     message: 'Access',
     default: defaultValue,
     choices: [
@@ -270,6 +270,26 @@ const outputFormatList = async (defaultValue: string = 'csv') => {
   return r
 }
 
+const adminTaskList = async (defaultValue: string = 'csv') => {
+  let r: any = await select({
+    message: 'Choose task to run',
+    default: defaultValue,
+    choices: [
+      {value: 'mapfiles', name: 'Write out MapFiles'},
+      {value: 'mapcachefile', name: 'Write out the MapCache file'},
+      {value: 'qgisfiles', name: 'Write QGIS project files'},
+      {value: 'schema', name: 'Create the settings schema'},
+      {value: 'migrations', name: 'Run database migrations'},
+      {value: 'diskcleanup', name: 'Clean up tmp files'},
+      {value: 'cachestats', name: 'Cache stats'},
+      {value: 'cachecleanup', name: 'Empty application cache'},
+      {value: 'insertmeta', name:'Create missing meta data'},
+    ]
+
+  })
+  return r
+}
+
 export {
   schemasList,
   tableList,
@@ -288,4 +308,5 @@ export {
   requestList,
   accessList,
   outputFormatList,
+  adminTaskList
 }

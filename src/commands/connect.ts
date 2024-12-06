@@ -16,8 +16,8 @@ export default class Connect extends Command {
 
   static flags = {
     help: Flags.help({char: 'h'}),
-    reset: Flags.boolean({char: 'r', description: 'Reset connection'}),
-    host: Flags.string({char: 'H', description: 'Host'}),
+    reset: Flags.boolean({char: 'r', description: 'Reset connection.'}),
+    host: Flags.string({char: 'H', description: 'Host of the server.'}),
   }
 
   async run() {

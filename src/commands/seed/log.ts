@@ -10,10 +10,10 @@ import get from '../../util/get-response'
 import make from '../../util/make-request'
 
 export default class Log extends Command {
-  static description = 'Logs'
+  static description = 'Get progress of a running job.'
   static flags = {
     help: Flags.help({char: 'h'}),
-    uuid: Flags.string({char: 'u', description: 'UUID of seed job', required: true}),
+    uuid: Flags.string({char: 'u', description: 'UUID of seed job.', required: true}),
   }
   async run() {
     const {flags} = await this.parse(Log)

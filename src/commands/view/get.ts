@@ -11,7 +11,7 @@ import make from '../../util/make-request'
 import get from '../../util/get-response'
 
 export default class Get extends Command {
-  static description = 'Get "*" definitions from backup for schema'
+  static description = 'Get "*" definitions from backup for schema.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
@@ -19,7 +19,7 @@ export default class Get extends Command {
     schema: Args.string(
       {
         required: true,
-        description: 'get star views for schema',
+        description: 'Get star views for schema.',
       }
     ),
   }

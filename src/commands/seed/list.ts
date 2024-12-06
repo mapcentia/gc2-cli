@@ -3,7 +3,7 @@ import get from '../../util/get-response'
 import make from '../../util/make-request'
 
 export default class List extends Command {
-  static description = 'List running seed jobs'
+  static description = 'List running seed jobs.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }

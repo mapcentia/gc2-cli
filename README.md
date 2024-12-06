@@ -70,7 +70,7 @@ USAGE
 * [`gc2 index get`](#gc2-index-get)
 * [`gc2 login`](#gc2-login)
 * [`gc2 privilege get [SCHEMA] [TABLE]`](#gc2-privilege-get-schema-table)
-* [`gc2 privilege set [SCHEMA] [TABLE] [USER] [PRIVILEGES]`](#gc2-privilege-set-schema-table-user-privileges)
+* [`gc2 privilege set [SCHEMA] [TABLE] [USER] [PRIVILEGE]`](#gc2-privilege-set-schema-table-user-privilege)
 * [`gc2 rule add`](#gc2-rule-add)
 * [`gc2 rule drop [ID]`](#gc2-rule-drop-id)
 * [`gc2 rule get [ID]`](#gc2-rule-get-id)
@@ -125,24 +125,24 @@ _See code: [src/commands/admin.ts](https://github.com/mapcentia/gc2-cli/blob/v20
 
 ## `gc2 client add [NAME]`
 
-Create new client
+Create new client.
 
 ```
 USAGE
   $ gc2 client add [NAME] [-n <value>] [-d <value>] [-r <value>] [-p <value>] [-h]
 
 ARGUMENTS
-  NAME  Name of new client
+  NAME  Name of new client.
 
 FLAGS
-  -d, --description=<value>   Description
+  -d, --description=<value>   Description of new client.
   -h, --help                  Show CLI help.
-  -n, --name=<value>          Name
-  -p, --homepage=<value>      Homepage
-  -r, --redirect_uri=<value>  Redirect uri
+  -n, --name=<value>          Name of new client.
+  -p, --homepage=<value>      Homepage of the application.
+  -r, --redirect_uri=<value>  Redirect uri. Redirects will only be allowed to an uri in this list.
 
 DESCRIPTION
-  Create new client
+  Create new client.
 ```
 
 _See code: [src/commands/client/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.10.2/src/commands/client/add.ts)_
@@ -156,7 +156,7 @@ USAGE
   $ gc2 client drop [ID] [-h]
 
 ARGUMENTS
-  ID  Id of client
+  ID  Id of client.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -193,16 +193,17 @@ Update a client.
 
 ```
 USAGE
-  $ gc2 client update [ID] [-d <value>] [-r <value>] [-p <value>] [-h]
+  $ gc2 client update [ID] [-n <value>] [-d <value>] [-r <value>] [-p <value>] [-h]
 
 ARGUMENTS
-  ID  Id of client
+  ID  Id of client.
 
 FLAGS
-  -d, --description=<value>   Description
+  -d, --description=<value>   Description of new client.
   -h, --help                  Show CLI help.
-  -p, --homepage=<value>      Homepage
-  -r, --redirect_uri=<value>  Redirect uri
+  -n, --name=<value>          New name ofclient.
+  -p, --homepage=<value>      Homepage of the application.
+  -r, --redirect_uri=<value>  Redirect uri. Redirects will only be allowed to an uri in this list.
 
 DESCRIPTION
   Update a client.
@@ -212,159 +213,159 @@ _See code: [src/commands/client/update.ts](https://github.com/mapcentia/gc2-cli/
 
 ## `gc2 column add [SCHEMA] [TABLE] [COLUMN] [TYPE]`
 
-Add a new column
+Add a new column to a table.
 
 ```
 USAGE
   $ gc2 column add [SCHEMA] [TABLE] [COLUMN] [TYPE] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema
-  TABLE   Name of table
-  COLUMN  Name of new column
-  TYPE    Type of new column
+  SCHEMA  Name of schema.
+  TABLE   Name of table.
+  COLUMN  Name of new column.
+  TYPE    Data type of new column.
 
 FLAGS
   -h, --help  Show CLI help.
 
 DESCRIPTION
-  Add a new column
+  Add a new column to a table.
 ```
 
 _See code: [src/commands/column/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.10.2/src/commands/column/add.ts)_
 
 ## `gc2 column default [SCHEMA] [TABLE] [COLUMN] [DEFAULT]`
 
-Set default value for column
+Set default value for column. The default value is set when inserting a new row without a value for the column.
 
 ```
 USAGE
   $ gc2 column default [SCHEMA] [TABLE] [COLUMN] [DEFAULT] [-h]
 
 ARGUMENTS
-  SCHEMA   Name of schema
-  TABLE    Name of table
-  COLUMN   Name of column
-  DEFAULT  Default value. Set to 'null' for removing an already set value
+  SCHEMA   Name of schema.
+  TABLE    Name of table.
+  COLUMN   Name of column.
+  DEFAULT  Default value. Set to 'null' for removing an already set value.
 
 FLAGS
   -h, --help  Show CLI help.
 
 DESCRIPTION
-  Set default value for column
+  Set default value for column. The default value is set when inserting a new row without a value for the column.
 ```
 
 _See code: [src/commands/column/default.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.10.2/src/commands/column/default.ts)_
 
 ## `gc2 column drop [SCHEMA] [TABLE] [COLUMN]`
 
-Drop a column
+Drop a column from table.
 
 ```
 USAGE
   $ gc2 column drop [SCHEMA] [TABLE] [COLUMN] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema
-  TABLE   Name of table
-  COLUMN  Name of column to drop
+  SCHEMA  Name of schema.
+  TABLE   Name of table.
+  COLUMN  Name of column to drop.
 
 FLAGS
   -h, --help  Show CLI help.
 
 DESCRIPTION
-  Drop a column
+  Drop a column from table.
 ```
 
 _See code: [src/commands/column/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.10.2/src/commands/column/drop.ts)_
 
 ## `gc2 column get [SCHEMA] [TABLE] [COLUMN]`
 
-Get a column
+Get description of a column.
 
 ```
 USAGE
   $ gc2 column get [SCHEMA] [TABLE] [COLUMN] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema
-  TABLE   Name of table
-  COLUMN  Column
+  SCHEMA  Name of schema.
+  TABLE   Name of table.
+  COLUMN  Name of column.
 
 FLAGS
   -h, --help  Show CLI help.
 
 DESCRIPTION
-  Get a column
+  Get description of a column.
 ```
 
 _See code: [src/commands/column/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.10.2/src/commands/column/get.ts)_
 
 ## `gc2 column nullable [SCHEMA] [TABLE] [COLUMN] [NULLABLE]`
 
-Set column to nullable
+Set nullable on column. If set the column can't be empty.
 
 ```
 USAGE
   $ gc2 column nullable [SCHEMA] [TABLE] [COLUMN] [NULLABLE] [-h]
 
 ARGUMENTS
-  SCHEMA    Name of schema
-  TABLE     Name of table
-  COLUMN    Name of column
-  NULLABLE  (true|false)
+  SCHEMA    Name of schema.
+  TABLE     Name of table.
+  COLUMN    Name of column.
+  NULLABLE  (true|false) Set column to nullable.
 
 FLAGS
   -h, --help  Show CLI help.
 
 DESCRIPTION
-  Set column to nullable
+  Set nullable on column. If set the column can't be empty.
 ```
 
 _See code: [src/commands/column/nullable.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.10.2/src/commands/column/nullable.ts)_
 
 ## `gc2 column rename [SCHEMA] [TABLE] [COLUMN] [NAME]`
 
-Rename column
+Rename a column.
 
 ```
 USAGE
   $ gc2 column rename [SCHEMA] [TABLE] [COLUMN] [NAME] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema
-  TABLE   Name of table
-  COLUMN  Existing Name of column
-  NAME    New name for column
+  SCHEMA  Name of schema.
+  TABLE   Name of table.
+  COLUMN  Existing name of column.
+  NAME    New name for column.
 
 FLAGS
   -h, --help  Show CLI help.
 
 DESCRIPTION
-  Rename column
+  Rename a column.
 ```
 
 _See code: [src/commands/column/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.10.2/src/commands/column/rename.ts)_
 
 ## `gc2 column type [SCHEMA] [TABLE] [COLUMN] [TYPE]`
 
-Rename column
+Set the data on column. It might be, the existing data type can't be transformed to the chosen one.
 
 ```
 USAGE
   $ gc2 column type [SCHEMA] [TABLE] [COLUMN] [TYPE] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema
-  TABLE   Name of table
-  COLUMN  Name of column
-  TYPE    New type for column
+  SCHEMA  Name of schema.
+  TABLE   Name of table.
+  COLUMN  Name of column.
+  TYPE    New data type for column.
 
 FLAGS
   -h, --help  Show CLI help.
 
 DESCRIPTION
-  Rename column
+  Set the data on column. It might be, the existing data type can't be transformed to the chosen one.
 ```
 
 _See code: [src/commands/column/type.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.10.2/src/commands/column/type.ts)_
@@ -391,18 +392,18 @@ _See code: [src/commands/connect.ts](https://github.com/mapcentia/gc2-cli/blob/v
 
 ## `gc2 constraint add [SCHEMA] [TABLE] [COLUMNS] [TYPE] [NAME]`
 
-Add a constraint
+Add a constraint.
 
 ```
 USAGE
   $ gc2 constraint add [SCHEMA] [TABLE] [COLUMNS] [TYPE] [NAME] [-h] [-t <value>] [-e <value>] [-c <value>]
 
 ARGUMENTS
-  SCHEMA   Name of schema
-  TABLE    Name of table
-  COLUMNS  Columns for use in the constraint (comma separated)
-  TYPE     (primary|unique|foreign|check) Type of constraint
-  NAME     Name for constraint
+  SCHEMA   Name of schema.
+  TABLE    Name of table.
+  COLUMNS  Columns for use in the constraint (comma separated).
+  TYPE     (primary|unique|foreign|check) Type of constraint.
+  NAME     Name for constraint.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -411,33 +412,33 @@ CHECK OPTIONS FLAGS
   -c, --check=<value>  Check expression
 
 FOREIGN KEY OPTIONS FLAGS
-  -e, --referencedColumns=<value>  Referenced columns
-  -t, --referencedTable=<value>    Referenced table
+  -e, --referencedColumns=<value>  Referenced columns.
+  -t, --referencedTable=<value>    Referenced table.
 
 DESCRIPTION
-  Add a constraint
+  Add a constraint.
 ```
 
 _See code: [src/commands/constraint/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.10.2/src/commands/constraint/add.ts)_
 
 ## `gc2 constraint drop [SCHEMA] [TABLE] [NAME]`
 
-Drop a constraint
+Drop a constraint.
 
 ```
 USAGE
   $ gc2 constraint drop [SCHEMA] [TABLE] [NAME] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema
-  TABLE   Name of table
-  NAME    Name for constraint
+  SCHEMA  Name of schema.
+  TABLE   Name of table.
+  NAME    Name of constraint.
 
 FLAGS
   -h, --help  Show CLI help.
 
 DESCRIPTION
-  Drop a constraint
+  Drop a constraint.
 ```
 
 _See code: [src/commands/constraint/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.10.2/src/commands/constraint/drop.ts)_
@@ -561,71 +562,70 @@ _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.0.1
 
 ## `gc2 import SCHEMA PATH`
 
-Import files to GC2. Set path to a file or folder, which will be compressed, uploaded and imported into GC2
+Import files. Set path to a file or folder, which will be compressed, uploaded and imported into GC2.
 
 ```
 USAGE
   $ gc2 import SCHEMA PATH [-s <value>] [-t <value>] [-d] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of user.
+  SCHEMA  Destination schema.
   PATH    Input path to file or folder.
 
 FLAGS
   -d, --dry_run        Dry run. Only analyse files with no import.
   -h, --help           Show CLI help.
-  -s, --s_srs=<value>  Source spatial reference system. Use EPSG codes.
-  -t, --t_srs=<value>  Target spatial reference system. Use EPSG codes.
+  -s, --s_srs=<value>  Fallback source SRS. Will be used if file doesn't contain projection information
+  -t, --t_srs=<value>  Fallback target SRS. Will be used if no authority name/code is available. Defaults to EPSG:4326.
 
 DESCRIPTION
-  Import files to GC2. Set path to a file or folder, which will be compressed, uploaded and imported into GC2
+  Import files. Set path to a file or folder, which will be compressed, uploaded and imported into GC2.
 ```
 
 _See code: [src/commands/import.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.10.2/src/commands/import.ts)_
 
 ## `gc2 index add [SCHEMA] [TABLE] [COLUMNS] [METHOD] [NAME]`
 
-Add index
+Add an new index to table.
 
 ```
 USAGE
-  $ gc2 index add [SCHEMA] [TABLE] [COLUMNS] [METHOD] [NAME] [-u] [-h]
+  $ gc2 index add [SCHEMA] [TABLE] [COLUMNS] [METHOD] [NAME] [-h]
 
 ARGUMENTS
-  SCHEMA   Name of schema
-  TABLE    Name of table
-  COLUMNS  Columns to index (comma separated)
-  METHOD   (btree|brin|gin|gist|hash) Index method
-  NAME     Name of index
+  SCHEMA   Name of schema.
+  TABLE    Name of table.
+  COLUMNS  Columns to index (comma separated).
+  METHOD   (btree|brin|gin|gist|hash) Index method.
+  NAME     Name of new index.
 
 FLAGS
-  -h, --help    Show CLI help.
-  -u, --unique  Causes the system to check for duplicate values in the table when the index is created
+  -h, --help  Show CLI help.
 
 DESCRIPTION
-  Add index
+  Add an new index to table.
 ```
 
 _See code: [src/commands/index/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.10.2/src/commands/index/add.ts)_
 
 ## `gc2 index drop [SCHEMA] [TABLE] [NAME]`
 
-Add column
+Drop an index from table.
 
 ```
 USAGE
   $ gc2 index drop [SCHEMA] [TABLE] [NAME] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema
-  TABLE   Name of table
-  NAME    Name of index
+  SCHEMA  Name of schema.
+  TABLE   Name of table.
+  NAME    Name of index.
 
 FLAGS
   -h, --help  Show CLI help.
 
 DESCRIPTION
-  Add column
+  Drop an index from table.
 ```
 
 _See code: [src/commands/index/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.10.2/src/commands/index/drop.ts)_
@@ -663,51 +663,51 @@ _See code: [src/commands/login.ts](https://github.com/mapcentia/gc2-cli/blob/v20
 
 ## `gc2 privilege get [SCHEMA] [TABLE]`
 
-Get privileges on table.
+Get user privileges on table.
 
 ```
 USAGE
   $ gc2 privilege get [SCHEMA] [TABLE] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema
-  TABLE   Name of table
+  SCHEMA  Name of schema.
+  TABLE   Name of table.
 
 FLAGS
   -h, --help  Show CLI help.
 
 DESCRIPTION
-  Get privileges on table.
+  Get user privileges on table.
 ```
 
 _See code: [src/commands/privilege/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.10.2/src/commands/privilege/get.ts)_
 
-## `gc2 privilege set [SCHEMA] [TABLE] [USER] [PRIVILEGES]`
+## `gc2 privilege set [SCHEMA] [TABLE] [USER] [PRIVILEGE]`
 
-Set privileges on table.
+Set user privileges on table.
 
 ```
 USAGE
-  $ gc2 privilege set [SCHEMA] [TABLE] [USER] [PRIVILEGES] [-h]
+  $ gc2 privilege set [SCHEMA] [TABLE] [USER] [PRIVILEGE] [-h]
 
 ARGUMENTS
-  SCHEMA      Name of schema
-  TABLE       Name of table
-  USER        Name of user
-  PRIVILEGES  Which privileges
+  SCHEMA     Name of schema.
+  TABLE      Name of table.
+  USER       Name of user.
+  PRIVILEGE  Which privilege.
 
 FLAGS
   -h, --help  Show CLI help.
 
 DESCRIPTION
-  Set privileges on table.
+  Set user privileges on table.
 ```
 
 _See code: [src/commands/privilege/set.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.10.2/src/commands/privilege/set.ts)_
 
 ## `gc2 rule add`
 
-Create new rule
+Create a new rule.
 
 ```
 USAGE
@@ -727,7 +727,7 @@ FLAGS
   -u, --username=<value>  Username
 
 DESCRIPTION
-  Create new rule
+  Create a new rule.
 ```
 
 _See code: [src/commands/rule/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.10.2/src/commands/rule/add.ts)_
@@ -774,7 +774,7 @@ _See code: [src/commands/rule/get.ts](https://github.com/mapcentia/gc2-cli/blob/
 
 ## `gc2 rule update [ID]`
 
-Update rule rule
+Update a rule.
 
 ```
 USAGE
@@ -782,7 +782,7 @@ USAGE
     <value>] [-a <value>] [-f <value>] [-h]
 
 ARGUMENTS
-  ID  Rule id
+  ID  Rule id.
 
 FLAGS
   -a, --access=<value>    Access
@@ -797,7 +797,7 @@ FLAGS
   -u, --username=<value>  Username
 
 DESCRIPTION
-  Update rule rule
+  Update a rule.
 ```
 
 _See code: [src/commands/rule/update.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.10.2/src/commands/rule/update.ts)_
@@ -844,40 +844,40 @@ _See code: [src/commands/scheduler/status.ts](https://github.com/mapcentia/gc2-c
 
 ## `gc2 schema add [SCHEMA]`
 
-Create a new schema
+Create a new schema.
 
 ```
 USAGE
   $ gc2 schema add [SCHEMA] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of new schema
+  SCHEMA  Name of new schema.
 
 FLAGS
   -h, --help  Show CLI help.
 
 DESCRIPTION
-  Create a new schema
+  Create a new schema.
 ```
 
 _See code: [src/commands/schema/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.10.2/src/commands/schema/add.ts)_
 
 ## `gc2 schema drop [SCHEMA]`
 
-Drop schema.
+Drop a schema.
 
 ```
 USAGE
   $ gc2 schema drop [SCHEMA] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema
+  SCHEMA  Name of schema.
 
 FLAGS
   -h, --help  Show CLI help.
 
 DESCRIPTION
-  Drop schema.
+  Drop a schema.
 ```
 
 _See code: [src/commands/schema/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.10.2/src/commands/schema/drop.ts)_
@@ -891,7 +891,7 @@ USAGE
   $ gc2 schema get [SCHEMA] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema
+  SCHEMA  Name of schema.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -904,21 +904,21 @@ _See code: [src/commands/schema/get.ts](https://github.com/mapcentia/gc2-cli/blo
 
 ## `gc2 schema rename [SCHEMA] [NAME]`
 
-Rename schema
+Rename schema.
 
 ```
 USAGE
   $ gc2 schema rename [SCHEMA] [NAME] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema
-  NAME    New name for schema
+  SCHEMA  Name of schema.
+  NAME    New name for schema.
 
 FLAGS
   -h, --help  Show CLI help.
 
 DESCRIPTION
-  Rename schema
+  Rename schema.
 ```
 
 _See code: [src/commands/schema/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.10.2/src/commands/schema/rename.ts)_
@@ -1007,14 +1007,16 @@ Run SQL statements. If run without --statement inactive mode will be enabled.
 
 ```
 USAGE
-  $ gc2 sql [-s <value>] [-c <value>] [-f <value>] [-p <value>] [-h]
+  $ gc2 sql [-s <value>] [-c <value>] [-f <value>] [-g wkt|geojson] [-p <value>] [-h]
 
 FLAGS
-  -c, --srs=<value>        [default: 4326] Output spatial reference system. Use EPSG codes.
-  -f, --format=<value>     [default: csv] Output file format.
-  -h, --help               Show CLI help.
-  -p, --path=<value>       [default: .] Output path to file. If omitted file is saved in current folder.
-  -s, --statement=<value>  SQL statement
+  -c, --srs=<value>         [default: 4326] Output spatial reference system. Use EPSG codes.
+  -f, --format=<value>      Output file format.
+  -g, --geoformat=<option>  Output geometry in CSV and Excel.
+                            <options: wkt|geojson>
+  -h, --help                Show CLI help.
+  -p, --path=<value>        [default: .] Output path to file. If omitted file is saved in current folder.
+  -s, --statement=<value>   SQL statement. Any select, insert, update and delete. No altering of schema is allowed.
 
 DESCRIPTION
   Run SQL statements. If run without --statement inactive mode will be enabled.
@@ -1069,8 +1071,8 @@ USAGE
   $ gc2 table add [SCHEMA] [TABLE] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema
-  TABLE   Name of table
+  SCHEMA  Name of schema.
+  TABLE   Name of table.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -1083,21 +1085,21 @@ _See code: [src/commands/table/add.ts](https://github.com/mapcentia/gc2-cli/blob
 
 ## `gc2 table drop [SCHEMA] [TABLE]`
 
-Drop table
+Drop a table.
 
 ```
 USAGE
   $ gc2 table drop [SCHEMA] [TABLE] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema
-  TABLE   Name of table
+  SCHEMA  Name of schema.
+  TABLE   Name of table.
 
 FLAGS
   -h, --help  Show CLI help.
 
 DESCRIPTION
-  Drop table
+  Drop a table.
 ```
 
 _See code: [src/commands/table/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.10.2/src/commands/table/drop.ts)_
@@ -1108,24 +1110,14 @@ Get table definition.
 
 ```
 USAGE
-  $ gc2 table get [SCHEMA] [TABLE] [-h] [--columns <value> | -x] [--filter <value>] [--no-header | [--csv |
-    --no-truncate]] [--output csv|json|yaml |  | ] [--sort <value>]
+  $ gc2 table get [SCHEMA] [TABLE] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema
-  TABLE   Name of table
+  SCHEMA  Name of schema.
+  TABLE   Name of table.
 
 FLAGS
-  -h, --help             Show CLI help.
-  -x, --extended         show extra columns
-      --columns=<value>  only show provided columns (comma-separated)
-      --csv              output is csv format [alias: --output=csv]
-      --filter=<value>   filter property by partial string matching, ex: name=foo
-      --no-header        hide table header from output
-      --no-truncate      do not truncate output to fit screen
-      --output=<option>  output in a more machine friendly format
-                         <options: csv|json|yaml>
-      --sort=<value>     property to sort by (prepend '-' for descending)
+  -h, --help  Show CLI help.
 
 DESCRIPTION
   Get table definition.
@@ -1142,9 +1134,9 @@ USAGE
   $ gc2 table move [SCHEMA] [TABLE] [DESTINATION] [-h]
 
 ARGUMENTS
-  SCHEMA       Name of schema
-  TABLE        Name of table
-  DESTINATION  Destination schema
+  SCHEMA       Name of schema.
+  TABLE        Name of table.
+  DESTINATION  Destination schema.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -1164,9 +1156,9 @@ USAGE
   $ gc2 table rename [SCHEMA] [TABLE] [NAME] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema
-  TABLE   Name of table
-  NAME    New name for table
+  SCHEMA  Name of schema.
+  TABLE   Name of table.
+  NAME    New name for table.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -1226,10 +1218,10 @@ ARGUMENTS
   NAME  Name of new user
 
 FLAGS
-  -e, --email=<value>       email of new user
-  -e, --properties=<value>  properties of new user
+  -e, --email=<value>       E-mail for new user
+  -e, --properties=<value>  Properties for new user
   -h, --help                Show CLI help.
-  -p, --password=<value>    password of new user
+  -p, --password=<value>    password for new user.
 
 DESCRIPTION
   Create new user.
@@ -1246,7 +1238,7 @@ USAGE
   $ gc2 user drop [NAME] [-h]
 
 ARGUMENTS
-  NAME  Name of user to drop
+  NAME  Name of user to drop.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -1268,7 +1260,7 @@ _See code: [src/commands/user/get.ts](https://github.com/mapcentia/gc2-cli/blob/
 
 ## `gc2 user update [NAME]`
 
-Update user
+Update user.
 
 ```
 USAGE
@@ -1278,13 +1270,13 @@ ARGUMENTS
   NAME  Name of user.
 
 FLAGS
-  -e, --properties=<value>  New properties
-  -g, --group=<value>       New group
+  -e, --properties=<value>  New properties.
+  -g, --group=<value>       New group.
   -h, --help                Show CLI help.
-  -p, --password=<value>    New password
+  -p, --password=<value>    New password for user.
 
 DESCRIPTION
-  Update user
+  Update user.
 ```
 
 _See code: [src/commands/user/update.ts](https://github.com/mapcentia/gc2-cli/blob/v2024.10.2/src/commands/user/update.ts)_

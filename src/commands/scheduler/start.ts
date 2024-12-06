@@ -16,13 +16,13 @@ export default class Start extends Command {
     job: Args.string(
       {
         required: true,
-        description: 'job id to start. Can also be a schema name and all jobs for that schema will be started',
+        description: 'Job id to start. Can also be a schema name and all jobs for that schema will be started.',
       },
     ),
     include: Args.string(
       {
         required: false,
-        description: 'only include jobs for named tables. Comma separated. Will only have effect id schema is used in "job" option',
+        description: 'Only include jobs for named tables. Comma separated. Will only have effect if schema is used in "job" option.',
       }
     )
 
@@ -32,13 +32,13 @@ export default class Start extends Command {
     name: Flags.string(
       {
         char: 'n',
-        description: 'Name the started job(s). The name will be listed in the progress status',
+        description: 'Name the started job(s). The name will be listed in the progress status.',
         required: false
       }),
     force: Flags.boolean(
       {
         char: 'f',
-        description: 'force table to be recreated',
+        description: 'Force table to be recreated.',
         required: false,
       },
     ),

@@ -12,7 +12,7 @@ import get from '../../util/get-response'
 import make from '../../util/make-request'
 
 export default class Start extends Command {
-  static description = 'Get jobs in progress'
+  static description = 'Get jobs in progress.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }

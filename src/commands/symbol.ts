@@ -11,16 +11,16 @@ import {JSDOM} from 'jsdom'
 import * as path from 'path'
 
 export default class Symbol extends Command {
-  static description = 'Create a symbol file from a directory for use in Vidi Symbol extension'
+  static description = 'Create a symbol file from a directory for use in Vidi Symbol extension.'
   static flags = {
     help: Flags.help({char: 'h'}),
-    file: Flags.string({char: 'f', description: 'Output file name. If omitted the content will be printed' }),
+    file: Flags.string({char: 'f', description: 'Output file name. If omitted the content will be printed.' }),
   }
   static args = {
     path: Args.string(
       {
         required: true,
-        description: 'Path to directory with SVG files',
+        description: 'Path to directory with SVG files.',
       }
     )
   }

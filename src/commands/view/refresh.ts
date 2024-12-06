@@ -11,7 +11,7 @@ import make from '../../util/make-request'
 import get from '../../util/get-response'
 
 export default class Refresh extends Command {
-  static description = 'Refresh all materialized views in schema'
+  static description = 'Refresh all materialized views in schema.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
@@ -19,13 +19,13 @@ export default class Refresh extends Command {
     schemas: Args.string(
       {
         required: true,
-        description: 'comma separated list of schemas',
+        description: 'Comma separated list of schemas.',
       }
     ),
     include: Args.string(
       {
         required: false,
-        description: 'only include named views in restore. Comma separated',
+        description: 'Only include named views in restore. Comma separated.',
       }
     ),
   }

@@ -11,7 +11,7 @@ import make from '../../util/make-request'
 import get from '../../util/get-response'
 
 export default class Backup extends Command {
-  static description = 'Backup all (mat)views definitions in schema'
+  static description = 'Backup all (mat)views definitions in schema.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
@@ -19,7 +19,7 @@ export default class Backup extends Command {
     schemas: Args.string(
       {
         required: true,
-        description: 'schemas for backup (comma separated)',
+        description: 'Schemas for backup (comma separated).',
       }
     ),
   }
@@ -29,6 +29,6 @@ export default class Backup extends Command {
     const schemas = args.schemas.split(',').map(s => s.trim())
     const response = await make('3', 'view', 'POST', {schemas: schemas})
     const res = await get(response, 201)
-    this.log(`${chalk.green(res.count)} views backed up`)
+    this.log(`${chalk.green(res.count)} views backed up.`)
   }
 }

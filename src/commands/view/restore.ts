@@ -11,7 +11,7 @@ import make from '../../util/make-request'
 import get from '../../util/get-response'
 
 export default class Restore extends Command {
-  static description = 'Restore all (mat)views definitions from schema'
+  static description = 'Restore all (mat)views definitions from schema.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
@@ -19,19 +19,19 @@ export default class Restore extends Command {
     from: Args.string(
       {
         required: true,
-        description: 'comma separated list of source schemas',
+        description: 'Comma separated list of source schemas.',
       }
     ),
     to: Args.string(
       {
         required: false,
-        description: 'comma separated list of target schemas',
+        description: 'Comma separated list of target schemas.',
       }
     ),
     include: Args.string(
       {
         required: false,
-        description: 'only include named views in restore. Comma separated',
+        description: 'Only include named views in restore. Comma separated.',
       }
     ),
   }
@@ -42,6 +42,6 @@ export default class Restore extends Command {
     const include = args?.include ? args.include.split(',').map(s => s.trim()) : null
     const response = await make('3', `view`, 'PATCH', {from, to, include})
     const res = await get(response, 200)
-    this.log(`${chalk.green(res.count)} views restored`)
+    this.log(`${chalk.green(res.count)} views restored.`)
   }
 }
