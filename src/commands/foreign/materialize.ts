@@ -11,7 +11,7 @@ import make from '../../util/make-request'
 import get from '../../util/get-response'
 
 export default class Materialize extends Command {
-  static description = 'Create mat views from foreign tables'
+  static description = 'Create materialized views of foreign tables.'
   static flags = {
     help: Flags.help({char: 'h'}),
     prefix: Flags.string({char: 'p', description: 'prefix for created foreign tables', required: false}),
@@ -21,19 +21,19 @@ export default class Materialize extends Command {
     from: Args.string(
       {
         required: true,
-        description: 'comma separated list of source schemas',
+        description: 'Comma separated list of source schemas.',
       }
     ),
     to: Args.string(
       {
         required: false,
-        description: 'comma separated list of target schemas',
+        description: 'comma separated list of target schemas.',
       }
     ),
     include: Args.string(
       {
         required: false,
-        description: 'only include named foreign tables. Comma separated',
+        description: 'only include named foreign tables. Comma separated.',
       }
     )
   }

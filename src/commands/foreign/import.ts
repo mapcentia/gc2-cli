@@ -11,7 +11,7 @@ import make from '../../util/make-request'
 import get from '../../util/get-response'
 
 export default class Import extends Command {
-  static description = 'Import schema from foreign server'
+  static description = 'Import schema from foreign server.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
@@ -19,25 +19,25 @@ export default class Import extends Command {
     server: Args.string(
       {
         required: true,
-        description: 'name of foreign server',
+        description: 'Name of foreign server.',
       }
     ),
     from: Args.string(
       {
         required: true,
-        description: 'comma separated list of foreign schemas',
+        description: 'Comma separated list of foreign schemas.',
       }
     ),
     to: Args.string(
       {
         required: true,
-        description: 'comma separated list of local schemas',
+        description: 'Comma separated list of local schemas.',
       }
     ),
     include: Args.string(
       {
         required: false,
-        description: 'only include named relations in import. Comma separated',
+        description: 'Only include named relations in import. Comma separated.',
       }
     ),
   }
@@ -49,6 +49,6 @@ export default class Import extends Command {
     const server = args.server
     const response = await make('3', `foreign`, 'POST', {from, to, server, include})
     await get(response, 201)
-    this.log(`${chalk.green('Schemas imported')}`)
+    this.log(`${chalk.green('Schemas imported.')}`)
   }
 }

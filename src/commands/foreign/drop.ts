@@ -11,7 +11,7 @@ import make from '../../util/make-request'
 import get from '../../util/get-response'
 
 export default class Drop extends Command {
-  static description = 'Drop all foreign tables in schema'
+  static description = 'Drop all foreign tables in schema.'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
@@ -19,13 +19,13 @@ export default class Drop extends Command {
     schemas: Args.string(
       {
         required: true,
-        description: 'schemas for dropping (comma separated)',
+        description: 'Schemas for dropping (comma separated).',
       }
     ),
     include: Args.string(
       {
         required: false,
-        description: 'only drop named foreign tables. Comma separated',
+        description: 'Only drop named foreign tables. Comma separated.',
       }
     ),
   }
