@@ -1,7 +1,7 @@
 {
   "name": "gc2",
   "description": "GC2 CLI",
-  "version": "2024.10.2",
+  "version": "2024.12.1",
   "author": "Martin Høgh @mapcentia",
   "bin": {
     "gc2": "./bin/run"
@@ -16,7 +16,7 @@
     "@oclif/plugin-autocomplete": "^3.2.4",
     "@oclif/plugin-help": "^6.0.1",
     "@oclif/plugin-not-found": "^3.2.21",
-    "@oclif/plugin-update": "^3.0.0",
+    "@oclif/plugin-update": "^3.2.4",
     "@types/adm-zip": "^0.5.0",
     "@types/configstore": "^4.0.0",
     "@types/inquirer": "^9.0.7",
@@ -48,6 +48,7 @@
     "@oclif/tslint": "^3.1.1",
     "@types/chai": "^4.3.10",
     "@types/jsdom": "^21.1.7",
+    "@types/lodash": "^4.14.202",
     "@types/mocha": "^10.0.4",
     "@types/node": "^10.17.60",
     "aws-sdk": "^2.1159.0",
@@ -134,9 +135,11 @@
     ],
     "update": {
       "s3": {
-        "bucket": "gc2-cli"
+        "bucket": "gc2-cli",
+        "host": "https://gc2-cli.s3.eu-west-1.amazonaws.com"
       }
     },
+
     "macos": {
       "identifier": "io.gc2.cli"
     }
@@ -157,7 +160,8 @@
     "packdeb": "oclif pack deb",
     "uploaddeb": "oclif upload deb",
     "packtarballs": "oclif pack tarballs",
-    "uploadtarballs": "oclif upload tarballs"
+    "uploadtarballs": "oclif upload tarballs",
+    "promotewin": "oclif promote --win --targets=win32-x64 --sha=$(git rev-parse --short HEAD) --version=$(node -p \"require('./package.json').version\")"
   },
   "types": "lib/index.d.ts",
   "directories": {
