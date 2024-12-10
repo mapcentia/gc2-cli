@@ -130,7 +130,6 @@
     "bin": "gc2",
     "plugins": [
       "@oclif/plugin-help",
-      "@oclif/plugin-update",
       "@oclif/plugin-not-found"
     ],
     "update": {
