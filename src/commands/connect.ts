@@ -6,7 +6,7 @@
  */
 
 import {input} from '@inquirer/prompts'
-import {Command, Flags, ux as cli} from '@oclif/core'
+import {Args, Command, Flags} from '@oclif/core'
 import Configstore from 'configstore'
 
 //process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
@@ -14,22 +14,30 @@ import Configstore from 'configstore'
 export default class Connect extends Command {
   static description = 'Set connection. You can use flags to set host, database and user. If one or more flags are missing, you will be prompted instead.'
 
+  static args = {
+    host: Args.string(
+      {
+        required: false,
+        description: 'Server host with scheme: http(s)',
+      }
+    )
+  }
+
   static flags = {
     help: Flags.help({char: 'h'}),
     reset: Flags.boolean({char: 'r', description: 'Reset connection.'}),
-    host: Flags.string({char: 'H', description: 'Host of the server.'}),
   }
 
   async run() {
-    const {flags} = await this.parse(Connect)
+    const {flags, args} = await this.parse(Connect)
     const config: Configstore = new Configstore('gc2-env')
     if (flags.reset) {
       config.clear()
-      this.log('Connection reset')
+      this.log('Connection reset.')
       return
     }
 
-    let host = flags?.host ? flags.host : await input({message: 'Host', required: true, default: config.all.host})
+    let host = args?.host ? args.host : await input({message: 'Host', required: true, default: config.all.host})
     if (host) {
       host = host.replace(/\/$/, '')
       config.set({host})
