@@ -18,11 +18,11 @@ CLI tool for GC2
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g gc2
+$ npm install -g @mapcentia/gc2-cli
 $ gc2 COMMAND
 running command...
 $ gc2 (--version|-v)
-gc2/2024.12.1 linux-x64 node-v20.18.0
+@mapcentia/gc2-cli/2024.12.1 linux-x64 node-v20.18.0
 $ gc2 --help [COMMAND]
 USAGE
   $ gc2 COMMAND
