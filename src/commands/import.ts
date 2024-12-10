@@ -17,6 +17,8 @@ import * as path from 'path'
 import User from '../common/user'
 import get from '../util/get-response'
 import make from '../util/make-request'
+import {schemasList} from "../util/lists";
+import setSchema from "../util/set-schema";
 
 const config: Configstore = new Configstore('gc2-env')
 const userConfig: User = config.all
@@ -25,15 +27,16 @@ let args: any = {}
 if (userConfig.superUser) {
   args.schema = Args.string(
     {
-      required: true,
+      required: false,
       description: 'Destination schema.',
     }
   )
 }
 args.path = Args.string(
   {
-    required: true,
+    required: false,
     description: 'Input path to file or folder.',
+    default: '.',
   },
 )
 
@@ -49,21 +52,23 @@ export default class Import extends Command {
   static args = args
 
   async run() {
-    const {flags, args} = await this.parse(Import)
+    let {flags, args} = await this.parse(Import)
+    args = setSchema(args)
+
     let tmpDir
     let tmpFile
     let tmpPath
     const appPrefix = 'gc2-cli-'
     const chunkSize = 1000000
     const inputPath = args.path
-    const schema = userConfig.superUser ? args?.schema : userConfig.user
+
+    // Interactive
+    const schema = args?.schema || await schemasList()
 
     try {
       tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix))
       tmpFile = uuidv4() + '.zip'
       tmpPath = tmpDir + '/' + tmpFile
-
-      console.log(tmpPath)
 
       cli.action.start('Compressing files')
       await this.createZipArchive(inputPath, tmpPath)
@@ -94,6 +99,8 @@ export default class Import extends Command {
       if (!flags.dry_run) {
         body.import = true
       }
+      delete body.dry_run
+
       const res = await make('4', `import/${schema}/${tmpFile}`, 'PATCH', body)
       const data = await get(res, 201)
       type tables = {
