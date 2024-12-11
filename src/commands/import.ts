@@ -24,6 +24,15 @@ const config: Configstore = new Configstore('gc2-env')
 const userConfig: User = config.all
 
 let args: any = {}
+
+args.path = Args.string(
+  {
+    required: false,
+    description: 'Input path to file or folder.',
+    default: '.',
+  },
+)
+
 if (userConfig.superUser) {
   args.schema = Args.string(
     {
@@ -32,13 +41,6 @@ if (userConfig.superUser) {
     }
   )
 }
-args.path = Args.string(
-  {
-    required: false,
-    description: 'Input path to file or folder.',
-    default: '.',
-  },
-)
 
 export default class Import extends Command {
   static description = 'Import files. Set path to a file or folder, which will be compressed, uploaded and imported into GC2.'
