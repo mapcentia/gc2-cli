@@ -37,36 +37,36 @@ export default class Get extends Command {
     }
     type column = {
       name: string;
-      num: number;
+      _num: number;
       type: string;
-      full_type: string;
+      _full_type: string;
       is_nullable: boolean;
-      character_maximum_length: number;
-      numeric_precision: number;
-      numeric_scale: number;
-      max_bytes: number;
-      reference: string;
-      restriction: any;
-      geom_type?: string;
-      srid?: string;
-      is_primary: boolean;
-      is_unique: boolean;
+      _character_maximum_length: number;
+      _numeric_precision: number;
+      _numeric_scale: number;
+      _max_bytes: number;
+      _reference: string;
+      _restriction: any;
+      _geom_type?: string;
+      _srid?: string;
+      _is_primary: boolean;
+      _is_unique: boolean;
       default_value: string;
-      index_method?: any;
-      checks?: any;
+      _index_method?: any;
+      _checks?: any;
     }
     const data: object[] = []
     const columns: columns = {column: {}, type: {}, unique: {} , nullable: {}, index_method: {}, foreign_key: {}, checks: {}}
     for (const c in res.columns) {
       const v: column = res.columns[c]
       data.push({
-        column: (v.is_primary ? chalk.green(v.name) : v.name) + (v.default_value ? ' = ' + v.default_value : ''),
-        type: v.full_type,
-        unique: v.is_unique,
+        column: (v._is_primary ? chalk.green(v.name) : v.name) + (v.default_value ? ' = ' + v.default_value : ''),
+        type: v._full_type,
+        unique: v._is_unique,
         nullable: v.is_nullable,
-        index_method: v.index_method ? v.index_method.join(', ') : '',
-        foreign_key: v.reference || '',
-        checks: v.checks ? v.checks.join(', ') : '',
+        index_method: v._index_method ? v._index_method.join(', ') : '',
+        foreign_key: v._reference || '',
+        checks: v._checks ? v._checks.join(', ') : '',
       })
     }
     cli.table(data, columns, {

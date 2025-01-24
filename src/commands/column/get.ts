@@ -48,24 +48,27 @@ export default class Get extends Command {
     const props: object[] = []
     const rows: row = {prop: {}, value: {}}
     props.push({prop: 'Name', value: res.name})
-    props.push({prop: 'Type', value: res.full_type})
-    props.push({prop: 'Is primary', value: res.is_primary})
-    props.push({prop: 'Is unique', value: res.is_unique})
+    props.push({prop: 'Type', value: res._full_type})
+    props.push({prop: 'Is primary', value: res._is_primary})
+    props.push({prop: 'Is unique', value: res._is_unique})
     props.push({prop: 'Is nullable', value: res.is_nullable})
     props.push({prop: 'Default value', value: res.default_value || ''})
-    if (res.character_maximum_length) props.push({
+    if (res._character_maximum_length) props.push({
       prop: 'character_maximum_length',
-      value: res.character_maximum_length
+      value: res._character_maximum_length
     })
-    if (res.numeric_precision) props.push({prop: 'Numeric precision', value: res.numeric_precision})
-    if (res.numeric_scale) props.push({prop: 'Numeric scale', value: res.numeric_scale})
-    if (res.max_bytes) props.push({prop: 'Max bytes', value: res.max_bytes})
-    if (res.reference) props.push({prop: 'Reference', value: res.reference})
-    if (res.index_method) props.push({prop: 'Index method', value: res.index_method.join(', ')})
-    if (res.checks) props.push({prop: 'Checks', value: res.checks.join(', ')})
+    if (res._numeric_precision) props.push({prop: 'Numeric precision', value: res._numeric_precision})
+    if (res._numeric_scale) props.push({prop: 'Numeric scale', value: res._numeric_scale})
+    if (res._max_bytes) props.push({prop: 'Max bytes', value: res._max_bytes})
+    if (res._reference) props.push({prop: 'Reference', value: res._reference})
+    if (res._index_method) props.push({prop: 'Index method', value: res._index_method.join(', ')})
+    if (res._checks) props.push({prop: 'Checks', value: res._checks.join(', ')})
 
     cli.table(props, rows, {
       printLine: this.log.bind(this)
     })
+    if (res.comment) {
+      this.log(`Comment: ${res.comment}`)
+    }
   }
 }
