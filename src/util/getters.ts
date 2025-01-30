@@ -29,7 +29,7 @@ const rules = async (id?: string) => {
 }
 
 const schemas = async (id?: string) => {
-  const res = id ? `schemas/${id}` : 'schemas'
+  const res = id ? `schemas/${id}` : 'schemas?namesOnly'
   const response = await make('4', res, 'GET')
   const t: any = await get(response, 200);
   if (!t.schemas) {
@@ -39,7 +39,7 @@ const schemas = async (id?: string) => {
 }
 
 const tables = async (schema: string, table?: string) => {
-  const res = table ? `schemas/${schema}/tables/${table}` : `schemas/${schema}/tables`
+  const res = table ? `schemas/${schema}/tables/${table}?namesOnly` : `schemas/${schema}/tables?namesOnly`
   const response = await make('4', res, 'GET')
   const t = await get(response, 200);
   if (!t.tables) {
