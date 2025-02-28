@@ -17,8 +17,9 @@ import * as path from 'path'
 import User from '../common/user'
 import get from '../util/get-response'
 import make from '../util/make-request'
-import {schemasList} from "../util/lists";
-import setSchema from "../util/set-schema";
+import {schemasList} from "../util/lists"
+import setSchema from "../util/set-schema"
+import {fileTypeFromFile} from 'file-type'
 
 const config: Configstore = new Configstore('gc2-env')
 const userConfig: User = config.all
@@ -45,8 +46,14 @@ if (userConfig.superUser) {
 export default class Import extends Command {
   static description = 'Import files. Set path to a file or folder, which will be compressed, uploaded and imported into GC2.'
   static flags = {
-    s_srs: Flags.string({char: 's', description: 'Fallback source SRS. Will be used if file doesn\'t contain projection information'}),
-    t_srs: Flags.string({char: 't', description: 'Fallback target SRS. Will be used if no authority name/code is available. Defaults to EPSG:4326.'}),
+    s_srs: Flags.string({
+      char: 's',
+      description: 'Fallback source SRS. Will be used if file doesn\'t contain projection information'
+    }),
+    t_srs: Flags.string({
+      char: 't',
+      description: 'Fallback target SRS. Will be used if no authority name/code is available. Defaults to EPSG:4326.'
+    }),
     dry_run: Flags.boolean({char: 'd', description: 'Dry run. Only analyse files with no import.'}),
 
     help: Flags.help({char: 'h'}),
@@ -68,13 +75,18 @@ export default class Import extends Command {
     const schema = args?.schema || await schemasList()
 
     try {
+
       tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix))
       tmpFile = uuidv4() + '.zip'
       tmpPath = tmpDir + '/' + tmpFile
 
-      cli.action.start('Compressing files')
-      await this.createZipArchive(inputPath, tmpPath)
-      cli.action.stop()
+      if (inputPath.split('.').reverse()[0].toLowerCase() === 'zip') {
+        fs.renameSync( inputPath, tmpPath)
+      } else {
+        cli.action.start('Compressing files')
+        await this.createZipArchive(inputPath, tmpPath)
+        cli.action.stop()
+      }
 
       cli.action.start('Uploading')
       const file = fs.readFileSync(tmpPath)
@@ -119,7 +131,7 @@ export default class Import extends Command {
         error: string;
       }
       const rows: object[] = []
-      const tables: tables = {driver: {}, count: {}, type: {}, index: {}, name: {}, hasWkt: {}, authStr: {}, error: {}, }
+      const tables: tables = {driver: {}, count: {}, type: {}, index: {}, name: {}, hasWkt: {}, authStr: {}, error: {},}
       for (const c in data.data) {
         const v: table = data.data[c]
         rows.push({
@@ -134,7 +146,7 @@ export default class Import extends Command {
 
         })
       }
-    //  cli.action.stop()
+      //  cli.action.stop()
       this.log('')
       cli.table(rows, tables, {
         printLine: this.log.bind(this)
