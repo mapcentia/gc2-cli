@@ -39,7 +39,6 @@ export default class Get extends Command {
       name: string;
       _num: number;
       type: string;
-      _full_type: string;
       is_nullable: boolean;
       _character_maximum_length: number;
       _numeric_precision: number;
@@ -61,7 +60,7 @@ export default class Get extends Command {
       const v: column = res.columns[c]
       data.push({
         column: (v._is_primary ? chalk.green(v.name) : v.name) + (v.default_value ? ' = ' + v.default_value : ''),
-        type: v._full_type,
+        type: v.type,
         unique: v._is_unique,
         nullable: v.is_nullable,
         index_method: v._index_method ? v._index_method.join(', ') : '',
