@@ -19,7 +19,6 @@ import get from '../util/get-response'
 import make from '../util/make-request'
 import {schemasList} from "../util/lists"
 import setSchema from "../util/set-schema"
-import {fileTypeFromFile} from 'file-type'
 
 const config: Configstore = new Configstore('gc2-env')
 const userConfig: User = config.all
