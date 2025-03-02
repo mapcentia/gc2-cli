@@ -6,8 +6,11 @@
  */
 
 import {input} from '@inquirer/prompts'
-import {Args, Command, Flags} from '@oclif/core'
+import {Args, Command, Flags, ux} from '@oclif/core'
 import Configstore from 'configstore'
+import fetch from "node-fetch";
+import {GC2_SERVER_ADDRESS} from "../util/utils";
+import {exit} from "@oclif/core/lib/errors";
 
 //process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
@@ -40,9 +43,19 @@ export default class Connect extends Command {
     let host = args?.host ? args.host : await input({message: 'Host', required: true, default: config.all.host})
     if (host) {
       host = host.replace(/\/$/, '')
+
+      // Check host
+      const response = await fetch((host || GC2_SERVER_ADDRESS) + '/fpm-ping')
+
+      if (response.status !== 200) {
+        ux.log('⚠️ The URL is not a valid connection.')
+        exit(1)
+      }
+
       config.set({host})
       config.set({user: ''})
       config.set({database: ''})
     }
+
   }
 }
