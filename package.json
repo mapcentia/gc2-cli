@@ -160,7 +160,7 @@
     "packtarballs": "oclif pack tarballs",
     "uploadtarballs": "oclif upload tarballs",
     "promotewin": "oclif promote --win --targets=win32-x64 --sha=$(git rev-parse --short HEAD) --version=$(node -p \"require('./package.json').version\")",
-    "promotedeb": "oclif promote --deb --targets=x64 --sha=$(git rev-parse --short HEAD) --version=$(node -p \"require('./package.json').version\")"
+    "promotedeb": "oclif promote --deb --targets=deb-amd64 --sha=$(git rev-parse --short HEAD) --version=$(node -p \"require('./package.json').version\")"
   },
   "types": "lib/index.d.ts",
   "directories": {
