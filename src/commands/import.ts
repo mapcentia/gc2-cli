@@ -53,7 +53,21 @@ export default class Import extends Command {
       char: 't',
       description: 'Fallback target SRS. Will be used if no authority name/code is available. Defaults to EPSG:4326.'
     }),
+    timestamp: Flags.string({
+      char: 'T',
+      description: 'Name of timestamp field. Create a timestamp field in the import table. Omit argument for no timestamp field.'
+    }),
+    x_possible_names: Flags.string({
+      char: 'x',
+      description: 'Specify the potential names of the columns that can contain X/longitude. Only effects CSV. Defaults to "lon*,Lon*,x,X"]'
+    }),
+    y_possible_names: Flags.string({
+      char: 'y',
+      description: 'Specify the potential names of the columns that can contain X/longitude. Only effects CSV. Defaults to "lat*,Lat*,y,Y"]'
+    }),
     dry_run: Flags.boolean({char: 'd', description: 'Dry run. Only analyse files with no import.'}),
+    append: Flags.boolean({char: 'a', description: 'Append to existing table instead of creating new.'}),
+    truncate: Flags.boolean({char: 'r', description: 'Truncate table before appending. Only have effect if --append is set.'}),
 
     help: Flags.help({char: 'h'}),
   }
