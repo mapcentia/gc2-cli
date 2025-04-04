@@ -63,7 +63,7 @@ export default class Import extends Command {
     }),
     y_possible_names: Flags.string({
       char: 'y',
-      description: 'Specify the potential names of the columns that can contain X/longitude. Only effects CSV. Defaults to "lat*,Lat*,y,Y"]'
+      description: 'Specify the potential names of the columns that can contain Y/latitude. Only effects CSV. Defaults to "lat*,Lat*,y,Y"]'
     }),
     dry_run: Flags.boolean({char: 'd', description: 'Dry run. Only analyse files with no import.'}),
     append: Flags.boolean({char: 'a', description: 'Append to existing table instead of creating new.'}),
