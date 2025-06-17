@@ -28,7 +28,7 @@ $ npm install -g @mapcentia/gc2-cli
 $ gc2 COMMAND
 running command...
 $ gc2 (--version|-v)
-@mapcentia/gc2-cli/2025.4.0 linux-x64 node-v20.18.0
+@mapcentia/gc2-cli/2025.4.0 linux-x64 node-v20.19.1
 $ gc2 --help [COMMAND]
 USAGE
   $ gc2 COMMAND
@@ -617,7 +617,7 @@ FLAGS
                                   EPSG:4326.
   -x, --x_possible_names=<value>  Specify the potential names of the columns that can contain X/longitude. Only effects
                                   CSV. Defaults to "lon*,Lon*,x,X"]
-  -y, --y_possible_names=<value>  Specify the potential names of the columns that can contain X/longitude. Only effects
+  -y, --y_possible_names=<value>  Specify the potential names of the columns that can contain Y/latitude. Only effects
                                   CSV. Defaults to "lat*,Lat*,y,Y"]
 
 DESCRIPTION

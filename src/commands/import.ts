@@ -68,6 +68,7 @@ export default class Import extends Command {
     dry_run: Flags.boolean({char: 'd', description: 'Dry run. Only analyse files with no import.'}),
     append: Flags.boolean({char: 'a', description: 'Append to existing table instead of creating new.'}),
     truncate: Flags.boolean({char: 'r', description: 'Truncate table before appending. Only have effect if --append is set.'}),
+    table_name: Flags.string({char: 'n', description: 'Name of table. Defaults to the name of the file. Can only be used when importing single file - not directories unless --append is used'}),
 
     help: Flags.help({char: 'h'}),
   }
