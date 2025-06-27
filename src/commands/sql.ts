@@ -40,7 +40,17 @@ export default class Sql extends Command {
     const {flags} = await this.parse(Sql)
     if (flags.statement) {
 
-      const format = flags?.format || await outputFormatList()
+      const statementText = flags.statement.toLowerCase()
+      let format: string | undefined = flags.format
+
+      if (!format) {
+        if (!statementText.includes('select') && !statementText.includes('returning')) {
+          // Skip prompting for format if statement has 'select' or 'returning'
+          format = 'geojson' // or any preferred default format here
+        } else {
+          format = await outputFormatList()
+        }
+      }
 
       const statement: Statement = {
         q: base64url(flags.statement),
