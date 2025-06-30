@@ -15,7 +15,7 @@ import make from '../../util/make-request'
 export default class Add extends Command {
   static description = 'Create a new rule.'
   static flags = {
-    priority: Flags.string({char: 'P', description: 'Priority'}),
+    priority: Flags.integer({char: 'P', description: 'Priority'}),
     username: Flags.string({char: 'u', description: 'Username'}),
     service: Flags.string({char: 's', description: 'Service'}),
     request: Flags.string({char: 'p', description: 'Request'}),
@@ -43,7 +43,7 @@ export default class Add extends Command {
     const access = flags?.access || await accessList()
     const filter = flags?.filter || await input({message: 'filter', required: false})
 
-    const body: {[index: string]:any} = {priority, username, service, request, schema, layer:table, iprange, access, filter}
+    const body: {[index: string]:any} = {priority, username, service, request, schema, table, iprange, access, filter}
     Object.keys(body).forEach((key) => {
       if (body[key] === '') {
         delete (body[key])
