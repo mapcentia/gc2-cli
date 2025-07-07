@@ -5,7 +5,7 @@
  *
  */
 
-import {input, password} from '@inquirer/prompts'
+import {confirm, input, password} from '@inquirer/prompts'
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import Configstore from 'configstore'
@@ -34,6 +34,7 @@ if (userConfig.superUser) {
 let flags: any = {
   help: Flags.help({char: 'h'}),
   password: Flags.string({char: 'p', description: 'New password for user.', required: false}),
+  default_user: Flags.boolean({char: 'd', description: 'The default user is the user that is used when no token is provided. Use for public applications where users should not be able to access data without a token.', required: false}),
 }
 if (userConfig.superUser) {
   flags.properties = Flags.string({char: 'e', description: 'New properties.', required: false})
@@ -59,6 +60,7 @@ export default class Update extends Command {
     user = await users(name)
     const pwd = flags?.password || await password({message: 'Password', mask: true, validate: (t) => passwordIsStrongEnough(t, true)})
     const email = flags?.password || await input({message: 'E-mail', required: true, default: user.email})
+    const default_user = flags?.default_user || await confirm({message: 'Default user?', default: user.default_user})
     if (userConfig.superUser) {
       group = flags?.group || await groupList(name, user.user_group)
     }
@@ -69,6 +71,7 @@ export default class Update extends Command {
       email,
       password: p,
       properties: flags.properties,
+      default_user,
     }
     if (userConfig.superUser) {
       body.user_group = group

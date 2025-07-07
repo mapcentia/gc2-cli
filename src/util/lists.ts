@@ -190,8 +190,10 @@ const userList = async (defaultValue?: string) => {
   let r: string = await select({
     message: 'Choose a user',
     default: defaultValue,
-    choices: s.users.map((v: { name: string }) => {
-      return {value: v.name}
+    choices: s.users.map((v: {
+      default_user: string;
+      name: string }) => {
+      return {value: v.name, name: `${v.name} (default user: ${v.default_user})`}
     })
   })
   return r

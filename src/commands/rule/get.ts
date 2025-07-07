@@ -40,7 +40,7 @@ export default class Get extends Command {
       service?: string;
       request?: string;
       schema?: string;
-      layer?: string;
+      table?: string;
       iprange?: string;
       access?: string;
       filter?: string;
@@ -57,7 +57,7 @@ export default class Get extends Command {
         service: v.service,
         request: v.request,
         schema: v.schema,
-        table: v.layer,
+        table: v.table,
         iprange: v.iprange,
         access: v.access,
         filter: v.filter,

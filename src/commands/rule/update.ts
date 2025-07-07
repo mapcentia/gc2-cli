@@ -51,11 +51,11 @@ export default class Update extends Command {
     const service = flags?.service || await serviceList(rule.service)
     const request = flags?.request ||  await requestList(rule.request)
     const schema = flags?.schema || await input({message: 'Schema', required: false, default: rule.schema})
-    const table = flags?.table || await input({message: 'Table', required: false, default: rule.layer})
+    const table = flags?.table || await input({message: 'Table', required: false, default: rule.table})
     const iprange = flags?.iprange || await input({message: 'IP range', required: false, default: rule.iprange})
     const access = flags?.access || await accessList(rule.access)
     const filter = flags?.filter || await input({message: 'Filter', required: false, default: rule.filter})
-    const body: {[index: string]:any} = {priority, username, service, request, schema, layer:table, iprange, access, filter}
+    const body: {[index: string]:any} = {priority, username, service, request, schema, table, iprange, access, filter}
     Object.keys(body).forEach((key) => {
       if (body[key] === '') {
         delete (body[key])
