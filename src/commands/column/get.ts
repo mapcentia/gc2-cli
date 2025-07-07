@@ -40,7 +40,6 @@ export default class Get extends Command {
 
     const response = await make('4', `schemas/${schema}/tables/${table}/columns/${column}`, 'GET', null)
     const res = await get(response, 200)
-    this.log(res)
 
     type row = {
       [key: string]: any

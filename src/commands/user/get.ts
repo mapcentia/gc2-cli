@@ -1,24 +1,57 @@
 /**
  * @author     Martin Høgh <mh@mapcentia.com>
- * @copyright  2013-2024 MapCentia ApS
+ * @copyright  2013-2025 MapCentia ApS
  * @license    http://www.gnu.org/licenses/#AGPL  GNU AFFERO GENERAL PUBLIC LICENSE 3
  *
  */
 
-import {Command, Flags, ux} from '@oclif/core'
-import chalk from 'chalk'
+import {Args, Command, Flags, ux} from '@oclif/core'
 import cli from 'cli-ux'
-import args from '../../common/base_args'
-import {tables} from '../../util/getters'
-import {schemasList, tableList} from '../../util/lists'
-import setSchema from '../../util/set-schema'
+import {users} from '../../util/getters'
 
-let base_args = args
-let specific_args = {}
+let specific_args = {
+  id: Args.string(
+    {
+      required: false,
+      description: 'User id',
+    },
+  ),
+}
 
 export default class Get extends Command {
-  run(): Promise<any> {
-    return Promise.resolve(undefined)
+  static description = 'Get user(s).'
+  static flags = {
+    help: Flags.help({char: 'h'}),
   }
+  static args = {...specific_args}
 
+  async run() {
+    let {args} = await this.parse(Get)
+    let res = await users(args?.id)
+    if (args?.id) {
+      res = {users: [res]};
+    }
+    type row = {
+      [key: string]: any
+    }
+    type user = {
+      name: string;
+      user_group?: string;
+      email: string;
+      properties: string;
+      default_user: boolean;
+    }
+    const data: object[] = []
+    const rows: row = {name: {}, user_group: {}, email: {}, default_user: {}}
+    for (const c in res.users) {
+      const v: user = res.users[c]
+      data.push({
+        name: v.name,
+        user_group: v.user_group || '',
+        email: v.email,
+        default_user: v.default_user,
+      })
+    }
+    cli.table(data, rows, {printLine: this.log.bind(this)})
+  }
 }
