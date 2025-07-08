@@ -5,7 +5,7 @@
  *
  */
 
-import {input} from '@inquirer/prompts'
+import {input, confirm} from '@inquirer/prompts'
 import {Args, Command, Flags, ux as cli} from '@oclif/core'
 import chalk from 'chalk'
 import get from '../../util/get-response'
@@ -19,8 +19,14 @@ export default class Update extends Command {
   static flags = {
     name: Flags.string({char: 'n', description: 'New name ofclient.', required: false}),
     description: Flags.string({char: 'd', description: 'Description of new client.', required: false}),
-    redirect_uri: Flags.string({char: 'r', description: 'Redirect uri. Redirects will only be allowed to an uri in this list.', required: false}),
+    redirect_uri: Flags.string({
+      char: 'r',
+      description: 'Redirect uri. Redirects will only be allowed to an uri in this list.',
+      required: false
+    }),
     homepage: Flags.string({char: 'p', description: 'Homepage of the application.', required: false}),
+    public: Flags.boolean({char: 'p', description: 'Public client. No secret needed.', required: false}),
+    confirm: Flags.boolean({char: 'c', description: 'Client user must confirm the token exchange.', required: false}),
     help: Flags.help({char: 'h'}),
   }
   static args = {
@@ -36,25 +42,28 @@ export default class Update extends Command {
     const {args} = await this.parse(Update)
     const {flags} = await this.parse(Update)
     let id = args?.id || await clientList()
-    const cl = await clients(id)
+    const clientResult = await clients(id)
+    const client = clientResult.clients[0]
 
-    const name = flags?.name || await input({message: 'Name', required: false, default: cl.name})
+    const name = flags?.name || await input({message: 'Name', required: false, default: client.name})
     const description = flags?.description || await input({
       message: 'Description',
       required: true,
-      default: cl.description
+      default: client.description
     })
     const redirect_uri_str = flags?.redirect_uri || await input({
       message: 'Redirect uri (comma separated)',
       required: true,
-      default: cl.redirect_uri?.join(',')
+      default: client.redirect_uri?.join(',')
     })
-    const homepage = flags?.homepage || await input({message: 'homepage', required: false, default: cl.homepage})
+    const homepage = flags?.homepage || await input({message: 'homepage', required: false, default: client.homepage})
 
     let redirect_uri = null
     if (redirect_uri_str) {
       redirect_uri = redirect_uri_str.split(',').map((e: string) => e.trim())
     }
+    const _public = flags?.public || await confirm({message: 'Public client?', default: client.public})
+    const _confirm = flags?.confirm || await confirm({message: 'Confirm token exchange?', default: client.confirm})
     const response = await make('4', `clients/${id}`, 'PATCH', {name, description, redirect_uri, homepage})
     await get(response, 303)
     this.log(`Client is here ${chalk.green(response.headers.get('Location'))}`)

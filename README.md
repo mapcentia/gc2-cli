@@ -28,7 +28,7 @@ $ npm install -g @mapcentia/gc2-cli
 $ gc2 COMMAND
 running command...
 $ gc2 (--version|-v)
-@mapcentia/gc2-cli/2025.7.0 linux-x64 node-v20.19.1
+@mapcentia/gc2-cli/2025.7.1 linux-x64 node-v20.19.1
 $ gc2 --help [COMMAND]
 USAGE
   $ gc2 COMMAND
@@ -126,7 +126,7 @@ USAGE
 * [`gc2 table rename [SCHEMA] [TABLE] [NAME]`](#gc2-table-rename-schema-table-name)
 * [`gc2 user add [NAME]`](#gc2-user-add-name)
 * [`gc2 user drop [NAME]`](#gc2-user-drop-name)
-* [`gc2 user get`](#gc2-user-get)
+* [`gc2 user get [ID]`](#gc2-user-get-id)
 * [`gc2 user update [NAME]`](#gc2-user-update-name)
 * [`gc2 view backup SCHEMAS`](#gc2-view-backup-schemas)
 * [`gc2 view get SCHEMA`](#gc2-view-get-schema)
@@ -151,7 +151,7 @@ DESCRIPTION
   Run administration task on the GC2 installation.
 ```
 
-_See code: [src/commands/admin.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/admin.ts)_
+_See code: [src/commands/admin.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/admin.ts)_
 
 ## `gc2 client add [NAME]`
 
@@ -175,7 +175,7 @@ DESCRIPTION
   Create new client.
 ```
 
-_See code: [src/commands/client/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/client/add.ts)_
+_See code: [src/commands/client/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/client/add.ts)_
 
 ## `gc2 client drop [ID]`
 
@@ -195,7 +195,7 @@ DESCRIPTION
   Drop a client.
 ```
 
-_See code: [src/commands/client/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/client/drop.ts)_
+_See code: [src/commands/client/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/client/drop.ts)_
 
 ## `gc2 client get [ID]`
 
@@ -215,7 +215,7 @@ DESCRIPTION
   Get client(s).
 ```
 
-_See code: [src/commands/client/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/client/get.ts)_
+_See code: [src/commands/client/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/client/get.ts)_
 
 ## `gc2 client update [ID]`
 
@@ -239,7 +239,7 @@ DESCRIPTION
   Update a client.
 ```
 
-_See code: [src/commands/client/update.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/client/update.ts)_
+_See code: [src/commands/client/update.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/client/update.ts)_
 
 ## `gc2 column add [SCHEMA] [TABLE] [COLUMN] [TYPE]`
 
@@ -262,7 +262,7 @@ DESCRIPTION
   Add a new column to a table.
 ```
 
-_See code: [src/commands/column/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/column/add.ts)_
+_See code: [src/commands/column/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/column/add.ts)_
 
 ## `gc2 column default [SCHEMA] [TABLE] [COLUMN] [DEFAULT]`
 
@@ -285,7 +285,7 @@ DESCRIPTION
   Set default value for column. The default value is set when inserting a new row without a value for the column.
 ```
 
-_See code: [src/commands/column/default.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/column/default.ts)_
+_See code: [src/commands/column/default.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/column/default.ts)_
 
 ## `gc2 column drop [SCHEMA] [TABLE] [COLUMN]`
 
@@ -307,7 +307,7 @@ DESCRIPTION
   Drop a column from table.
 ```
 
-_See code: [src/commands/column/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/column/drop.ts)_
+_See code: [src/commands/column/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/column/drop.ts)_
 
 ## `gc2 column get [SCHEMA] [TABLE] [COLUMN]`
 
@@ -329,7 +329,7 @@ DESCRIPTION
   Get description of a column.
 ```
 
-_See code: [src/commands/column/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/column/get.ts)_
+_See code: [src/commands/column/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/column/get.ts)_
 
 ## `gc2 column nullable [SCHEMA] [TABLE] [COLUMN] [NULLABLE]`
 
@@ -352,7 +352,7 @@ DESCRIPTION
   Set nullable on column. If set the column can't be empty.
 ```
 
-_See code: [src/commands/column/nullable.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/column/nullable.ts)_
+_See code: [src/commands/column/nullable.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/column/nullable.ts)_
 
 ## `gc2 column rename [SCHEMA] [TABLE] [COLUMN] [NAME]`
 
@@ -375,7 +375,7 @@ DESCRIPTION
   Rename a column.
 ```
 
-_See code: [src/commands/column/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/column/rename.ts)_
+_See code: [src/commands/column/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/column/rename.ts)_
 
 ## `gc2 column type [SCHEMA] [TABLE] [COLUMN] [TYPE]`
 
@@ -398,7 +398,7 @@ DESCRIPTION
   Set the data on column. It might be, the existing data type can't be transformed to the chosen one.
 ```
 
-_See code: [src/commands/column/type.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/column/type.ts)_
+_See code: [src/commands/column/type.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/column/type.ts)_
 
 ## `gc2 connect [HOST]`
 
@@ -420,7 +420,7 @@ DESCRIPTION
   prompted instead.
 ```
 
-_See code: [src/commands/connect.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/connect.ts)_
+_See code: [src/commands/connect.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/connect.ts)_
 
 ## `gc2 constraint add [SCHEMA] [TABLE] [COLUMNS] [TYPE] [NAME]`
 
@@ -451,7 +451,7 @@ DESCRIPTION
   Add a constraint.
 ```
 
-_See code: [src/commands/constraint/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/constraint/add.ts)_
+_See code: [src/commands/constraint/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/constraint/add.ts)_
 
 ## `gc2 constraint drop [SCHEMA] [TABLE] [NAME]`
 
@@ -473,7 +473,7 @@ DESCRIPTION
   Drop a constraint.
 ```
 
-_See code: [src/commands/constraint/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/constraint/drop.ts)_
+_See code: [src/commands/constraint/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/constraint/drop.ts)_
 
 ## `gc2 constraint get`
 
@@ -482,7 +482,7 @@ USAGE
   $ gc2 constraint get
 ```
 
-_See code: [src/commands/constraint/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/constraint/get.ts)_
+_See code: [src/commands/constraint/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/constraint/get.ts)_
 
 ## `gc2 foreign drop SCHEMAS [INCLUDE]`
 
@@ -503,7 +503,7 @@ DESCRIPTION
   Drop all foreign tables in schema.
 ```
 
-_See code: [src/commands/foreign/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/foreign/drop.ts)_
+_See code: [src/commands/foreign/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/foreign/drop.ts)_
 
 ## `gc2 foreign import SERVER FROM TO [INCLUDE]`
 
@@ -526,7 +526,7 @@ DESCRIPTION
   Import schema from foreign server.
 ```
 
-_See code: [src/commands/foreign/import.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/foreign/import.ts)_
+_See code: [src/commands/foreign/import.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/foreign/import.ts)_
 
 ## `gc2 foreign materialize FROM [TO] [INCLUDE]`
 
@@ -550,7 +550,7 @@ DESCRIPTION
   Create materialized views of foreign tables.
 ```
 
-_See code: [src/commands/foreign/materialize.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/foreign/materialize.ts)_
+_See code: [src/commands/foreign/materialize.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/foreign/materialize.ts)_
 
 ## `gc2 grid`
 
@@ -570,7 +570,7 @@ DESCRIPTION
   Add a fishnet grid from an input polygon.
 ```
 
-_See code: [src/commands/grid.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/grid.ts)_
+_See code: [src/commands/grid.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/grid.ts)_
 
 ## `gc2 help [COMMAND]`
 
@@ -627,7 +627,7 @@ DESCRIPTION
   Import files. Set path to a file or folder, which will be compressed, uploaded and imported into GC2.
 ```
 
-_See code: [src/commands/import.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/import.ts)_
+_See code: [src/commands/import.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/import.ts)_
 
 ## `gc2 index add [SCHEMA] [TABLE] [COLUMNS] [METHOD] [NAME]`
 
@@ -651,7 +651,7 @@ DESCRIPTION
   Add an new index to table.
 ```
 
-_See code: [src/commands/index/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/index/add.ts)_
+_See code: [src/commands/index/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/index/add.ts)_
 
 ## `gc2 index drop [SCHEMA] [TABLE] [NAME]`
 
@@ -673,7 +673,7 @@ DESCRIPTION
   Drop an index from table.
 ```
 
-_See code: [src/commands/index/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/index/drop.ts)_
+_See code: [src/commands/index/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/index/drop.ts)_
 
 ## `gc2 index get`
 
@@ -682,7 +682,7 @@ USAGE
   $ gc2 index get
 ```
 
-_See code: [src/commands/index/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/index/get.ts)_
+_See code: [src/commands/index/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/index/get.ts)_
 
 ## `gc2 login`
 
@@ -704,7 +704,7 @@ DESCRIPTION
   commandline is considered insecure. It's better to be prompt for the password
 ```
 
-_See code: [src/commands/login.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/login.ts)_
 
 ## `gc2 logout`
 
@@ -721,7 +721,7 @@ DESCRIPTION
   Logout the current user.
 ```
 
-_See code: [src/commands/logout.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/logout.ts)_
+_See code: [src/commands/logout.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/logout.ts)_
 
 ## `gc2 privilege get [SCHEMA] [TABLE]`
 
@@ -742,7 +742,7 @@ DESCRIPTION
   Get user privileges on table.
 ```
 
-_See code: [src/commands/privilege/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/privilege/get.ts)_
+_See code: [src/commands/privilege/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/privilege/get.ts)_
 
 ## `gc2 privilege set [SCHEMA] [TABLE] [USER] [PRIVILEGE]`
 
@@ -765,7 +765,7 @@ DESCRIPTION
   Set user privileges on table.
 ```
 
-_See code: [src/commands/privilege/set.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/privilege/set.ts)_
+_See code: [src/commands/privilege/set.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/privilege/set.ts)_
 
 ## `gc2 rule add`
 
@@ -792,7 +792,7 @@ DESCRIPTION
   Create a new rule.
 ```
 
-_See code: [src/commands/rule/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/rule/add.ts)_
+_See code: [src/commands/rule/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/rule/add.ts)_
 
 ## `gc2 rule drop [ID]`
 
@@ -812,7 +812,7 @@ DESCRIPTION
   Drop a rule.
 ```
 
-_See code: [src/commands/rule/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/rule/drop.ts)_
+_See code: [src/commands/rule/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/rule/drop.ts)_
 
 ## `gc2 rule get [ID]`
 
@@ -832,7 +832,7 @@ DESCRIPTION
   Get rule(s).
 ```
 
-_See code: [src/commands/rule/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/rule/get.ts)_
+_See code: [src/commands/rule/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/rule/get.ts)_
 
 ## `gc2 rule update [ID]`
 
@@ -862,7 +862,7 @@ DESCRIPTION
   Update a rule.
 ```
 
-_See code: [src/commands/rule/update.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/rule/update.ts)_
+_See code: [src/commands/rule/update.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/rule/update.ts)_
 
 ## `gc2 scheduler start JOB [INCLUDE]`
 
@@ -885,7 +885,7 @@ DESCRIPTION
   Starts a scheduler job
 ```
 
-_See code: [src/commands/scheduler/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/scheduler/start.ts)_
+_See code: [src/commands/scheduler/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/scheduler/start.ts)_
 
 ## `gc2 scheduler status`
 
@@ -902,7 +902,7 @@ DESCRIPTION
   Get jobs in progress.
 ```
 
-_See code: [src/commands/scheduler/status.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/scheduler/status.ts)_
+_See code: [src/commands/scheduler/status.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/scheduler/status.ts)_
 
 ## `gc2 schema add [SCHEMA]`
 
@@ -922,7 +922,7 @@ DESCRIPTION
   Create a new schema.
 ```
 
-_See code: [src/commands/schema/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/schema/add.ts)_
+_See code: [src/commands/schema/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/schema/add.ts)_
 
 ## `gc2 schema drop [SCHEMA]`
 
@@ -942,7 +942,7 @@ DESCRIPTION
   Drop a schema.
 ```
 
-_See code: [src/commands/schema/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/schema/drop.ts)_
+_See code: [src/commands/schema/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/schema/drop.ts)_
 
 ## `gc2 schema get [SCHEMA]`
 
@@ -962,7 +962,7 @@ DESCRIPTION
   Get list of tables in schema.
 ```
 
-_See code: [src/commands/schema/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/schema/get.ts)_
+_See code: [src/commands/schema/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/schema/get.ts)_
 
 ## `gc2 schema rename [SCHEMA] [NAME]`
 
@@ -983,7 +983,7 @@ DESCRIPTION
   Rename schema.
 ```
 
-_See code: [src/commands/schema/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/schema/rename.ts)_
+_See code: [src/commands/schema/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/schema/rename.ts)_
 
 ## `gc2 seed list`
 
@@ -1000,7 +1000,7 @@ DESCRIPTION
   List running seed jobs.
 ```
 
-_See code: [src/commands/seed/list.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/seed/list.ts)_
+_See code: [src/commands/seed/list.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/seed/list.ts)_
 
 ## `gc2 seed log`
 
@@ -1018,7 +1018,7 @@ DESCRIPTION
   Get progress of a running job.
 ```
 
-_See code: [src/commands/seed/log.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/seed/log.ts)_
+_See code: [src/commands/seed/log.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/seed/log.ts)_
 
 ## `gc2 seed start`
 
@@ -1043,7 +1043,7 @@ DESCRIPTION
   Starts a seed job.
 ```
 
-_See code: [src/commands/seed/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/seed/start.ts)_
+_See code: [src/commands/seed/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/seed/start.ts)_
 
 ## `gc2 seed stop`
 
@@ -1061,7 +1061,7 @@ DESCRIPTION
   Stops a running seed job.
 ```
 
-_See code: [src/commands/seed/stop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/seed/stop.ts)_
+_See code: [src/commands/seed/stop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/seed/stop.ts)_
 
 ## `gc2 sql`
 
@@ -1084,7 +1084,7 @@ DESCRIPTION
   Run SQL statements. If run without --statement inactive mode will be enabled.
 ```
 
-_See code: [src/commands/sql.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/sql.ts)_
+_See code: [src/commands/sql.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/sql.ts)_
 
 ## `gc2 stat`
 
@@ -1101,7 +1101,7 @@ DESCRIPTION
   Get usage statistics.
 ```
 
-_See code: [src/commands/stat.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/stat.ts)_
+_See code: [src/commands/stat.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/stat.ts)_
 
 ## `gc2 symbol PATH`
 
@@ -1122,7 +1122,7 @@ DESCRIPTION
   Create a symbol file from a directory for use in Vidi Symbol extension.
 ```
 
-_See code: [src/commands/symbol.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/symbol.ts)_
+_See code: [src/commands/symbol.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/symbol.ts)_
 
 ## `gc2 table add [SCHEMA] [TABLE]`
 
@@ -1143,7 +1143,7 @@ DESCRIPTION
   Create a new table.
 ```
 
-_See code: [src/commands/table/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/table/add.ts)_
+_See code: [src/commands/table/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/table/add.ts)_
 
 ## `gc2 table drop [SCHEMA] [TABLE]`
 
@@ -1164,7 +1164,7 @@ DESCRIPTION
   Drop a table.
 ```
 
-_See code: [src/commands/table/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/table/drop.ts)_
+_See code: [src/commands/table/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/table/drop.ts)_
 
 ## `gc2 table get [SCHEMA] [TABLE]`
 
@@ -1185,7 +1185,7 @@ DESCRIPTION
   Get table definition.
 ```
 
-_See code: [src/commands/table/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/table/get.ts)_
+_See code: [src/commands/table/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/table/get.ts)_
 
 ## `gc2 table move [SCHEMA] [TABLE] [DESTINATION]`
 
@@ -1207,7 +1207,7 @@ DESCRIPTION
   Move table to another schema.
 ```
 
-_See code: [src/commands/table/move.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/table/move.ts)_
+_See code: [src/commands/table/move.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/table/move.ts)_
 
 ## `gc2 table rename [SCHEMA] [TABLE] [NAME]`
 
@@ -1229,7 +1229,7 @@ DESCRIPTION
   Rename table.
 ```
 
-_See code: [src/commands/table/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/table/rename.ts)_
+_See code: [src/commands/table/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/table/rename.ts)_
 
 ## `gc2 user add [NAME]`
 
@@ -1254,7 +1254,7 @@ DESCRIPTION
   Create new user.
 ```
 
-_See code: [src/commands/user/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/user/add.ts)_
+_See code: [src/commands/user/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/user/add.ts)_
 
 ## `gc2 user drop [NAME]`
 
@@ -1274,16 +1274,27 @@ DESCRIPTION
   Drop existing user.
 ```
 
-_See code: [src/commands/user/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/user/drop.ts)_
+_See code: [src/commands/user/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/user/drop.ts)_
 
-## `gc2 user get`
+## `gc2 user get [ID]`
+
+Get user(s).
 
 ```
 USAGE
-  $ gc2 user get
+  $ gc2 user get [ID] [-h]
+
+ARGUMENTS
+  ID  User id
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Get user(s).
 ```
 
-_See code: [src/commands/user/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/user/get.ts)_
+_See code: [src/commands/user/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/user/get.ts)_
 
 ## `gc2 user update [NAME]`
 
@@ -1308,7 +1319,7 @@ DESCRIPTION
   Update user.
 ```
 
-_See code: [src/commands/user/update.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/user/update.ts)_
+_See code: [src/commands/user/update.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/user/update.ts)_
 
 ## `gc2 view backup SCHEMAS`
 
@@ -1328,7 +1339,7 @@ DESCRIPTION
   Backup all (mat)views definitions in schema.
 ```
 
-_See code: [src/commands/view/backup.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/view/backup.ts)_
+_See code: [src/commands/view/backup.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/view/backup.ts)_
 
 ## `gc2 view get SCHEMA`
 
@@ -1348,7 +1359,7 @@ DESCRIPTION
   Get "*" definitions from backup for schema.
 ```
 
-_See code: [src/commands/view/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/view/get.ts)_
+_See code: [src/commands/view/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/view/get.ts)_
 
 ## `gc2 view refresh SCHEMAS [INCLUDE]`
 
@@ -1369,7 +1380,7 @@ DESCRIPTION
   Refresh all materialized views in schema.
 ```
 
-_See code: [src/commands/view/refresh.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/view/refresh.ts)_
+_See code: [src/commands/view/refresh.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/view/refresh.ts)_
 
 ## `gc2 view restore FROM [TO] [INCLUDE]`
 
@@ -1391,7 +1402,7 @@ DESCRIPTION
   Restore all (mat)views definitions from schema.
 ```
 
-_See code: [src/commands/view/restore.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.0/src/commands/view/restore.ts)_
+_See code: [src/commands/view/restore.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.7.1/src/commands/view/restore.ts)_
 <!-- commandsstop -->
 * [`gc2 admin`](#gc2-admin)
 * [`gc2 client add [NAME]`](#gc2-client-add-name)

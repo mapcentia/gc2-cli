@@ -34,7 +34,11 @@ if (userConfig.superUser) {
 let flags: any = {
   help: Flags.help({char: 'h'}),
   password: Flags.string({char: 'p', description: 'New password for user.', required: false}),
-  default_user: Flags.boolean({char: 'd', description: 'The default user is the user that is used when no token is provided. Use for public applications where users should not be able to access data without a token.', required: false}),
+  default_user: Flags.boolean({
+    char: 'd',
+    description: 'The default user is the user that is used when no token is provided. Use for public applications where users should not be able to access data without a token.',
+    required: false
+  }),
 }
 if (userConfig.superUser) {
   flags.properties = Flags.string({char: 'e', description: 'New properties.', required: false})
@@ -49,7 +53,6 @@ export default class Update extends Command {
   async run() {
     let {args, flags} = await this.parse(Update)
     let name
-    let user
     let group
 
     if (userConfig.superUser) {
@@ -57,15 +60,20 @@ export default class Update extends Command {
     } else {
       name = userConfig.user
     }
-    user = await users(name)
-    const pwd = flags?.password || await password({message: 'Password', mask: true, validate: (t) => passwordIsStrongEnough(t, true)})
+    const userResult = await users(name)
+    const user = userResult.users[0]
+    const pwd = flags?.password || await password({
+      message: 'Password',
+      mask: true,
+      validate: (t) => passwordIsStrongEnough(t, true)
+    })
     const email = flags?.password || await input({message: 'E-mail', required: true, default: user.email})
     const default_user = flags?.default_user || await confirm({message: 'Default user?', default: user.default_user})
     if (userConfig.superUser) {
       group = flags?.group || await groupList(name, user.user_group)
     }
 
-    const p: string|null = pwd === '' ? null: pwd
+    const p: string | null = pwd === '' ? null : pwd
 
     let body: any = {
       email,

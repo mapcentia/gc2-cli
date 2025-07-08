@@ -8,12 +8,40 @@
 import get from './get-response'
 import make from './make-request'
 
-const clients = async (id?: string) => {
+type Client = {
+  id: string
+  name: string
+  description: string
+  redirect_uri: string[]
+  homepage: string
+  public: boolean
+  confirm: boolean
+}
+
+const clients = async (id?: string): Promise<{ clients: Client[] }> => {
   const res = id ? `clients/${id}` : 'clients'
   const response = await make('4', res, 'GET')
-  const t: any = await get(response, 200);
-  if (!t.clients) {
-    t.clients = [t]
+  let t = await get(response, 200)
+  if (id) {
+    t = {clients: [t]};
+  }
+  return t;
+}
+
+type User = {
+  name: string;
+  user_group?: string;
+  email: string;
+  properties: string;
+  default_user: boolean;
+}
+
+const users = async (id?: string): Promise<{ users: User[] }> => {
+  const res = id ? `users/${id}` : 'users'
+  const response = await make('4', res, 'GET')
+  let t: any = await get(response, 200);
+  if (id) {
+    t = {users: [t]}
   }
   return t
 }
@@ -44,16 +72,6 @@ const tables = async (schema: string, table?: string) => {
   const t = await get(response, 200);
   if (!t.tables) {
     t.tables = [t]
-  }
-  return t
-}
-
-const users = async (id?: string) => {
-  const res = id ? `users/${id}` : 'users'
-  const response = await make('4', res, 'GET')
-  const t: any = await get(response, 200);
-  if (!t.users) {
-    t.users = [t]
   }
   return t
 }

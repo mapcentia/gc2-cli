@@ -24,32 +24,26 @@ export default class Get extends Command {
     help: Flags.help({char: 'h'}),
   }
   static args = {...specific_args}
+
   async run() {
     let {args} = await this.parse(Get)
     let res = await clients(args?.id)
-    if (args?.id) {
-      res = {clients: [res]};
-    }
     type row = {
       [key: string]: any
     }
-    type client = {
-      id: string;
-      name: string;
-      homepage?: string;
-      description?: string;
-      redirect_uri?: any;
-    }
+
     const data: object[] = []
-    const rows: row = {id: {}, name: {}, homepage: {} , description: {}, redirect_uri: {}}
+    const rows: row = {id: {}, name: {}, homepage: {}, description: {}, redirect_uri: {}, public: {}, confirm: {}}
     for (const c in res.clients) {
-      const v: client = res.clients[c]
+      const v = res.clients[c]
       data.push({
         id: v.id,
         name: v.name,
         homepage: v.homepage || '',
         description: v.description || '',
         redirect_uri: v.redirect_uri?.join(',') || '',
+        public: v.public,
+        confirm: v.confirm,
       })
     }
     cli.table(data, rows, {
