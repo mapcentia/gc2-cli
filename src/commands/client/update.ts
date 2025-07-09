@@ -64,7 +64,14 @@ export default class Update extends Command {
     }
     const _public = flags?.public || await confirm({message: 'Public client?', default: client.public})
     const _confirm = flags?.confirm || await confirm({message: 'Confirm token exchange?', default: client.confirm})
-    const response = await make('4', `clients/${id}`, 'PATCH', {name, description, redirect_uri, homepage})
+    const response = await make('4', `clients/${id}`, 'PATCH', {
+      name,
+      description,
+      redirect_uri,
+      homepage,
+      public: _public,
+      confirm: _confirm
+    })
     await get(response, 303)
     this.log(`Client is here ${chalk.green(response.headers.get('Location'))}`)
   }

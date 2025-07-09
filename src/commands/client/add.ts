@@ -26,7 +26,10 @@ export default class Add extends Command {
   static flags = {
     name: Flags.string({char: 'n', description: 'Name of new client.'}),
     description: Flags.string({char: 'd', description: 'Description of new client.'}),
-    redirect_uri: Flags.string({char: 'r', description: 'Redirect uri. Redirects will only be allowed to an uri in this list.'}),
+    redirect_uri: Flags.string({
+      char: 'r',
+      description: 'Redirect uri. Redirects will only be allowed to an uri in this list.'
+    }),
     homepage: Flags.string({char: 'H', description: 'Homepage of the application.'}),
     public: Flags.boolean({char: 'p', description: 'Public client. No secret needed.'}),
     confirm: Flags.boolean({char: 'c', description: 'Client user must confirm the token exchange.'}),
@@ -50,7 +53,14 @@ export default class Add extends Command {
     }
     const _public = flags?.public || await confirm({message: 'Public client?', default: false})
     const _confirm = flags?.confirm || await confirm({message: 'Confirm token exchange?', default: false})
-    const response = await make('4', `clients`, 'POST', {name, description, redirect_uri, homepage, public: _public, confirm: _confirm})
+    const response = await make('4', `clients`, 'POST', {
+      name,
+      description,
+      redirect_uri,
+      homepage,
+      public: _public,
+      confirm: _confirm
+    })
     const data = await get(response, 200)
     this.log(`Client ${chalk.green(name)} created with:\n id: ${chalk.green(data.id)}\nsecret ${chalk.green(data.secret)}\nThis secret will can not be retrieved, so please keep it save.`)
   }
