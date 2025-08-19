@@ -22,7 +22,7 @@ const clients = async (id?: string): Promise<{ clients: Client[] }> => {
   const res = id ? `clients/${id}` : 'clients'
   const response = await make('4', res, 'GET')
   let t = await get(response, 200)
-  if (id) {
+  if (!t?.clients) {
     t = {clients: [t]};
   }
   return t;
@@ -40,7 +40,7 @@ const users = async (id?: string): Promise<{ users: User[] }> => {
   const res = id ? `users/${id}` : 'users'
   const response = await make('4', res, 'GET')
   let t: any = await get(response, 200);
-  if (id) {
+  if (!t?.users) {
     t = {users: [t]}
   }
   return t
@@ -50,7 +50,7 @@ const rules = async (id?: string) => {
   const res = id ? `rules/${id}` : 'rules'
   const response = await make('4', res, 'GET')
   const t: any = await get(response, 200);
-  if (!t.rules) {
+  if (!t?.rules) {
     t.rules = [t]
   }
   return t
@@ -60,7 +60,7 @@ const schemas = async (id?: string) => {
   const res = id ? `schemas/${id}` : 'schemas?namesOnly'
   const response = await make('4', res, 'GET')
   const t: any = await get(response, 200);
-  if (!t.schemas) {
+  if (!t?.schemas) {
     t.schemas = [t]
   }
   return t
@@ -70,7 +70,7 @@ const tables = async (schema: string, table?: string) => {
   const res = table ? `schemas/${schema}/tables/${table}?namesOnly` : `schemas/${schema}/tables?namesOnly`
   const response = await make('4', res, 'GET')
   const t = await get(response, 200);
-  if (!t.tables) {
+  if (!t?.tables) {
     t.tables = [t]
   }
   return t

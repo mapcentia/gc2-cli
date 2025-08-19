@@ -45,7 +45,7 @@ export default class Connect extends Command {
       host = host.replace(/\/$/, '')
 
       // Check host
-      const response = await fetch((host || GC2_SERVER_ADDRESS) + '/fpm-ping')
+      const response = await fetch((host || GC2_SERVER_ADDRESS) + '/ping')
 
       if (response.status !== 200) {
         ux.log('⚠️ The URL is not a valid connection.')

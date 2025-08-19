@@ -23,7 +23,10 @@ const get = async (response: Response, expectedCode: number, doNotExit: boolean 
   let res = null
   // Handle case of No Content
   if (![204, 303].includes(expectedCode)) {
-    res = await response.json()
+    try {
+      res = await response.json()
+    } catch (e) {
+    }
   }
   if (response.status !== expectedCode) {
     if (res === null) {
