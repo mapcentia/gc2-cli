@@ -28,8 +28,8 @@ export default class Add extends Command {
     help: Flags.help({char: 'h'}),
     password: Flags.string({char: 'p', description: 'password for new user.', required: false}),
     email: Flags.string({char: 'e', description: 'E-mail for new user', required: false}),
-    properties: Flags.string({char: 'e', description: 'Properties for new user', required: false}),
-    default_user: Flags.boolean({char: 'd', description: 'The default user is the user that is used when no token is provided. Use for public applications where users should not be able to access data without a token.', required: false}),
+    properties: Flags.string({char: 'P', description: 'Properties for new user', required: false}),
+    default_user: Flags.boolean({char: 'd', default: false, description: 'The default user is the user that is used when no token is provided. Use for public applications where users should not be able to access data without a token.', required: false}),
   }
 
   async run() {
