@@ -18,22 +18,22 @@ let specific_args = {
   ),
 }
 
-export default class Get extends Command {
-  static description = 'Get client(s).'
+export default class List extends Command {
+  static description = 'List client(s).'
   static flags = {
     help: Flags.help({char: 'h'}),
   }
   static args = {...specific_args}
 
   async run() {
-    let {args} = await this.parse(Get)
+    let {args} = await this.parse(List)
     let res = await clients(args?.id)
     type row = {
       [key: string]: any
     }
 
     const data: object[] = []
-    const rows: row = {id: {}, name: {}, homepage: {}, description: {}, redirect_uri: {}, public: {}, confirm: {}}
+    const rows: row = {id: {}, name: {}, homepage: {}, description: {}, redirect_uri: {}, public: {}, confirm: {}, two_factor: {}}
     for (const c in res.clients) {
       const v = res.clients[c]
       data.push({
@@ -44,6 +44,7 @@ export default class Get extends Command {
         redirect_uri: v.redirect_uri?.join(',') || '',
         public: v.public,
         confirm: v.confirm,
+        two_factor: v.two_factor,
       })
     }
     cli.table(data, rows, {

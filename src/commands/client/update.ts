@@ -27,6 +27,7 @@ export default class Update extends Command {
     homepage: Flags.string({char: 'p', description: 'Homepage of the application.', required: false}),
     public: Flags.boolean({char: 'p', description: 'Public client. No secret needed.', required: false}),
     confirm: Flags.boolean({char: 'c', description: 'Client user must confirm the token exchange.', required: false}),
+    two_factor: Flags.boolean({char: 't', description: 'Client user must authenticate with two factor authentication.', required: false}),
     help: Flags.help({char: 'h'}),
   }
   static args = {
@@ -64,13 +65,15 @@ export default class Update extends Command {
     }
     const _public = flags?.public || await confirm({message: 'Public client?', default: client.public})
     const _confirm = flags?.confirm || await confirm({message: 'Confirm token exchange?', default: client.confirm})
+    const two_factor = flags?.two_factor || await confirm({message: 'Enable two factor authentication', default: client.two_factor})
     const response = await make('4', `clients/${id}`, 'PATCH', {
       name,
       description,
       redirect_uri,
       homepage,
       public: _public,
-      confirm: _confirm
+      confirm: _confirm,
+      two_factor
     })
     await get(response, 303)
     this.log(`Client is here ${chalk.green(response.headers.get('Location'))}`)
