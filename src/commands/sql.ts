@@ -23,16 +23,24 @@ interface Statement {
   base64?: boolean,
   allstr?: boolean,
   lifetime?: number,
+  convert_types: boolean,
 }
 
 export default class Sql extends Command {
   static description = 'Run SQL statements. If run without --statement inactive mode will be enabled.'
   static flags = {
-    statement: Flags.string({char: 's', description: 'SQL statement. Any select, insert, update and delete. No altering of schema is allowed.'}),
+    statement: Flags.string({
+      char: 's',
+      description: 'SQL statement. Any select, insert, update and delete. No altering of schema is allowed.'
+    }),
     srs: Flags.integer({char: 'c', description: 'Output spatial reference system. Use EPSG codes.', default: 4326}),
     format: Flags.string({char: 'f', description: 'Output file format.'}),
     geoformat: Flags.string({char: 'g', description: 'Output geometry in CSV and Excel.', options: ['wkt', 'geojson']}),
-    path: Flags.string({char: 'p', description: 'Output path to file. If omitted file is saved in current folder.', default: '.'}),
+    path: Flags.string({
+      char: 'p',
+      description: 'Output path to file. If omitted file is saved in current folder.',
+      default: '.'
+    }),
     help: Flags.help({char: 'h'}),
   }
 
@@ -58,6 +66,7 @@ export default class Sql extends Command {
         output_format: format,
         base64: true,
         geo_format: flags.geoformat,
+        convert_types: false
       }
 
       const res = await make('4', `sql`, 'POST', statement)
@@ -112,33 +121,19 @@ export default class Sql extends Command {
           q: base64url(sql),
           srs: 4326,
           output_format: 'geojson',
+          convert_types: false,
           lifetime: 0,
           base64: true
         }
         const response = await make('4', `sql`, 'POST', statement)
         const data = await get(response, 200, true)
-
         if (response.status !== 200) {
           continue
         }
-
         if (data?.affected_rows) {
           this.log(chalk.green('Affected rows: ' + data.affected_rows))
         } else {
-          type columns = {
-            [key: string]: any
-          }
-          const columns: columns = {}
-          data.forStore.forEach((e: { name: string, type: string }) => {
-            if (e.type !== 'geometry') {
-              columns[e.name] = ({} as string)
-            }
-          })
-          const features: any[] = []
-          data.features.forEach((e: { type: string, geometry: object, properties: any }) => {
-            features.push(e.properties)
-          })
-          cli.table(features, columns)
+          cli.table(data.data, data.schema)
         }
       }
     }
