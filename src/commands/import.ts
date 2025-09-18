@@ -89,7 +89,6 @@ export default class Import extends Command {
     const schema = args?.schema || await schemasList()
 
     try {
-
       tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix))
       tmpFile = uuidv4() + '.zip'
       tmpPath = tmpDir + '/' + tmpFile
@@ -117,7 +116,7 @@ export default class Import extends Command {
         form.append('filename', chunk, {
           filename: tmpFile
         })
-        const res = await make('4', `import/${schema}`, 'POST', form, true, null)
+        const res = await make('4', `file/upload`, 'POST', form, true, null)
         await get(res, 201)
         chunkCount++
       }
@@ -128,8 +127,9 @@ export default class Import extends Command {
         body.import = true
       }
       delete body.dry_run
-
-      const res = await make('4', `import/${schema}/${tmpFile}`, 'PATCH', body)
+      body.file = tmpFile
+      body.schema = schema
+      const res = await make('4', `file/process`, 'POST', body)
       const data = await get(res, 201)
       type tables = {
         [key: string]: any
