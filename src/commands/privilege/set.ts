@@ -45,10 +45,10 @@ export default class Set extends Command {
     const table = args?.table || await tableList(schema)
     const user = args?.user || await userList()
     const current = await privileges(schema, table)
-    const v = current.privileges.filter((e: { subuser: any }) => user === e.subuser)[0]
+    const v = current?.privileges.filter((e: { subuser: any }) => user === e.subuser)[0]
     const privilege = args?.privilege || await privilegeList(v?.privilege)
 
-    const response = await make('4', `schemas/${schema}/tables/${table}/privilege`, 'PATCH', {subuser: user, privilege})
+    const response = await make('4', `schemas/${schema}/tables/${table}/privileges`, 'PATCH', {subuser: user, privilege})
     await get(response, 303)
     this.log(`Privileges update on ${chalk.green(table)}`)
   }

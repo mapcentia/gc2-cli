@@ -78,9 +78,13 @@ const tables = async (schema: string, table?: string) => {
 }
 
 const privileges = async (schema: string, table: string) => {
-  const res = `schemas/${schema}/tables/${table}/privilege`
+  const res = `schemas/${schema}/tables/${table}/privileges`
   const response = await make('4', res, 'GET')
-  return await get(response, 200)
+  const t = await get(response, 200, true);
+  if (!t?.privileges) {
+    t.privileges = [t]
+  }
+  return t
 }
 
 export {clients, rules, schemas, tables, users, privileges}

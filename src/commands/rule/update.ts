@@ -12,6 +12,7 @@ import {rules} from '../../util/getters'
 import {accessList, requestList, ruleList, serviceList} from '../../util/lists'
 import make from '../../util/make-request'
 import {input} from '@inquirer/prompts'
+import get from "../../util/get-response";
 
 
 let specific_args = {
@@ -46,7 +47,9 @@ export default class Update extends Command {
     const rule = await rules(id)
 
     // Interactive
-    const priority = flags?.priority || await input({message: 'Priority', required: true, default: rule.priority})
+    const priority = flags?.priority || parseInt(await input({message: 'Priority', required: true, validate: async (input) => {
+        return Number.isInteger(parseInt(input));
+      }}))
     const username = flags?.username || await input({message: 'Username', required: false, default: rule.username})
     const service = flags?.service || await serviceList(rule.service)
     const request = flags?.request ||  await requestList(rule.request)
@@ -63,6 +66,7 @@ export default class Update extends Command {
     });
 
     const response = await make('4', `rules/${id}`, 'PATCH', body)
+    await get(response, 303)
     this.log(`Rule is here ${chalk.green(response.headers.get('Location'))}`)
   }
 }

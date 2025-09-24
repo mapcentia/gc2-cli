@@ -117,7 +117,15 @@ export default class Import extends Command {
           filename: tmpFile
         })
         const res = await make('4', `file/upload`, 'POST', form, true, null)
-        await get(res, 201)
+        if (res.status !== 201) {
+          let errMsg = ''
+          try {
+            errMsg = await res.text()
+          } catch (e) {
+            // ignore
+          }
+          throw new Error(`Upload failed (status ${res.status}). ${errMsg}`)
+        }
         chunkCount++
       }
       cli.action.stop()
