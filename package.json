@@ -150,7 +150,7 @@
     "prebuild": "node scripts/build.js",
     "postpack": "rm -f oclif.manifest.json",
     "posttest": "tslint -p test -t stylish",
-    "prepack": "rm -rf lib && /usr/bin/tsc -b && oclif manifest && oclif readme",
+    "prepack": "rm -rf lib && tsc && oclif manifest && oclif readme",
     "test": " NODE_OPTIONS=\"--loader ts-node/esm\" nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif-dev readme && git add README.md",
     "packwin": "oclif pack win",
