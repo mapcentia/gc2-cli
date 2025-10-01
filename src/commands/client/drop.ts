@@ -27,7 +27,7 @@ export default class Drop extends Command {
 
   async run() {
     const {args} = await this.parse(Drop)
-    let id = args?.id || await clientList()
+    const id = args?.id || await clientList()
     if (!await confirm({message: '⚠️ The client will be deleted. Are you sure', default: false})) {
       this.exit();
     }

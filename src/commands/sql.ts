@@ -107,7 +107,7 @@ export default class Sql extends Command {
     } else {
       // tslint:disable-next-line:no-constant-condition
       while (true) {
-        let sql = await cli.prompt('')
+        const sql = await cli.prompt('')
         const statement: Statement = {
           q: base64url(sql),
           srs: 4326,

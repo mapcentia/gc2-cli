@@ -27,7 +27,7 @@ export default class Drop extends Command {
   }
   async run() {
     const {args} = await this.parse(Drop)
-    let schema = args?.schema || await schemasList()
+    const schema = args?.schema || await schemasList()
     if (!await confirm({message: '⚠️ The whole schema will be deleted. Are you sure', default: false})) {
       this.exit();
     }

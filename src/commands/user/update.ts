@@ -31,7 +31,7 @@ if (userConfig.superUser) {
   args = null
 }
 
-let flags: any = {
+const flags: any = {
   help: Flags.help({char: 'h'}),
   password: Flags.string({char: 'p', description: 'New password for user.', required: false}),
   default_user: Flags.boolean({
@@ -51,7 +51,7 @@ export default class Update extends Command {
   static args = args
 
   async run() {
-    let {args, flags} = await this.parse(Update)
+    const {args, flags} = await this.parse(Update)
     let name
     let group
 
@@ -75,7 +75,7 @@ export default class Update extends Command {
 
     const p: string | null = pwd === '' ? null : pwd
 
-    let body: any = {
+    const body: any = {
       email,
       password: p,
       properties: flags.properties,

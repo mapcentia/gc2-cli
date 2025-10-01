@@ -14,8 +14,8 @@ import {privilegeList, schemasList, tableList, userList} from '../../util/lists'
 import make from '../../util/make-request'
 import setSchema from '../../util/set-schema'
 
-let base_args = args
-let specific_args = {
+const base_args = args
+const specific_args = {
   user: Args.string(
     {
       required: false,

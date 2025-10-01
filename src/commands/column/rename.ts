@@ -14,8 +14,8 @@ import {columnList, schemasList, tableList} from '../../util/lists'
 import make from '../../util/make-request'
 import setSchema from '../../util/set-schema'
 
-let base_args = args
-let specific_args = {
+const base_args = args
+const specific_args = {
   column: Args.string(
     {
       required: false,

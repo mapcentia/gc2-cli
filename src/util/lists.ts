@@ -12,7 +12,7 @@ import {checkbox, select} from '@inquirer/prompts'
 
 const schemasList = async (message: string = 'Choose a schema') => {
   const s: any = await schemas()
-  let r: string = await select({
+  const r: string = await select({
     message,
     default: null,
     choices: s.schemas.map((v: { name: string }) => {
@@ -24,7 +24,7 @@ const schemasList = async (message: string = 'Choose a schema') => {
 
 const tableList = async (schema: string) => {
   const s: any = await tables(schema)
-  let r: string = await select({
+  const r: string = await select({
     message: 'Choose a table',
     default: null,
     choices: s.tables.map((v: { name: string }) => {
@@ -40,7 +40,7 @@ const columnList = async (schema: string, table: string) => {
     ux.log(`⚠️ No columns found for table ${table}`)
     exit(0)
   }
-  let r: string = await select({
+  const r: string = await select({
     message: 'Choose a column',
     default: null,
     choices: s.columns.map((v: { name: string, type: string }) => {
@@ -74,7 +74,7 @@ const indexList = async (schema: string, table: string) => {
     ux.log(`⚠️ No indices found for table ${table}`)
     exit(0)
   }
-  let r: string = await select({
+  const r: string = await select({
     message: 'Choose an index',
     default: null,
     choices: s.indices.map((v: { name: string, method: string, columns: any }) => {
@@ -90,7 +90,7 @@ const constraintList = async (schema: string, table: string) => {
     ux.log(`⚠️ No constraints found for table ${table}`)
     exit(0)
   }
-  let r: string = await select({
+  const r: string = await select({
     message: 'Choose an constraint',
     default: null,
     choices: s.constraints.map((v: { name: string, constraint: string, columns?: any }) => {
@@ -107,7 +107,7 @@ const clientList = async () => {
     ux.log(`⚠️ No clients yet`)
     exit(0)
   }
-  let r: any = await select({
+  const r: any = await select({
     message: 'Choose a client',
     default: null,
     choices: s.clients.map((v: { id: string, name: string }) => {
@@ -123,7 +123,7 @@ const ruleList = async () => {
     ux.log(`⚠️ No rules yet`)
     exit(0)
   }
-  let r: string = await select({
+  const r: string = await select({
     message: 'Choose a rule',
     default: null,
     choices: s.rules.map((v: { id: string }) => {
@@ -134,7 +134,7 @@ const ruleList = async () => {
 }
 
 const typeList = async () => {
-  let r: string = await select({
+  const r: string = await select({
     message: 'Choose a type',
     default: null,
     choices: [
@@ -146,7 +146,7 @@ const typeList = async () => {
 }
 
 const constraintTypeList = async () => {
-  let r: string = await select({
+  const r: string = await select({
     message: 'Choose a constraint type',
     default: null,
     choices: [
@@ -160,7 +160,7 @@ const constraintTypeList = async () => {
 }
 
 const privilegeList = async (defaultValue: string = 'none') => {
-  let r: string = await select({
+  const r: string = await select({
     message: 'Choose privileges',
     default: defaultValue,
     choices: [
@@ -173,7 +173,7 @@ const privilegeList = async (defaultValue: string = 'none') => {
 }
 
 const authLevelList = async () => {
-  let r: string = await select({
+  const r: string = await select({
     message: 'Choose a auth level',
     default: null,
     choices: [
@@ -187,7 +187,7 @@ const authLevelList = async () => {
 
 const userList = async (defaultValue?: string) => {
   const s: any = await users()
-  let r: string = await select({
+  const r: string = await select({
     message: 'Choose a user',
     default: defaultValue,
     choices: s.users.map((v: {
@@ -201,7 +201,7 @@ const userList = async (defaultValue?: string) => {
 
 const groupList = async (exclude: string, defaultValue?: string) => {
   const s: any = await users()
-  let r: string = await select({
+  const r: string = await select({
     message: 'Choose a group',
     default: defaultValue || '',
     choices: [{value: '', name: 'None'}, ...s.users.filter((e: { name: string }) => e.name !== exclude).map((v: {
@@ -214,7 +214,7 @@ const groupList = async (exclude: string, defaultValue?: string) => {
 }
 
 const serviceList = async (defaultValue: string = '*') => {
-  let r: string = await select({
+  const r: string = await select({
     message: 'Service',
     default: defaultValue,
     choices: [
@@ -228,7 +228,7 @@ const serviceList = async (defaultValue: string = '*') => {
 }
 
 const requestList = async (defaultValue: string = '*') => {
-  let r: string = await select({
+  const r: string = await select({
     message: 'Request',
     default: defaultValue,
     choices: [
@@ -243,7 +243,7 @@ const requestList = async (defaultValue: string = '*') => {
 }
 
 const accessList = async (defaultValue: string = 'deny') => {
-  let r: string = await select({
+  const r: string = await select({
     message: 'Access',
     default: defaultValue,
     choices: [
@@ -256,7 +256,7 @@ const accessList = async (defaultValue: string = 'deny') => {
 }
 
 const outputFormatList = async (defaultValue: string = 'csv') => {
-  let r: string = await select({
+  const r: string = await select({
     message: 'Choose output format',
     default: defaultValue,
     choices: [
@@ -273,7 +273,7 @@ const outputFormatList = async (defaultValue: string = 'csv') => {
 }
 
 const adminTaskList = async (defaultValue: string = 'csv') => {
-  let r: string = await select({
+  const r: string = await select({
     message: 'Choose task to run',
     default: defaultValue,
     choices: [

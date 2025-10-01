@@ -18,7 +18,7 @@ export interface BaseArgs {
   table: Arg;
 }
 
-let obj: any = {}
+const obj: any = {}
 if (user.superUser) {
   obj.schema = Args.string(
     {

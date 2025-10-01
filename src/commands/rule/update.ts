@@ -14,7 +14,7 @@ import make from '../../util/make-request'
 import {input} from '@inquirer/prompts'
 
 
-let specific_args = {
+const specific_args = {
   id: Args.string(
     {
       required: false,
@@ -40,7 +40,7 @@ export default class Update extends Command {
   }
 
   async run() {
-    let {args, flags} = await this.parse(Update)
+    const {args, flags} = await this.parse(Update)
 
     const id = args?.id || await ruleList()
     const rule = await rules(id)

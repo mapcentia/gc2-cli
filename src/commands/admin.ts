@@ -58,7 +58,7 @@ export default class Admin extends Command {
         break
       case tasks[4]:
         Object.keys(data.data).forEach(key => {
-          let value = data.data[key]
+          const value = data.data[key]
           this.log(key + ': ' + chalk.green(value))
         })
         this.log(`time ${data._execution_time}`)

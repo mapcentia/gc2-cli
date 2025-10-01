@@ -11,7 +11,7 @@ import EventEmitter = require('events')
 import {jwtDecode} from 'jwt-decode'
 
 const config: Configstore = new Configstore('gc2-env')
-let obj: User = config.all // User object or empty object
+const obj: User = config.all // User object or empty object
 
 const CONFIG_PATH = path.resolve(os.homedir(), '.clirc')
 export const CLI_SERVER_ADDRESS = 'http://127.0.0.1:5657'

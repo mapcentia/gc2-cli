@@ -14,8 +14,8 @@ import {columnCheck, constraintTypeList, schemasList, tableList} from '../../uti
 import make from '../../util/make-request'
 import setSchema from '../../util/set-schema'
 
-let base_args = args
-let specific_args = {
+const base_args = args
+const specific_args = {
   columns: Args.string(
     {
       required: false,
@@ -62,7 +62,7 @@ export default class Add extends Command {
 
   async run() {
     let {args} = await this.parse(Add)
-    let {flags} = await this.parse(Add)
+    const {flags} = await this.parse(Add)
 
     args = setSchema(args)
     const schema = args?.schema || await schemasList()
