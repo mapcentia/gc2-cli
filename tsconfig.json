@@ -9,7 +9,8 @@
     "rootDir": "src",
     "strict": true,
     "target": "ES2020",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
   "include": [
     "src/**/*"
