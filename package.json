@@ -158,7 +158,7 @@
     "prebuild": "node scripts/build.js",
     "postpack": "rm -f oclif.manifest.json",
     "prepack": "rm -rf lib && tsc && oclif manifest && oclif readme",
-    "version": "oclif-dev readme && git add README.md",
+    "version": "oclif readme && git add README.md",
     "packwin": "oclif pack win",
     "uploadwin": "oclif upload win",
     "packdeb": "oclif pack deb",
