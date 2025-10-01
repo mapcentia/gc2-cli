@@ -161,8 +161,8 @@
     "promotewin": "oclif promote --win --targets=win32-x64 --sha=$(git rev-parse --short HEAD) --version=$(node -p \"require('./package.json').version\")",
     "promotedeb": "oclif promote --deb --targets=linux-x64 --sha=$(git rev-parse --short HEAD) --version=$(node -p \"require('./package.json').version\")",
     "lint": "tslint -p test -t stylish",
-    "test:plain": "mocha --forbid-only 'test/**/*.test.ts'",
-    "test:nyc": "nyc --extension .ts mocha --forbid-only 'test/**/*.test.ts'",
+    "test:plain": "mocha --forbid-only 'test/**/*.test.*ts'",
+    "test:nyc": "nyc --extension .ts mocha --forbid-only 'test/**/*.test.*ts'",
     "test": "npm run -s test:plain"
   },
   "types": "lib/index.d.ts",
