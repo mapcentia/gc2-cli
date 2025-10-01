@@ -45,23 +45,29 @@
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.525.0",
     "@oclif/test": "^3.1.2",
-    "@oclif/tslint": "^3.1.1",
     "@types/chai": "^4.3.10",
     "@types/jsdom": "^21.1.7",
     "@types/lodash": "^4.14.202",
     "@types/mocha": "^10.0.4",
     "@types/node": "^18.19.128",
+    "@typescript-eslint/eslint-plugin": "^8.45.0",
+    "@typescript-eslint/parser": "^8.45.0",
     "aws-sdk": "^2.1159.0",
     "chai": "^4.3.10",
+    "eslint": "^9.36.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-n": "^17.23.1",
+    "eslint-plugin-prettier": "^5.5.4",
     "globby": "^10.0.2",
     "mocha": "^10.8.2",
     "nock": "^13.3.8",
     "nyc": "^14.1.1",
     "oclif": "^4.22.27",
+    "prettier": "^3.6.2",
     "stdout-stderr": "^0.1.13",
     "ts-node": "^10.9.2",
-    "tslint": "^5.20.1",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.45.0"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -160,7 +166,8 @@
     "uploadtarballs": "oclif upload tarballs",
     "promotewin": "oclif promote --win --targets=win32-x64 --sha=$(git rev-parse --short HEAD) --version=$(node -p \"require('./package.json').version\")",
     "promotedeb": "oclif promote --deb --targets=linux-x64 --sha=$(git rev-parse --short HEAD) --version=$(node -p \"require('./package.json').version\")",
-    "lint": "tslint -p test -t stylish",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "test:plain": "mocha --forbid-only 'test/**/*.test.*ts'",
     "test:nyc": "nyc --extension .ts mocha --forbid-only 'test/**/*.test.*ts'",
     "test": "npm run -s test:plain"
