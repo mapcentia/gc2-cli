@@ -10,6 +10,7 @@
     "url": "https://github.com/mapcentia/gc2-cli/issues"
   },
   "dependencies": {
+    "@inquirer/prompts": "^7.8.6",
     "@oclif/command": "^1.8.36",
     "@oclif/core": "^3.27.0",
     "@oclif/parser": "^3.8.17",
