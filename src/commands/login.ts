@@ -58,8 +58,8 @@ export default class Login extends Command {
     }
 
     if (obj.host === '' && !process.env?.GC2_HOST) {
-        this.log('Connect is not set. Please use the \'connect\' command')
-        this.exit()
+      //  this.log('Connect is not set. Please use the \'connect\' command')
+      //  this.exit()
     }
 
     let data

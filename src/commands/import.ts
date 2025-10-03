@@ -65,7 +65,7 @@ export default class Import extends Command {
       char: 'y',
       description: 'Specify the potential names of the columns that can contain Y/latitude. Only effects CSV. Defaults to "lat*,Lat*,y,Y"]'
     }),
-    dry_run: Flags.boolean({char: 'd', description: 'Dry run. Only analyse files with no import.'}),
+    dry_run: Flags.boolean({char: 'd', description: 'Dry run. Only analyse files with no import.', default: false}),
     append: Flags.boolean({char: 'a', description: 'Append to existing table instead of creating new.'}),
     truncate: Flags.boolean({char: 'r', description: 'Truncate table before appending. Only have effect if --append is set.'}),
     p_multi: Flags.boolean({char: 'p', description: 'Promote single geometries to multi part.'}),
@@ -86,7 +86,10 @@ export default class Import extends Command {
     const inputPath = args.path
 
     // Interactive
-    const schema = args?.schema || await schemasList()
+    let schema
+    if (!flags.dry_run) {
+      schema = args?.schema || await schemasList()
+    }
 
     try {
       tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix))
@@ -129,15 +132,17 @@ export default class Import extends Command {
         chunkCount++
       }
       cli.action.stop()
+      cli.action.start('Processing')
 
       let body: any = flags
-      if (!flags.dry_run) {
-        body.import = true
-      }
+      body.import = !flags.dry_run
       delete body.dry_run
       body.file = tmpFile
-      body.schema = schema
+      if (schema) {
+        body.schema = schema
+      }
       const res = await make('4', `file/process`, 'POST', body)
+      cli.action.stop()
       const data = await get(res, 201)
       type tables = {
         [key: string]: any

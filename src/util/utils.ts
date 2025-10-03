@@ -16,7 +16,7 @@ let obj: User = config.all // User object or empty object
 const CONFIG_PATH = path.resolve(os.homedir(), '.clirc')
 export const CLI_SERVER_ADDRESS = 'http://127.0.0.1:5657'
 export const CLI_SERVER_ADDRESS_CALLBACK = `${CLI_SERVER_ADDRESS}/auth/callback`
-export const GC2_SERVER_ADDRESS = obj.host
+export const GC2_SERVER_ADDRESS = obj.host ?? 'https://api.centia.io'
 
 export type UserCredentials = {
   accessToken: string;
