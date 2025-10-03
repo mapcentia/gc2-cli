@@ -1,10 +1,10 @@
 {
-  "name": "@mapcentia/gc2-cli",
-  "description": "GC2 CLI",
-  "version": "2025.8.0",
+  "name": "@centia-io/cli",
+  "description": "Centia.io CLI",
+  "version": "2025.9.11",
   "author": "Martin Høgh @mapcentia",
   "bin": {
-    "gc2": "./bin/run"
+    "centia": "./bin/run"
   },
   "bugs": {
     "url": "https://github.com/mapcentia/gc2-cli/issues"
@@ -127,7 +127,7 @@
     ],
     "topicSeparator": " ",
     "commands": "./lib/commands",
-    "bin": "gc2",
+    "bin": "centia",
     "plugins": [
       "@oclif/plugin-help",
       "@oclif/plugin-not-found"
@@ -150,7 +150,7 @@
     "prebuild": "node scripts/build.js",
     "postpack": "rm -f oclif.manifest.json",
     "posttest": "tslint -p test -t stylish",
-    "prepack": "rm -rf lib && /usr/bin/tsc -b && oclif manifest && oclif readme",
+    "prepack": "rm -rf lib && /usr/bin/tsc -b && node scripts/whitelist-commands.js && oclif manifest && oclif readme",
     "test": " NODE_OPTIONS=\"--loader ts-node/esm\" nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif-dev readme && git add README.md",
     "packwin": "oclif pack win",
