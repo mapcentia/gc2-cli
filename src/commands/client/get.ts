@@ -9,7 +9,7 @@ import {Args, Command, Flags} from '@oclif/core'
 import cli from 'cli-ux'
 import {clients} from '../../util/getters'
 
-let specific_args = {
+const specific_args = {
   id: Args.string(
     {
       required: false,
@@ -26,8 +26,8 @@ export default class Get extends Command {
   static args = {...specific_args}
 
   async run() {
-    let {args} = await this.parse(Get)
-    let res = await clients(args?.id)
+    const {args} = await this.parse(Get)
+    const res = await clients(args?.id)
     type row = {
       [key: string]: any
     }

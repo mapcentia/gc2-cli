@@ -28,7 +28,7 @@ export default class Drop extends Command {
 
   async run() {
     const {args} = await this.parse(Drop)
-    let id = args?.id || await ruleList()
+    const id = args?.id || await ruleList()
     if (!await confirm({message: '⚠️ The rule will be deleted. Are you sure', default: false})) {
       this.exit();
     }

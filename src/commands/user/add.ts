@@ -33,7 +33,7 @@ export default class Add extends Command {
   }
 
   async run() {
-    let {args, flags} = await this.parse(Add)
+    const {args, flags} = await this.parse(Add)
 
     const name = args?.name || await input({message: 'Username', required: true})
     const pwd = flags?.password || await password({message: 'Password', mask:true, validate: passwordIsStrongEnough})

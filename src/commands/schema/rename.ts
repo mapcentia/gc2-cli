@@ -34,7 +34,7 @@ export default class Rename extends Command {
   async run() {
     const {args} = await this.parse(Rename)
 
-    let schema = args?.schema || await schemasList()
+    const schema = args?.schema || await schemasList()
     const name = args?.name || await input({message: 'New name', required: true})
     const response = await make('4', `schemas/${schema}`, 'PATCH', {name})
     await get(response, 303)

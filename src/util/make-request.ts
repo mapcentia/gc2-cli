@@ -39,7 +39,7 @@ const make = async (version: string, resource: string, method: Method, payload?:
       exit(1)
     }
   }
-  let request: RequestInit = {
+  const request: RequestInit = {
     method: method,
     headers: headers,
     redirect: 'manual'

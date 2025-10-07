@@ -14,8 +14,8 @@ import make from '../../util/make-request'
 import args, {BaseArgs} from '../../common/base_args'
 import setSchema from '../../util/set-schema'
 
-let base_args: BaseArgs = args
-let specific_args = {
+const base_args: BaseArgs = args
+const specific_args = {
   columns: Args.string(
     {
       required: false,

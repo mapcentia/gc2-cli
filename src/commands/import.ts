@@ -23,7 +23,7 @@ import setSchema from "../util/set-schema"
 const config: Configstore = new Configstore('gc2-env')
 const userConfig: User = config.all
 
-let args: any = {}
+const args: any = {}
 
 args.path = Args.string(
   {
@@ -75,7 +75,10 @@ export default class Import extends Command {
   static args = args
 
   async run() {
-    let {flags, args} = await this.parse(Import)
+    const parsed = await this.parse(Import)
+    const { flags } = parsed
+    let { args } = parsed
+
     args = setSchema(args)
 
     let tmpDir
@@ -123,7 +126,7 @@ export default class Import extends Command {
       }
       cli.action.stop()
 
-      let body: any = flags
+      const body: any = flags
       if (!flags.dry_run) {
         body.import = true
       }

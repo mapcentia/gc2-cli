@@ -12,8 +12,8 @@ import {privileges} from '../../util/getters'
 import {schemasList, tableList} from '../../util/lists'
 import setSchema from '../../util/set-schema'
 
-let base_args = args
-let specific_args = {}
+const base_args = args
+const specific_args = {}
 
 export default class Get extends Command {
   static description = 'Get user privileges on table.'

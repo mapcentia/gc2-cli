@@ -41,7 +41,7 @@ export default class Update extends Command {
   async run() {
     const {args} = await this.parse(Update)
     const {flags} = await this.parse(Update)
-    let id = args?.id || await clientList()
+    const id = args?.id || await clientList()
     const clientResult = await clients(id)
     const client = clientResult.clients[0]
 
