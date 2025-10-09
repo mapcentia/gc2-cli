@@ -33,30 +33,30 @@ USAGE
 * [`gc2 client drop [ID]`](#gc2-client-drop-id)
 * [`gc2 client get [ID]`](#gc2-client-get-id)
 * [`gc2 client update [ID]`](#gc2-client-update-id)
-* [`gc2 column add [SCHEMA] [TABLE] [COLUMN] [TYPE]`](#gc2-column-add-schema-table-column-type)
-* [`gc2 column default [SCHEMA] [TABLE] [COLUMN] [DEFAULT]`](#gc2-column-default-schema-table-column-default)
-* [`gc2 column drop [SCHEMA] [TABLE] [COLUMN]`](#gc2-column-drop-schema-table-column)
-* [`gc2 column get [SCHEMA] [TABLE] [COLUMN]`](#gc2-column-get-schema-table-column)
-* [`gc2 column nullable [SCHEMA] [TABLE] [COLUMN] [NULLABLE]`](#gc2-column-nullable-schema-table-column-nullable)
-* [`gc2 column rename [SCHEMA] [TABLE] [COLUMN] [NAME]`](#gc2-column-rename-schema-table-column-name)
-* [`gc2 column type [SCHEMA] [TABLE] [COLUMN] [TYPE]`](#gc2-column-type-schema-table-column-type)
+* [`gc2 column add [TABLE] [COLUMN] [TYPE]`](#gc2-column-add-table-column-type)
+* [`gc2 column default [TABLE] [COLUMN] [DEFAULT]`](#gc2-column-default-table-column-default)
+* [`gc2 column drop [TABLE] [COLUMN]`](#gc2-column-drop-table-column)
+* [`gc2 column get [TABLE] [COLUMN]`](#gc2-column-get-table-column)
+* [`gc2 column nullable [TABLE] [COLUMN] [NULLABLE]`](#gc2-column-nullable-table-column-nullable)
+* [`gc2 column rename [TABLE] [COLUMN] [NAME]`](#gc2-column-rename-table-column-name)
+* [`gc2 column type [TABLE] [COLUMN] [TYPE]`](#gc2-column-type-table-column-type)
 * [`gc2 connect [HOST]`](#gc2-connect-host)
-* [`gc2 constraint add [SCHEMA] [TABLE] [COLUMNS] [TYPE] [NAME]`](#gc2-constraint-add-schema-table-columns-type-name)
-* [`gc2 constraint drop [SCHEMA] [TABLE] [NAME]`](#gc2-constraint-drop-schema-table-name)
-* [`gc2 constraint get [SCHEMA] [TABLE] [NAME]`](#gc2-constraint-get-schema-table-name)
+* [`gc2 constraint add [TABLE] [COLUMNS] [TYPE] [NAME]`](#gc2-constraint-add-table-columns-type-name)
+* [`gc2 constraint drop [TABLE] [NAME]`](#gc2-constraint-drop-table-name)
+* [`gc2 constraint get [TABLE] [NAME]`](#gc2-constraint-get-table-name)
 * [`gc2 foreign drop SCHEMAS [INCLUDE]`](#gc2-foreign-drop-schemas-include)
 * [`gc2 foreign import SERVER FROM TO [INCLUDE]`](#gc2-foreign-import-server-from-to-include)
 * [`gc2 foreign materialize FROM [TO] [INCLUDE]`](#gc2-foreign-materialize-from-to-include)
 * [`gc2 grid`](#gc2-grid)
 * [`gc2 help [COMMAND]`](#gc2-help-command)
-* [`gc2 import [PATH] [SCHEMA]`](#gc2-import-path-schema)
-* [`gc2 index add [SCHEMA] [TABLE] [COLUMNS] [METHOD] [NAME]`](#gc2-index-add-schema-table-columns-method-name)
-* [`gc2 index drop [SCHEMA] [TABLE] [NAME]`](#gc2-index-drop-schema-table-name)
-* [`gc2 index get [SCHEMA] [TABLE] [NAME]`](#gc2-index-get-schema-table-name)
+* [`gc2 import [PATH]`](#gc2-import-path)
+* [`gc2 index add [TABLE] [COLUMNS] [METHOD] [NAME]`](#gc2-index-add-table-columns-method-name)
+* [`gc2 index drop [TABLE] [NAME]`](#gc2-index-drop-table-name)
+* [`gc2 index get [TABLE] [NAME]`](#gc2-index-get-table-name)
 * [`gc2 login`](#gc2-login)
 * [`gc2 logout`](#gc2-logout)
-* [`gc2 privilege get [SCHEMA] [TABLE]`](#gc2-privilege-get-schema-table)
-* [`gc2 privilege set [SCHEMA] [TABLE] [USER] [PRIVILEGE]`](#gc2-privilege-set-schema-table-user-privilege)
+* [`gc2 privilege get [TABLE]`](#gc2-privilege-get-table)
+* [`gc2 privilege set [TABLE] [USER] [PRIVILEGE]`](#gc2-privilege-set-table-user-privilege)
 * [`gc2 rule add`](#gc2-rule-add)
 * [`gc2 rule drop [ID]`](#gc2-rule-drop-id)
 * [`gc2 rule get [ID]`](#gc2-rule-get-id)
@@ -74,15 +74,15 @@ USAGE
 * [`gc2 sql`](#gc2-sql)
 * [`gc2 stat`](#gc2-stat)
 * [`gc2 symbol PATH`](#gc2-symbol-path)
-* [`gc2 table add [SCHEMA] [TABLE]`](#gc2-table-add-schema-table)
-* [`gc2 table drop [SCHEMA] [TABLE]`](#gc2-table-drop-schema-table)
-* [`gc2 table get [SCHEMA] [TABLE]`](#gc2-table-get-schema-table)
-* [`gc2 table move [SCHEMA] [TABLE] [DESTINATION]`](#gc2-table-move-schema-table-destination)
-* [`gc2 table rename [SCHEMA] [TABLE] [NAME]`](#gc2-table-rename-schema-table-name)
+* [`gc2 table add [TABLE]`](#gc2-table-add-table)
+* [`gc2 table drop [TABLE]`](#gc2-table-drop-table)
+* [`gc2 table get [TABLE]`](#gc2-table-get-table)
+* [`gc2 table move [TABLE] [DESTINATION]`](#gc2-table-move-table-destination)
+* [`gc2 table rename [TABLE] [NAME]`](#gc2-table-rename-table-name)
 * [`gc2 user add [NAME]`](#gc2-user-add-name)
 * [`gc2 user drop [NAME]`](#gc2-user-drop-name)
 * [`gc2 user get [ID]`](#gc2-user-get-id)
-* [`gc2 user update [NAME]`](#gc2-user-update-name)
+* [`gc2 user update`](#gc2-user-update)
 * [`gc2 view backup SCHEMAS`](#gc2-view-backup-schemas)
 * [`gc2 view get SCHEMA`](#gc2-view-get-schema)
 * [`gc2 view refresh SCHEMAS [INCLUDE]`](#gc2-view-refresh-schemas-include)
@@ -200,16 +200,15 @@ DESCRIPTION
 
 _See code: [src/commands/client/update.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.8.0/src/commands/client/update.ts)_
 
-## `gc2 column add [SCHEMA] [TABLE] [COLUMN] [TYPE]`
+## `gc2 column add [TABLE] [COLUMN] [TYPE]`
 
 Add a new column to a table.
 
 ```
 USAGE
-  $ gc2 column add [SCHEMA] [TABLE] [COLUMN] [TYPE] [-h]
+  $ gc2 column add [TABLE] [COLUMN] [TYPE] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema.
   TABLE   Name of table.
   COLUMN  Name of new column.
   TYPE    Data type of new column.
@@ -223,16 +222,15 @@ DESCRIPTION
 
 _See code: [src/commands/column/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.8.0/src/commands/column/add.ts)_
 
-## `gc2 column default [SCHEMA] [TABLE] [COLUMN] [DEFAULT]`
+## `gc2 column default [TABLE] [COLUMN] [DEFAULT]`
 
 Set default value for column. The default value is set when inserting a new row without a value for the column.
 
 ```
 USAGE
-  $ gc2 column default [SCHEMA] [TABLE] [COLUMN] [DEFAULT] [-h]
+  $ gc2 column default [TABLE] [COLUMN] [DEFAULT] [-h]
 
 ARGUMENTS
-  SCHEMA   Name of schema.
   TABLE    Name of table.
   COLUMN   Name of column.
   DEFAULT  Default value. Set to 'null' for removing an already set value.
@@ -246,16 +244,15 @@ DESCRIPTION
 
 _See code: [src/commands/column/default.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.8.0/src/commands/column/default.ts)_
 
-## `gc2 column drop [SCHEMA] [TABLE] [COLUMN]`
+## `gc2 column drop [TABLE] [COLUMN]`
 
 Drop a column from table.
 
 ```
 USAGE
-  $ gc2 column drop [SCHEMA] [TABLE] [COLUMN] [-h]
+  $ gc2 column drop [TABLE] [COLUMN] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema.
   TABLE   Name of table.
   COLUMN  Name of column to drop.
 
@@ -268,16 +265,15 @@ DESCRIPTION
 
 _See code: [src/commands/column/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.8.0/src/commands/column/drop.ts)_
 
-## `gc2 column get [SCHEMA] [TABLE] [COLUMN]`
+## `gc2 column get [TABLE] [COLUMN]`
 
 Get description of a column.
 
 ```
 USAGE
-  $ gc2 column get [SCHEMA] [TABLE] [COLUMN] [-h]
+  $ gc2 column get [TABLE] [COLUMN] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema.
   TABLE   Name of table.
   COLUMN  Name of column.
 
@@ -290,16 +286,15 @@ DESCRIPTION
 
 _See code: [src/commands/column/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.8.0/src/commands/column/get.ts)_
 
-## `gc2 column nullable [SCHEMA] [TABLE] [COLUMN] [NULLABLE]`
+## `gc2 column nullable [TABLE] [COLUMN] [NULLABLE]`
 
 Set nullable on column. If set the column can't be empty.
 
 ```
 USAGE
-  $ gc2 column nullable [SCHEMA] [TABLE] [COLUMN] [NULLABLE] [-h]
+  $ gc2 column nullable [TABLE] [COLUMN] [NULLABLE] [-h]
 
 ARGUMENTS
-  SCHEMA    Name of schema.
   TABLE     Name of table.
   COLUMN    Name of column.
   NULLABLE  (true|false) Set column to nullable.
@@ -313,16 +308,15 @@ DESCRIPTION
 
 _See code: [src/commands/column/nullable.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.8.0/src/commands/column/nullable.ts)_
 
-## `gc2 column rename [SCHEMA] [TABLE] [COLUMN] [NAME]`
+## `gc2 column rename [TABLE] [COLUMN] [NAME]`
 
 Rename a column.
 
 ```
 USAGE
-  $ gc2 column rename [SCHEMA] [TABLE] [COLUMN] [NAME] [-h]
+  $ gc2 column rename [TABLE] [COLUMN] [NAME] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema.
   TABLE   Name of table.
   COLUMN  Existing name of column.
   NAME    New name for column.
@@ -336,16 +330,15 @@ DESCRIPTION
 
 _See code: [src/commands/column/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.8.0/src/commands/column/rename.ts)_
 
-## `gc2 column type [SCHEMA] [TABLE] [COLUMN] [TYPE]`
+## `gc2 column type [TABLE] [COLUMN] [TYPE]`
 
 Set the data on column. It might be, the existing data type can't be transformed to the chosen one.
 
 ```
 USAGE
-  $ gc2 column type [SCHEMA] [TABLE] [COLUMN] [TYPE] [-h]
+  $ gc2 column type [TABLE] [COLUMN] [TYPE] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema.
   TABLE   Name of table.
   COLUMN  Name of column.
   TYPE    New data type for column.
@@ -381,16 +374,15 @@ DESCRIPTION
 
 _See code: [src/commands/connect.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.8.0/src/commands/connect.ts)_
 
-## `gc2 constraint add [SCHEMA] [TABLE] [COLUMNS] [TYPE] [NAME]`
+## `gc2 constraint add [TABLE] [COLUMNS] [TYPE] [NAME]`
 
 Add a constraint.
 
 ```
 USAGE
-  $ gc2 constraint add [SCHEMA] [TABLE] [COLUMNS] [TYPE] [NAME] [-h] [-t <value>] [-e <value>] [-c <value>]
+  $ gc2 constraint add [TABLE] [COLUMNS] [TYPE] [NAME] [-h] [-t <value>] [-e <value>] [-c <value>]
 
 ARGUMENTS
-  SCHEMA   Name of schema.
   TABLE    Name of table.
   COLUMNS  Columns for use in the constraint (comma separated).
   TYPE     (primary|unique|foreign|check) Type of constraint.
@@ -412,18 +404,17 @@ DESCRIPTION
 
 _See code: [src/commands/constraint/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.8.0/src/commands/constraint/add.ts)_
 
-## `gc2 constraint drop [SCHEMA] [TABLE] [NAME]`
+## `gc2 constraint drop [TABLE] [NAME]`
 
 Drop a constraint.
 
 ```
 USAGE
-  $ gc2 constraint drop [SCHEMA] [TABLE] [NAME] [-h]
+  $ gc2 constraint drop [TABLE] [NAME] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema.
-  TABLE   Name of table.
-  NAME    Name of constraint.
+  TABLE  Name of table.
+  NAME   Name of constraint.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -434,18 +425,17 @@ DESCRIPTION
 
 _See code: [src/commands/constraint/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.8.0/src/commands/constraint/drop.ts)_
 
-## `gc2 constraint get [SCHEMA] [TABLE] [NAME]`
+## `gc2 constraint get [TABLE] [NAME]`
 
 Get constraint details.
 
 ```
 USAGE
-  $ gc2 constraint get [SCHEMA] [TABLE] [NAME] [-h]
+  $ gc2 constraint get [TABLE] [NAME] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema.
-  TABLE   Name of table.
-  NAME    Name of constraint.
+  TABLE  Name of table.
+  NAME   Name of constraint.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -564,18 +554,17 @@ DESCRIPTION
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.33/src/commands/help.ts)_
 
-## `gc2 import [PATH] [SCHEMA]`
+## `gc2 import [PATH]`
 
 Import files. Set path to a file or folder, which will be compressed, uploaded and imported into GC2.
 
 ```
 USAGE
-  $ gc2 import [PATH] [SCHEMA] [-s <value>] [-t <value>] [-T <value>] [-x <value>] [-y <value>] [-d] [-a]
-    [-r] [-p] [-n <value>] [-h]
+  $ gc2 import [PATH] [-s <value>] [-t <value>] [-T <value>] [-x <value>] [-y <value>] [-d] [-a] [-r] [-p]
+    [-n <value>] [-h]
 
 ARGUMENTS
-  PATH    [default: .] Input path to file or folder.
-  SCHEMA  Destination schema.
+  PATH  [default: .] Input path to file or folder.
 
 FLAGS
   -T, --timestamp=<value>         Name of timestamp field. Create a timestamp field in the import table. Omit argument
@@ -601,16 +590,15 @@ DESCRIPTION
 
 _See code: [src/commands/import.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.8.0/src/commands/import.ts)_
 
-## `gc2 index add [SCHEMA] [TABLE] [COLUMNS] [METHOD] [NAME]`
+## `gc2 index add [TABLE] [COLUMNS] [METHOD] [NAME]`
 
 Add an new index to table.
 
 ```
 USAGE
-  $ gc2 index add [SCHEMA] [TABLE] [COLUMNS] [METHOD] [NAME] [-h]
+  $ gc2 index add [TABLE] [COLUMNS] [METHOD] [NAME] [-h]
 
 ARGUMENTS
-  SCHEMA   Name of schema.
   TABLE    Name of table.
   COLUMNS  Columns to index (comma separated).
   METHOD   (btree|brin|gin|gist|hash) Index method.
@@ -625,18 +613,17 @@ DESCRIPTION
 
 _See code: [src/commands/index/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.8.0/src/commands/index/add.ts)_
 
-## `gc2 index drop [SCHEMA] [TABLE] [NAME]`
+## `gc2 index drop [TABLE] [NAME]`
 
 Drop an index from table.
 
 ```
 USAGE
-  $ gc2 index drop [SCHEMA] [TABLE] [NAME] [-h]
+  $ gc2 index drop [TABLE] [NAME] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema.
-  TABLE   Name of table.
-  NAME    Name of index.
+  TABLE  Name of table.
+  NAME   Name of index.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -647,18 +634,17 @@ DESCRIPTION
 
 _See code: [src/commands/index/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.8.0/src/commands/index/drop.ts)_
 
-## `gc2 index get [SCHEMA] [TABLE] [NAME]`
+## `gc2 index get [TABLE] [NAME]`
 
 Get index definition.
 
 ```
 USAGE
-  $ gc2 index get [SCHEMA] [TABLE] [NAME] [-h]
+  $ gc2 index get [TABLE] [NAME] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema.
-  TABLE   Name of table.
-  NAME    Name of index.
+  TABLE  Name of table.
+  NAME   Name of index.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -708,17 +694,16 @@ DESCRIPTION
 
 _See code: [src/commands/logout.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.8.0/src/commands/logout.ts)_
 
-## `gc2 privilege get [SCHEMA] [TABLE]`
+## `gc2 privilege get [TABLE]`
 
 Get user privileges on table.
 
 ```
 USAGE
-  $ gc2 privilege get [SCHEMA] [TABLE] [-h]
+  $ gc2 privilege get [TABLE] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema.
-  TABLE   Name of table.
+  TABLE  Name of table.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -729,16 +714,15 @@ DESCRIPTION
 
 _See code: [src/commands/privilege/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.8.0/src/commands/privilege/get.ts)_
 
-## `gc2 privilege set [SCHEMA] [TABLE] [USER] [PRIVILEGE]`
+## `gc2 privilege set [TABLE] [USER] [PRIVILEGE]`
 
 Set user privileges on table.
 
 ```
 USAGE
-  $ gc2 privilege set [SCHEMA] [TABLE] [USER] [PRIVILEGE] [-h]
+  $ gc2 privilege set [TABLE] [USER] [PRIVILEGE] [-h]
 
 ARGUMENTS
-  SCHEMA     Name of schema.
   TABLE      Name of table.
   USER       Name of user.
   PRIVILEGE  Which privilege.
@@ -1109,17 +1093,16 @@ DESCRIPTION
 
 _See code: [src/commands/symbol.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.8.0/src/commands/symbol.ts)_
 
-## `gc2 table add [SCHEMA] [TABLE]`
+## `gc2 table add [TABLE]`
 
 Create a new table.
 
 ```
 USAGE
-  $ gc2 table add [SCHEMA] [TABLE] [-h]
+  $ gc2 table add [TABLE] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema.
-  TABLE   Name of table.
+  TABLE  Name of table.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -1130,17 +1113,16 @@ DESCRIPTION
 
 _See code: [src/commands/table/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.8.0/src/commands/table/add.ts)_
 
-## `gc2 table drop [SCHEMA] [TABLE]`
+## `gc2 table drop [TABLE]`
 
 Drop a table.
 
 ```
 USAGE
-  $ gc2 table drop [SCHEMA] [TABLE] [-h]
+  $ gc2 table drop [TABLE] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema.
-  TABLE   Name of table.
+  TABLE  Name of table.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -1151,17 +1133,16 @@ DESCRIPTION
 
 _See code: [src/commands/table/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.8.0/src/commands/table/drop.ts)_
 
-## `gc2 table get [SCHEMA] [TABLE]`
+## `gc2 table get [TABLE]`
 
 Get table definition.
 
 ```
 USAGE
-  $ gc2 table get [SCHEMA] [TABLE] [-h]
+  $ gc2 table get [TABLE] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema.
-  TABLE   Name of table.
+  TABLE  Name of table.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -1172,16 +1153,15 @@ DESCRIPTION
 
 _See code: [src/commands/table/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.8.0/src/commands/table/get.ts)_
 
-## `gc2 table move [SCHEMA] [TABLE] [DESTINATION]`
+## `gc2 table move [TABLE] [DESTINATION]`
 
 Move table to another schema.
 
 ```
 USAGE
-  $ gc2 table move [SCHEMA] [TABLE] [DESTINATION] [-h]
+  $ gc2 table move [TABLE] [DESTINATION] [-h]
 
 ARGUMENTS
-  SCHEMA       Name of schema.
   TABLE        Name of table.
   DESTINATION  Destination schema.
 
@@ -1194,18 +1174,17 @@ DESCRIPTION
 
 _See code: [src/commands/table/move.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.8.0/src/commands/table/move.ts)_
 
-## `gc2 table rename [SCHEMA] [TABLE] [NAME]`
+## `gc2 table rename [TABLE] [NAME]`
 
 Rename table.
 
 ```
 USAGE
-  $ gc2 table rename [SCHEMA] [TABLE] [NAME] [-h]
+  $ gc2 table rename [TABLE] [NAME] [-h]
 
 ARGUMENTS
-  SCHEMA  Name of schema.
-  TABLE   Name of table.
-  NAME    New name for table.
+  TABLE  Name of table.
+  NAME   New name for table.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -1281,24 +1260,19 @@ DESCRIPTION
 
 _See code: [src/commands/user/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.8.0/src/commands/user/get.ts)_
 
-## `gc2 user update [NAME]`
+## `gc2 user update`
 
 Update user.
 
 ```
 USAGE
-  $ gc2 user update [NAME] [-h] [-p <value>] [-d] [-e <value>] [-g <value>]
-
-ARGUMENTS
-  NAME  Name of user.
+  $ gc2 user update [-h] [-p <value>] [-d]
 
 FLAGS
-  -d, --default_user        The default user is the user that is used when no token is provided. Use for public
-                            applications where users should not be able to access data without a token.
-  -e, --properties=<value>  New properties.
-  -g, --group=<value>       New group.
-  -h, --help                Show CLI help.
-  -p, --password=<value>    New password for user.
+  -d, --default_user      The default user is the user that is used when no token is provided. Use for public
+                          applications where users should not be able to access data without a token.
+  -h, --help              Show CLI help.
+  -p, --password=<value>  New password for user.
 
 DESCRIPTION
   Update user.
