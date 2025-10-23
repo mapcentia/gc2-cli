@@ -17,6 +17,8 @@ type Client = {
   public: boolean
   confirm: boolean
   two_factor: boolean
+  allow_signup: boolean
+  social_signup: boolean
 }
 
 const clients = async (id?: string): Promise<{ clients: Client[] }> => {
