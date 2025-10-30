@@ -29,7 +29,7 @@ export default class Update extends Command {
     confirm: Flags.boolean({char: 'c', description: 'Client user must confirm the token exchange.', required: false}),
     two_factor: Flags.boolean({char: 't', description: 'Client user must authenticate with two factor authentication.', required: false}),
     allow_signup: Flags.boolean({char: 's', description: 'Allow users to sign up for a new account in the web-dialog.', required: false}),
-    social_signup: Flags.boolean({char: 'S', description: 'Enable users to signup for a new account with social login.', required: false}),
+    social_signup: Flags.boolean({char: 'S', description: 'Enable users to sign up for a new account with social login.', required: false}),
     help: Flags.help({char: 'h'}),
   }
   static args = {
@@ -68,8 +68,8 @@ export default class Update extends Command {
     const _public = flags?.public || await confirm({message: 'Public client?', default: client.public})
     const _confirm = flags?.confirm || await confirm({message: 'Confirm token exchange?', default: client.confirm})
     const two_factor = flags?.two_factor || await confirm({message: 'Enable two factor authentication', default: client.two_factor})
-    const allow_signup = flags?.allow_signup || await confirm({message: 'Allow users to signup', default: client.allow_signup})
-    const social_signup = flags?.social_signup || await confirm({message: 'Enable social signup', default: client.social_signup})
+    const allow_signup = flags?.allow_signup || await confirm({message: 'Allow users to sign up', default: client.allow_signup})
+    const social_signup = flags?.social_signup || await confirm({message: 'Enable users to sign up with social login', default: client.social_signup})
     const response = await make('4', `clients/${id}`, 'PATCH', {
       name,
       description,

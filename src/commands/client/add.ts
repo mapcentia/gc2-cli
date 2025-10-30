@@ -36,7 +36,7 @@ export default class Add extends Command {
     confirm: Flags.boolean({char: 'c', description: 'Client user must confirm the token exchange.'}),
     two_factor: Flags.boolean({char: 't', description: 'Client user must authenticate with two factor authentication.'}),
     allow_signup: Flags.boolean({char: 's', description: 'Allow users to sign up for a new account in the web-dialog.'}),
-    social_signup: Flags.boolean({char: 'S', description: 'Enable users to signup for a new account with social login.'}),
+    social_signup: Flags.boolean({char: 'S', description: 'Enable users to sign up for a new account with social login.'}),
     help: Flags.help({char: 'h'}),
   }
 
