@@ -14,7 +14,8 @@ import {schemasList} from '../../util/lists'
 export default class Get extends Command {
   static description = 'Get list of tables in schema.'
   static flags = {
-    help: Flags.help({char: 'h'})
+    raw: Flags.boolean({char: 'R', description: 'Print raw data.', default: false}),
+    help: Flags.help({char: 'h'}),
   }
   static args = {
     schema: Args.string(
@@ -27,29 +28,31 @@ export default class Get extends Command {
 
   async run() {
     const {args} = await this.parse(Get)
+    let {flags} = await this.parse(Get)
     let schema = args?.schema || await schemasList()
-    const res = await schemas(schema)
+    const res = await schemas(schema, false)
     if (res.tables.length < 1) {
       ux.log(`⚠️ No tables found for schema ${schema}`)
       exit(0)
     }
-    type tables = {
-      [key: string]: any
-    }
-    type table = {
-      table: string;
-    }
-    const data: object[] = []
-    const columns: tables = {table: {}}
-    for (const c in res.tables) {
-      const v: tables = res.tables[c]
-      data.push({
-        table: v.name.split('.').reverse()[0],
+    if (flags.raw) {
+      this.log(JSON.stringify({name: schema, tables: res.tables}, null, 2))
+    } else {
+      type tables = {
+        [key: string]: any
+      }
+      const data: object[] = []
+      const columns: tables = {table: {}}
+      for (const c in res.tables) {
+        const v: tables = res.tables[c]
+        data.push({
+          table: v.name.split('.').reverse()[0],
 
+        })
+      }
+      cli.table(data, columns, {
+        printLine: this.log.bind(this)
       })
     }
-    cli.table(data, columns, {
-      printLine: this.log.bind(this)
-    })
   }
 }

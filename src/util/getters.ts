@@ -59,8 +59,8 @@ const rules = async (id?: string) => {
   return t
 }
 
-const schemas = async (id?: string) => {
-  const res = id ? `schemas/${id}` : 'schemas?namesOnly'
+const schemas = async (id?: string, namesOnly: boolean = true) => {
+  const res = (id ? `schemas/${id}` : 'schemas') + (namesOnly ? '?namesOnly' : '')
   const response = await make('4', res, 'GET')
   const t: any = await get(response, 200);
   if (!t?.schemas) {
