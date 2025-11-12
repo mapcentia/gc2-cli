@@ -82,7 +82,7 @@ export default class Sql extends Command {
       let fileStream: any
       let fileName: string;
 
-      if (flags.format === 'csv' || flags.format === 'ndjson') {
+      if (flags.format === 'ccsv' || flags.format === 'ndjson') {
         fileName = 'file.' + flags.format
       } else {
         fileName = res.headers.get('content-disposition')?.split('=')[1].replace(/"/g, '')
@@ -120,7 +120,7 @@ export default class Sql extends Command {
         const statement: Statement = {
           q: base64url(sql),
           srs: 4326,
-          output_format: 'geojson',
+          output_format: 'json',
           convert_types: false,
           lifetime: 0,
           base64: true
