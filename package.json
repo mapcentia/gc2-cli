@@ -34,9 +34,10 @@
     "fetch-blob": "^3.2.0",
     "form-data": "^4.0.0",
     "inquirer": "^10.1.8",
-    "jsdom": "^24.1.0",
+    "jsdom": "28.1.0",
     "jwt-decode": "^4.0.0",
-    "node-fetch": "^2.6.7",
+    "node-fetch": "^2.7.0",
+    "oclif": "^4.22.81",
     "through2": "^3.0.2",
     "tslib": "^1.14.1",
     "url-parse": "^1.4.7",
@@ -50,8 +51,7 @@
     "@types/jsdom": "^21.1.7",
     "@types/lodash": "^4.14.202",
     "@types/mocha": "^10.0.4",
-    "@types/node": "^10.17.60",
-    "aws-sdk": "^2.1159.0",
+    "@types/node": "^20.0.0",
     "chai": "^4.3.10",
     "globby": "^10.0.2",
     "mocha": "^10.8.2",
@@ -60,7 +60,11 @@
     "stdout-stderr": "^0.1.13",
     "ts-node": "^10.9.2",
     "tslint": "^5.20.1",
-    "typescript": "4.7.4"
+    "typescript": "4.9.5"
+  },
+  "overrides": {
+    "whatwg-url": "^16.0.0",
+    "tr46": "^6.0.0"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -150,8 +154,8 @@
     "prebuild": "node scripts/build.js",
     "postpack": "rm -f oclif.manifest.json",
     "posttest": "tslint -p test -t stylish",
-    "prepack": "rm -rf lib && /usr/bin/tsc -b && oclif manifest && oclif readme",
-    "test": " NODE_OPTIONS=\"--loader ts-node/esm\" nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+    "prepack": "rm -rf lib && tsc -b && oclif manifest && oclif readme",
+    "test": " NODE_OPTIONS=\"--loader ts-node/esm\" nyc --extension .ts mocha v--forbid-only \"test/**/*.test.ts\"",
     "version": "oclif-dev readme && git add README.md",
     "packwin": "oclif pack win",
     "uploadwin": "oclif upload win",
