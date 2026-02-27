@@ -7,6 +7,7 @@
 
 import get from './get-response'
 import make from './make-request'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../centiaClient'
 
 type Client = {
   id: string
@@ -60,23 +61,29 @@ const rules = async (id?: string) => {
 }
 
 const schemas = async (id?: string, namesOnly: boolean = true) => {
-  const res = (id ? `schemas/${id}` : 'schemas') + (namesOnly ? '?namesOnly' : '')
-  const response = await make('4', res, 'GET')
-  const t: any = await get(response, 200);
-  if (!t?.schemas) {
-    t.schemas = [t]
+  try {
+    const client = createCliCentiaAdminClient()
+    const t: any = await client.provisioning.schemas.getSchema(id, {namesOnly})
+    if (!t?.schemas) {
+      t.schemas = [t]
+    }
+    return t
+  } catch (error) {
+    logCentiaErrorAndExit(error)
   }
-  return t
 }
 
 const tables = async (schema: string, table?: string) => {
-  const res = table ? `schemas/${schema}/tables/${table}?namesOnly` : `schemas/${schema}/tables?namesOnly`
-  const response = await make('4', res, 'GET')
-  const t = await get(response, 200);
-  if (!t?.tables) {
-    t.tables = [t]
+  try {
+    const client = createCliCentiaAdminClient()
+    const t: any = await client.provisioning.tables.getTable(schema, table)
+    if (!t?.tables) {
+      t.tables = [t]
+    }
+    return t
+  } catch (error) {
+    logCentiaErrorAndExit(error)
   }
-  return t
 }
 
 const privileges = async (schema: string, table: string) => {

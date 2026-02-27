@@ -8,10 +8,9 @@
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import args from '../../common/base_args'
-import get from '../../util/get-response'
 import {columnList, schemasList, tableList} from '../../util/lists'
-import make from '../../util/make-request'
 import setSchema from '../../util/set-schema'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 let base_args = args
 let specific_args = {
@@ -38,8 +37,12 @@ export default class Drop extends Command {
     const table = args?.table || await tableList(schema)
     const column = args?.column || await columnList(schema, table)
 
-    const response = await make('4', `schemas/${schema}/tables/${table}/columns/${column}`, 'DELETE', null)
-    await get(response, 204)
-    this.log(`Column ${chalk.green(column)} dropped`)
+    try {
+      const client = createCliCentiaAdminClient()
+      await client.provisioning.columns.deleteColumn(schema, table, column)
+      this.log(`Column ${chalk.green(column)} dropped`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }

@@ -5,15 +5,14 @@
  *
  */
 
-import {input, select} from '@inquirer/prompts'
+import {input} from '@inquirer/prompts'
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import args from '../../common/base_args'
-import get from '../../util/get-response'
 import {tables} from '../../util/getters'
 import {columnList, schemasList, tableList} from '../../util/lists'
-import make from '../../util/make-request'
 import setSchema from '../../util/set-schema'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 let base_args = args
 let specific_args = {
@@ -51,15 +50,19 @@ export default class Default extends Command {
       default: c.default_value,
       required: true
     })
-    const body = {
-      default_value: defaultValue
-    }
-    const response = await make('4', `schemas/${schema}/tables/${table}/columns/${column}`, 'PATCH', body)
-    await get(response, 303)
-    if (defaultValue === 'null') {
-      this.log(`Column ${chalk.green(column)} has now NO default value.`)
-    } else {
-      this.log(`Column ${chalk.green(column)} has now default value.`)
+
+    try {
+      const client = createCliCentiaAdminClient()
+      await client.provisioning.columns.patchColumn(schema, table, column, {
+        default_value: defaultValue
+      })
+      if (defaultValue === 'null') {
+        this.log(`Column ${chalk.green(column)} has now NO default value.`)
+      } else {
+        this.log(`Column ${chalk.green(column)} has now default value.`)
+      }
+    } catch (error) {
+      logCentiaErrorAndExit(error)
     }
   }
 }

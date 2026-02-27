@@ -6,11 +6,10 @@
  */
 
 import {input} from '@inquirer/prompts'
-import {Args, Command, Flags, ux as cli} from '@oclif/core'
+import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
-import get from '../../util/get-response'
 import {schemasList} from '../../util/lists'
-import make from '../../util/make-request'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 export default class Rename extends Command {
   static description = 'Rename schema.'
@@ -36,8 +35,12 @@ export default class Rename extends Command {
 
     let schema = args?.schema || await schemasList()
     const name = args?.name || await input({message: 'New name', required: true})
-    const response = await make('4', `schemas/${schema}`, 'PATCH', {name})
-    await get(response, 303)
-    this.log(`Schema relocated to here ${chalk.green(response.headers.get('Location'))}`)
+    try {
+      const client = createCliCentiaAdminClient()
+      const response = await client.provisioning.schemas.patchSchema(schema, {name})
+      this.log(`Schema relocated to here ${chalk.green(response.location)}`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }

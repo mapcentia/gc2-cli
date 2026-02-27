@@ -9,11 +9,10 @@ import {select} from '@inquirer/prompts'
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import args from '../../common/base_args'
-import get from '../../util/get-response'
 import {tables} from '../../util/getters'
 import {columnList, schemasList, tableList} from '../../util/lists'
-import make from '../../util/make-request'
 import setSchema from '../../util/set-schema'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 let base_args = args
 let specific_args = {
@@ -55,11 +54,14 @@ export default class Nullable extends Command {
       choices: [{value: 'true'}, {value: 'false'}],
     }))
 
-    const body = {
-      is_nullable: nullable === 'true'
+    try {
+      const client = createCliCentiaAdminClient()
+      await client.provisioning.columns.patchColumn(schema, table, column, {
+        is_nullable: nullable === 'true'
+      })
+      this.log(`Column ${chalk.green(column)} is now ${nullable !== 'true' ? chalk.red('NOT ') : ''}nullable.`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
     }
-    const response = await make('4', `schemas/${schema}/tables/${table}/columns/${column}`, 'PATCH', body)
-    await get(response, 303)
-    this.log(`Column ${chalk.green(column)} is now ${nullable !== 'true' ? chalk.red('NOT ') : ''}nullable.`)
   }
 }

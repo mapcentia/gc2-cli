@@ -5,14 +5,12 @@
  *
  */
 
-import {input} from '@inquirer/prompts'
-import {Args, Command, Flags, ux as cli} from '@oclif/core'
+import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import args from '../../common/base_args'
-import get from '../../util/get-response'
 import {schemasList, tableList} from '../../util/lists'
-import make from '../../util/make-request'
 import setSchema from '../../util/set-schema'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 let base_args = args
 let specific_args = {
@@ -38,8 +36,12 @@ export default class Move extends Command {
     const table = args?.table || await tableList(schema)
     const destination = args?.destination || await schemasList('Choose a destination schema')
 
-    const response = await make('4', `schemas/${schema}/tables/${table}`, 'PATCH', {schema: destination})
-    await get(response, 303)
-    this.log(`Table relocated to here ${chalk.green(response.headers.get('Location'))}`)
+    try {
+      const client = createCliCentiaAdminClient()
+      const response = await client.provisioning.tables.patchTable(schema, table, {schema: destination})
+      this.log(`Table relocated to here ${chalk.green(response.location)}`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }

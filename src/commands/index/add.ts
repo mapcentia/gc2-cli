@@ -8,11 +8,10 @@
 import {input, select} from '@inquirer/prompts'
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
-import get from '../../util/get-response'
 import {columnCheck, schemasList, tableList} from '../../util/lists'
-import make from '../../util/make-request'
 import args, {BaseArgs} from '../../common/base_args'
 import setSchema from '../../util/set-schema'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 let base_args: BaseArgs = args
 let specific_args = {
@@ -68,13 +67,17 @@ export default class Add extends Command {
       ]
     })
     const name = args?.name || await input({message: 'Name of new index', required: false, default: `${table}-${method}`})
-    const body = {
-      name,
-      columns: columns.split(',').map((e: string) => e.trim()),
-      method,
+
+    try {
+      const client = createCliCentiaAdminClient()
+      const response = await client.provisioning.indices.postIndex(schema, table, {
+        name,
+        columns: columns.split(',').map((e: string) => e.trim()),
+        method: method as any,
+      })
+      this.log(`Index created here: ${chalk.green(response.location)}`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
     }
-    const response = await make('4', `schemas/${schema}/tables/${table}/indices`, 'POST', body)
-    await get(response, 201)
-    this.log(`Index created here: ${chalk.green(response.headers.get('Location'))}`)
   }
 }

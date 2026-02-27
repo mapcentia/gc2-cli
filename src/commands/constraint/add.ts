@@ -9,10 +9,9 @@ import {input} from '@inquirer/prompts'
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import args from '../../common/base_args'
-import get from '../../util/get-response'
 import {columnCheck, constraintTypeList, schemasList, tableList} from '../../util/lists'
-import make from '../../util/make-request'
 import setSchema from '../../util/set-schema'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 let base_args = args
 let specific_args = {
@@ -71,7 +70,7 @@ export default class Add extends Command {
     const type = args?.type || await constraintTypeList()
     const name = args?.name || await input({message: 'Name', required: false, default: `${table}-${type}`})
 
-    let body = {
+    let body: any = {
       name,
       columns: columns.split(',').map((e: string) => e.trim()),
       constraint: type,
@@ -105,8 +104,12 @@ export default class Add extends Command {
       }
     }
 
-    const response = await make('4', `schemas/${schema}/tables/${table}/constraints`, 'POST', body)
-    await get(response, 201)
-    this.log(`Constraint created here ${chalk.green(response.headers.get('Location'))}`)
+    try {
+      const client = createCliCentiaAdminClient()
+      const response = await client.provisioning.constraints.postConstraint(schema, table, body)
+      this.log(`Constraint created here ${chalk.green(response.location)}`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }
