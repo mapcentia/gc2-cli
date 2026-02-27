@@ -34,7 +34,7 @@ $ npm install -g @centia-io/cli
 $ centia COMMAND
 running command...
 $ centia (--version|-v)
-@centia-io/cli/2025.10.1 linux-x64 node-v20.19.5
+@centia-io/cli/2025.11.1 linux-x64 node-v20.19.5
 $ centia --help [COMMAND]
 USAGE
   $ centia COMMAND
@@ -161,7 +161,7 @@ ARGUMENTS
 
 FLAGS
   -H, --homepage=<value>      Homepage of the application.
-  -S, --social_signup         Enable users to signup for a new account with social login.
+  -S, --social_signup         Enable users to sign up for a new account with social login.
   -c, --confirm               Client user must confirm the token exchange.
   -d, --description=<value>   Description of new client.
   -h, --help                  Show CLI help.
@@ -176,7 +176,7 @@ DESCRIPTION
   Create new client.
 ```
 
-_See code: [src/commands/client/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/client/add.ts)_
+_See code: [src/commands/client/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/client/add.ts)_
 
 ## `centia client drop [ID]`
 
@@ -196,7 +196,7 @@ DESCRIPTION
   Drop a client.
 ```
 
-_See code: [src/commands/client/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/client/drop.ts)_
+_See code: [src/commands/client/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/client/drop.ts)_
 
 ## `centia client get [ID]`
 
@@ -216,7 +216,7 @@ DESCRIPTION
   List client(s).
 ```
 
-_See code: [src/commands/client/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/client/get.ts)_
+_See code: [src/commands/client/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/client/get.ts)_
 
 ## `centia client update [ID]`
 
@@ -230,7 +230,7 @@ ARGUMENTS
   ID  Id of client.
 
 FLAGS
-  -S, --social_signup         Enable users to signup for a new account with social login.
+  -S, --social_signup         Enable users to sign up for a new account with social login.
   -c, --confirm               Client user must confirm the token exchange.
   -d, --description=<value>   Description of new client.
   -h, --help                  Show CLI help.
@@ -245,7 +245,7 @@ DESCRIPTION
   Update a client.
 ```
 
-_See code: [src/commands/client/update.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/client/update.ts)_
+_See code: [src/commands/client/update.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/client/update.ts)_
 
 ## `centia column add [SCHEMA] [TABLE] [COLUMN] [TYPE]`
 
@@ -268,7 +268,7 @@ DESCRIPTION
   Add a new column to a table.
 ```
 
-_See code: [src/commands/column/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/column/add.ts)_
+_See code: [src/commands/column/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/column/add.ts)_
 
 ## `centia column default [SCHEMA] [TABLE] [COLUMN] [DEFAULT]`
 
@@ -291,7 +291,7 @@ DESCRIPTION
   Set default value for column. The default value is set when inserting a new row without a value for the column.
 ```
 
-_See code: [src/commands/column/default.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/column/default.ts)_
+_See code: [src/commands/column/default.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/column/default.ts)_
 
 ## `centia column drop [SCHEMA] [TABLE] [COLUMN]`
 
@@ -313,7 +313,7 @@ DESCRIPTION
   Drop a column from table.
 ```
 
-_See code: [src/commands/column/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/column/drop.ts)_
+_See code: [src/commands/column/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/column/drop.ts)_
 
 ## `centia column get [SCHEMA] [TABLE] [COLUMN]`
 
@@ -335,7 +335,7 @@ DESCRIPTION
   Get description of a column.
 ```
 
-_See code: [src/commands/column/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/column/get.ts)_
+_See code: [src/commands/column/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/column/get.ts)_
 
 ## `centia column nullable [SCHEMA] [TABLE] [COLUMN] [NULLABLE]`
 
@@ -358,7 +358,7 @@ DESCRIPTION
   Set nullable on column. If set the column can't be empty.
 ```
 
-_See code: [src/commands/column/nullable.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/column/nullable.ts)_
+_See code: [src/commands/column/nullable.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/column/nullable.ts)_
 
 ## `centia column rename [SCHEMA] [TABLE] [COLUMN] [NAME]`
 
@@ -381,7 +381,7 @@ DESCRIPTION
   Rename a column.
 ```
 
-_See code: [src/commands/column/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/column/rename.ts)_
+_See code: [src/commands/column/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/column/rename.ts)_
 
 ## `centia column type [SCHEMA] [TABLE] [COLUMN] [TYPE]`
 
@@ -404,7 +404,7 @@ DESCRIPTION
   Set the data on column. It might be, the existing data type can't be transformed to the chosen one.
 ```
 
-_See code: [src/commands/column/type.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/column/type.ts)_
+_See code: [src/commands/column/type.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/column/type.ts)_
 
 ## `centia connect [HOST]`
 
@@ -426,7 +426,7 @@ DESCRIPTION
   prompted instead.
 ```
 
-_See code: [src/commands/connect.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/connect.ts)_
+_See code: [src/commands/connect.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/connect.ts)_
 
 ## `centia constraint add [SCHEMA] [TABLE] [COLUMNS] [TYPE] [NAME]`
 
@@ -457,7 +457,7 @@ DESCRIPTION
   Add a constraint.
 ```
 
-_See code: [src/commands/constraint/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/constraint/add.ts)_
+_See code: [src/commands/constraint/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/constraint/add.ts)_
 
 ## `centia constraint drop [SCHEMA] [TABLE] [NAME]`
 
@@ -479,7 +479,7 @@ DESCRIPTION
   Drop a constraint.
 ```
 
-_See code: [src/commands/constraint/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/constraint/drop.ts)_
+_See code: [src/commands/constraint/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/constraint/drop.ts)_
 
 ## `centia constraint get [SCHEMA] [TABLE] [NAME]`
 
@@ -501,7 +501,7 @@ DESCRIPTION
   Get constraint details.
 ```
 
-_See code: [src/commands/constraint/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/constraint/get.ts)_
+_See code: [src/commands/constraint/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/constraint/get.ts)_
 
 ## `centia help [COMMAND]`
 
@@ -558,7 +558,7 @@ DESCRIPTION
   Import files. Set path to a file or folder, which will be compressed, uploaded and imported into GC2.
 ```
 
-_See code: [src/commands/import.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/import.ts)_
+_See code: [src/commands/import.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/import.ts)_
 
 ## `centia index add [SCHEMA] [TABLE] [COLUMNS] [METHOD] [NAME]`
 
@@ -582,7 +582,7 @@ DESCRIPTION
   Add an new index to table.
 ```
 
-_See code: [src/commands/index/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/index/add.ts)_
+_See code: [src/commands/index/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/index/add.ts)_
 
 ## `centia index drop [SCHEMA] [TABLE] [NAME]`
 
@@ -604,7 +604,7 @@ DESCRIPTION
   Drop an index from table.
 ```
 
-_See code: [src/commands/index/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/index/drop.ts)_
+_See code: [src/commands/index/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/index/drop.ts)_
 
 ## `centia index get [SCHEMA] [TABLE] [NAME]`
 
@@ -626,7 +626,7 @@ DESCRIPTION
   Get index definition.
 ```
 
-_See code: [src/commands/index/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/index/get.ts)_
+_See code: [src/commands/index/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/index/get.ts)_
 
 ## `centia login`
 
@@ -648,7 +648,7 @@ DESCRIPTION
   commandline is considered insecure. It's better to be prompt for the password
 ```
 
-_See code: [src/commands/login.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/login.ts)_
 
 ## `centia logout`
 
@@ -665,7 +665,7 @@ DESCRIPTION
   Logout the current user.
 ```
 
-_See code: [src/commands/logout.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/logout.ts)_
+_See code: [src/commands/logout.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/logout.ts)_
 
 ## `centia privilege get [SCHEMA] [TABLE]`
 
@@ -686,7 +686,7 @@ DESCRIPTION
   Get user privileges on table.
 ```
 
-_See code: [src/commands/privilege/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/privilege/get.ts)_
+_See code: [src/commands/privilege/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/privilege/get.ts)_
 
 ## `centia privilege set [SCHEMA] [TABLE] [USER] [PRIVILEGE]`
 
@@ -709,7 +709,7 @@ DESCRIPTION
   Set user privileges on table.
 ```
 
-_See code: [src/commands/privilege/set.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/privilege/set.ts)_
+_See code: [src/commands/privilege/set.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/privilege/set.ts)_
 
 ## `centia rule add`
 
@@ -736,7 +736,7 @@ DESCRIPTION
   Create a new rule.
 ```
 
-_See code: [src/commands/rule/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/rule/add.ts)_
+_See code: [src/commands/rule/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/rule/add.ts)_
 
 ## `centia rule drop [ID]`
 
@@ -756,7 +756,7 @@ DESCRIPTION
   Drop a rule.
 ```
 
-_See code: [src/commands/rule/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/rule/drop.ts)_
+_See code: [src/commands/rule/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/rule/drop.ts)_
 
 ## `centia rule get [ID]`
 
@@ -776,7 +776,7 @@ DESCRIPTION
   Get rule(s).
 ```
 
-_See code: [src/commands/rule/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/rule/get.ts)_
+_See code: [src/commands/rule/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/rule/get.ts)_
 
 ## `centia rule update [ID]`
 
@@ -806,7 +806,7 @@ DESCRIPTION
   Update a rule.
 ```
 
-_See code: [src/commands/rule/update.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/rule/update.ts)_
+_See code: [src/commands/rule/update.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/rule/update.ts)_
 
 ## `centia schema add [SCHEMA]`
 
@@ -826,7 +826,7 @@ DESCRIPTION
   Create a new schema.
 ```
 
-_See code: [src/commands/schema/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/schema/add.ts)_
+_See code: [src/commands/schema/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/schema/add.ts)_
 
 ## `centia schema drop [SCHEMA]`
 
@@ -846,7 +846,7 @@ DESCRIPTION
   Drop a schema.
 ```
 
-_See code: [src/commands/schema/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/schema/drop.ts)_
+_See code: [src/commands/schema/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/schema/drop.ts)_
 
 ## `centia schema get [SCHEMA]`
 
@@ -854,19 +854,20 @@ Get list of tables in schema.
 
 ```
 USAGE
-  $ centia schema get [SCHEMA] [-h]
+  $ centia schema get [SCHEMA] [-R] [-h]
 
 ARGUMENTS
   SCHEMA  Name of schema.
 
 FLAGS
+  -R, --raw   Print raw data.
   -h, --help  Show CLI help.
 
 DESCRIPTION
   Get list of tables in schema.
 ```
 
-_See code: [src/commands/schema/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/schema/get.ts)_
+_See code: [src/commands/schema/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/schema/get.ts)_
 
 ## `centia schema rename [SCHEMA] [NAME]`
 
@@ -887,7 +888,7 @@ DESCRIPTION
   Rename schema.
 ```
 
-_See code: [src/commands/schema/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/schema/rename.ts)_
+_See code: [src/commands/schema/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/schema/rename.ts)_
 
 ## `centia sql`
 
@@ -910,7 +911,7 @@ DESCRIPTION
   Run SQL statements. If run without --statement inactive mode will be enabled.
 ```
 
-_See code: [src/commands/sql.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/sql.ts)_
+_See code: [src/commands/sql.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/sql.ts)_
 
 ## `centia table add [SCHEMA] [TABLE]`
 
@@ -931,7 +932,7 @@ DESCRIPTION
   Create a new table.
 ```
 
-_See code: [src/commands/table/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/table/add.ts)_
+_See code: [src/commands/table/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/table/add.ts)_
 
 ## `centia table drop [SCHEMA] [TABLE]`
 
@@ -952,7 +953,7 @@ DESCRIPTION
   Drop a table.
 ```
 
-_See code: [src/commands/table/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/table/drop.ts)_
+_See code: [src/commands/table/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/table/drop.ts)_
 
 ## `centia table event [SCHEMA] [TABLE] [EVENT]`
 
@@ -974,7 +975,7 @@ DESCRIPTION
   Enable emitting of realtime events from tables.
 ```
 
-_See code: [src/commands/table/event.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/table/event.ts)_
+_See code: [src/commands/table/event.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/table/event.ts)_
 
 ## `centia table get [SCHEMA] [TABLE]`
 
@@ -995,7 +996,7 @@ DESCRIPTION
   Get table definition.
 ```
 
-_See code: [src/commands/table/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/table/get.ts)_
+_See code: [src/commands/table/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/table/get.ts)_
 
 ## `centia table move [SCHEMA] [TABLE] [DESTINATION]`
 
@@ -1017,7 +1018,7 @@ DESCRIPTION
   Move table to another schema.
 ```
 
-_See code: [src/commands/table/move.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/table/move.ts)_
+_See code: [src/commands/table/move.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/table/move.ts)_
 
 ## `centia table rename [SCHEMA] [TABLE] [NAME]`
 
@@ -1039,7 +1040,7 @@ DESCRIPTION
   Rename table.
 ```
 
-_See code: [src/commands/table/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/table/rename.ts)_
+_See code: [src/commands/table/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/table/rename.ts)_
 
 ## `centia user add [NAME]`
 
@@ -1064,7 +1065,7 @@ DESCRIPTION
   Create new user.
 ```
 
-_See code: [src/commands/user/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/user/add.ts)_
+_See code: [src/commands/user/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/user/add.ts)_
 
 ## `centia user drop [NAME]`
 
@@ -1084,7 +1085,7 @@ DESCRIPTION
   Drop existing user.
 ```
 
-_See code: [src/commands/user/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/user/drop.ts)_
+_See code: [src/commands/user/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/user/drop.ts)_
 
 ## `centia user get [ID]`
 
@@ -1104,7 +1105,7 @@ DESCRIPTION
   Get user(s).
 ```
 
-_See code: [src/commands/user/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/user/get.ts)_
+_See code: [src/commands/user/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/user/get.ts)_
 
 ## `centia user update [NAME]`
 
@@ -1129,7 +1130,7 @@ DESCRIPTION
   Update user.
 ```
 
-_See code: [src/commands/user/update.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.10.1/src/commands/user/update.ts)_
+_See code: [src/commands/user/update.ts](https://github.com/mapcentia/gc2-cli/blob/v2025.11.1/src/commands/user/update.ts)_
 <!-- commandsstop -->
 * [`centia client add [NAME]`](#centia-client-add-name)
 * [`centia client drop [ID]`](#centia-client-drop-id)
