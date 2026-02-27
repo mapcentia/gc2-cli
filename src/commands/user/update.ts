@@ -10,10 +10,9 @@ import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import Configstore from 'configstore'
 import User from '../../common/user'
-import get from '../../util/get-response'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 import {users} from '../../util/getters'
 import {groupList, userList} from '../../util/lists'
-import make from '../../util/make-request'
 import {passwordIsStrongEnough} from '../../util/utils'
 
 const config: Configstore = new Configstore('gc2-env')
@@ -75,18 +74,18 @@ export default class Update extends Command {
 
     const p: string | null = pwd === '' ? null : pwd
 
-    let body: any = {
-      email,
-      password: p,
-      properties: flags.properties,
-      default_user,
+    try {
+      const client = createCliCentiaAdminClient()
+      const response = await client.provisioning.users.patchUser(name, {
+        email,
+        password: p,
+        properties: flags.properties,
+        default_user,
+        user_group: userConfig.superUser ? group : undefined,
+      })
+      this.log(`User is here ${chalk.green(response.location)}`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
     }
-    if (userConfig.superUser) {
-      body.user_group = group
-    }
-
-    const response = await make('4', `users/${name}`, 'PATCH', body)
-    await get(response, 303)
-    this.log(`User is here ${chalk.green(response.headers.get('Location'))}`)
   }
 }

@@ -5,7 +5,7 @@
  *
  */
 
-import {Args, Command, Flags, ux} from '@oclif/core'
+import {Args, Command, Flags} from '@oclif/core'
 import cli from 'cli-ux'
 import {users} from '../../util/getters'
 

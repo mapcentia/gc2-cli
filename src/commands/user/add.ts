@@ -8,8 +8,7 @@
 import {input, password, confirm} from '@inquirer/prompts'
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
-import get from '../../util/get-response'
-import make from '../../util/make-request'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 import {passwordIsStrongEnough} from '../../util/utils'
 
 export default class Add extends Command {
@@ -39,15 +38,19 @@ export default class Add extends Command {
     const pwd = flags?.password || await password({message: 'Password', mask:true, validate: passwordIsStrongEnough})
     const email = flags?.email || await input({message: 'E-mail', required: true})
     const default_user = flags?.default_user || await confirm({message: 'Default user?', default: false})
-    const body = {
-      name,
-      email,
-      password: pwd,
-      properties: flags.properties,
-      default_user,
+
+    try {
+      const client = createCliCentiaAdminClient()
+      const response = await client.provisioning.users.postUser({
+        name,
+        email,
+        password: pwd,
+        properties: flags.properties,
+        default_user,
+      })
+      this.log(`User created here ${chalk.green(response.location)}`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
     }
-    const response = await make('4', `users`, 'POST', body)
-    await get(response, 201)
-    this.log(`User created here ${chalk.green(response.headers.get('Location'))}`)
   }
 }

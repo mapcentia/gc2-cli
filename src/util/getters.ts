@@ -40,14 +40,17 @@ type User = {
   default_user: boolean;
 }
 
-const users = async (id?: string): Promise<{ users: User[] }> => {
-  const res = id ? `users/${id}` : 'users'
-  const response = await make('4', res, 'GET')
-  let t: any = await get(response, 200);
-  if (!t?.users) {
-    t = {users: [t]}
+const users = async (id?: string) => {
+  try {
+    const client = createCliCentiaAdminClient()
+    const t: any = await client.provisioning.users.getUser(id)
+    if (!t?.users) {
+      return {users: Array.isArray(t) ? t : [t]}
+    }
+    return t
+  } catch (error) {
+    logCentiaErrorAndExit(error)
   }
-  return t
 }
 
 const rules = async (id?: string) => {
