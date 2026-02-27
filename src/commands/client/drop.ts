@@ -6,10 +6,9 @@
  */
 
 import {confirm} from '@inquirer/prompts'
-import {Args, Command, Flags, ux, ux as cli} from '@oclif/core'
-import get from '../../util/get-response'
+import {Args, Command, Flags} from '@oclif/core'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 import {clientList} from '../../util/lists'
-import make from '../../util/make-request'
 
 export default class Drop extends Command {
   static description = 'Drop a client.'
@@ -31,8 +30,12 @@ export default class Drop extends Command {
     if (!await confirm({message: '⚠️ The client will be deleted. Are you sure', default: false})) {
       this.exit();
     }
-    const response = await make('4', `clients/${id}`, 'DELETE')
-    await get(response, 204)
-    this.log(`Client is dropped.`)
+    try {
+      const client = createCliCentiaAdminClient()
+      await client.provisioning.clients.deleteClient(id)
+      this.log(`Client is dropped.`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }

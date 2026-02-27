@@ -28,6 +28,7 @@ export default class Get extends Command {
   async run() {
     let {args} = await this.parse(Get)
     let res = await clients(args?.id)
+
     type row = {
       [key: string]: any
     }

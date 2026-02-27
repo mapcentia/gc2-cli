@@ -22,14 +22,17 @@ type Client = {
   social_signup: boolean
 }
 
-const clients = async (id?: string): Promise<{ clients: Client[] }> => {
-  const res = id ? `clients/${id}` : 'clients'
-  const response = await make('4', res, 'GET')
-  let t = await get(response, 200)
-  if (!t?.clients) {
-    t = {clients: [t]};
+const clients = async (id?: string) => {
+  try {
+    const client = createCliCentiaAdminClient()
+    const t: any = await client.provisioning.clients.getClient(id)
+    if (!t?.clients) {
+      return {clients: Array.isArray(t) ? t : [t]}
+    }
+    return t
+  } catch (error) {
+    logCentiaErrorAndExit(error)
   }
-  return t;
 }
 
 type User = {
