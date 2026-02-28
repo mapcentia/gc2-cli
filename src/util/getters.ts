@@ -5,8 +5,6 @@
  *
  */
 
-import get from './get-response'
-import make from './make-request'
 import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../centiaClient'
 
 type Client = {
@@ -57,13 +55,16 @@ const users = async (id?: string) => {
 }
 
 const rules = async (id?: string) => {
-  const res = id ? `rules/${id}` : 'rules'
-  const response = await make('4', res, 'GET')
-  const t: any = await get(response, 200);
-  if (!t?.rules) {
-    t.rules = [t]
+  try {
+    const client = createCliCentiaAdminClient()
+    const t: any = await client.provisioning.rules.getRule(id != null ? Number(id) : undefined)
+    if (!t?.rules) {
+      return {rules: Array.isArray(t) ? t : [t]}
+    }
+    return t
+  } catch (error) {
+    logCentiaErrorAndExit(error)
   }
-  return t
 }
 
 const schemas = async (id?: string, namesOnly: boolean = true) => {
@@ -93,13 +94,16 @@ const tables = async (schema: string, table?: string) => {
 }
 
 const privileges = async (schema: string, table: string) => {
-  const res = `schemas/${schema}/tables/${table}/privileges`
-  const response = await make('4', res, 'GET')
-  const t = await get(response, 200, true);
-  if (!t?.privileges) {
-    t.privileges = [t]
+  try {
+    const client = createCliCentiaAdminClient()
+    const t: any = await client.provisioning.privileges.getPrivileges(schema, table)
+    if (!t?.privileges) {
+      return {privileges: Array.isArray(t) ? t : [t]}
+    }
+    return t
+  } catch (error) {
+    logCentiaErrorAndExit(error)
   }
-  return t
 }
 
 export {clients, rules, schemas, tables, users, privileges}
