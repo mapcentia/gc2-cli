@@ -59,8 +59,7 @@ export default class Update extends Command {
     } else {
       name = userConfig.user
     }
-    const userResult = await users(name)
-    const user = userResult.users[0]
+    const user: any = await users(name)
     const pwd = flags?.password || await password({
       message: 'Password',
       mask: true,

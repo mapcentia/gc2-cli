@@ -7,48 +7,23 @@
 
 import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../centiaClient'
 
-type Client = {
-  id: string
-  name: string
-  description: string
-  redirect_uri: string[]
-  homepage: string
-  public: boolean
-  confirm: boolean
-  two_factor: boolean
-  allow_signup: boolean
-  social_signup: boolean
-}
-
 const clients = async (id?: string) => {
   try {
     const client = createCliCentiaAdminClient()
-    const t: any = await client.provisioning.clients.getClient(id)
-    if (!t?.clients) {
-      return {clients: Array.isArray(t) ? t : [t]}
-    }
-    return t
+    return id
+      ? await client.provisioning.clients.getClient(id)
+      : await client.provisioning.clients.getClient()
   } catch (error) {
     logCentiaErrorAndExit(error)
   }
 }
 
-type User = {
-  name: string;
-  user_group?: string;
-  email: string;
-  properties: string;
-  default_user: boolean;
-}
-
 const users = async (id?: string) => {
   try {
     const client = createCliCentiaAdminClient()
-    const t: any = await client.provisioning.users.getUser(id)
-    if (!t?.users) {
-      return {users: Array.isArray(t) ? t : [t]}
-    }
-    return t
+    return id
+      ? await client.provisioning.users.getUser(id)
+      : await client.provisioning.users.getUser()
   } catch (error) {
     logCentiaErrorAndExit(error)
   }
@@ -57,11 +32,9 @@ const users = async (id?: string) => {
 const rules = async (id?: string) => {
   try {
     const client = createCliCentiaAdminClient()
-    const t: any = await client.provisioning.rules.getRule(id != null ? Number(id) : undefined)
-    if (!t?.rules) {
-      return {rules: Array.isArray(t) ? t : [t]}
-    }
-    return t
+    return id != null
+      ? await client.provisioning.rules.getRule(Number(id))
+      : await client.provisioning.rules.getRule()
   } catch (error) {
     logCentiaErrorAndExit(error)
   }
@@ -70,11 +43,9 @@ const rules = async (id?: string) => {
 const schemas = async (id?: string, namesOnly: boolean = true) => {
   try {
     const client = createCliCentiaAdminClient()
-    const t: any = await client.provisioning.schemas.getSchema(id, {namesOnly})
-    if (!t?.schemas) {
-      t.schemas = [t]
-    }
-    return t
+    return id
+      ? await client.provisioning.schemas.getSchema(id, {namesOnly})
+      : await client.provisioning.schemas.getSchema(undefined, {namesOnly})
   } catch (error) {
     logCentiaErrorAndExit(error)
   }
@@ -83,11 +54,9 @@ const schemas = async (id?: string, namesOnly: boolean = true) => {
 const tables = async (schema: string, table?: string) => {
   try {
     const client = createCliCentiaAdminClient()
-    const t: any = await client.provisioning.tables.getTable(schema, table)
-    if (!t?.tables) {
-      t.tables = [t]
-    }
-    return t
+    return table
+      ? await client.provisioning.tables.getTable(schema, table)
+      : await client.provisioning.tables.getTable(schema)
   } catch (error) {
     logCentiaErrorAndExit(error)
   }
@@ -96,11 +65,7 @@ const tables = async (schema: string, table?: string) => {
 const privileges = async (schema: string, table: string) => {
   try {
     const client = createCliCentiaAdminClient()
-    const t: any = await client.provisioning.privileges.getPrivileges(schema, table)
-    if (!t?.privileges) {
-      return {privileges: Array.isArray(t) ? t : [t]}
-    }
-    return t
+    return await client.provisioning.privileges.getPrivileges(schema, table)
   } catch (error) {
     logCentiaErrorAndExit(error)
   }

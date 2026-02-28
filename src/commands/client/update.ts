@@ -44,8 +44,7 @@ export default class Update extends Command {
     const {args} = await this.parse(Update)
     const {flags} = await this.parse(Update)
     let id = args?.id || await clientList()
-    const clientResult = await clients(id)
-    const existingClient = clientResult.clients[0]
+    const existingClient: any = await clients(id)
 
     const name = flags?.name || await input({message: 'Name', required: false, default: existingClient.name})
     const description = flags?.description || await input({

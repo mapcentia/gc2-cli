@@ -45,7 +45,7 @@ export default class Nullable extends Command {
     const table = args?.table || await tableList(schema)
     const column = args?.column || await columnList(schema, table)
 
-    const res = await tables(schema, table)
+    const res: any = await tables(schema, table)
     const c = res.columns.filter((e: { name: any }) => e.name === column)[0]
 
     const nullable = args?.nullable || (await select({

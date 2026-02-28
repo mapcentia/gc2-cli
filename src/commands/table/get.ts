@@ -30,7 +30,7 @@ export default class Get extends Command {
     args = setSchema(args)
     const schema = args?.schema || await schemasList()
     const table = args?.table || await tableList(schema)
-    const res = await tables(schema, table)
+    const res: any = await tables(schema, table)
 
     type columns = {
       [key: string]: any
