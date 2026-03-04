@@ -8,8 +8,7 @@
 import {input, confirm} from '@inquirer/prompts'
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
-import get from '../../util/get-response'
-import make from '../../util/make-request'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 export default class Add extends Command {
   static description = 'Create new client.'
@@ -52,7 +51,7 @@ export default class Add extends Command {
     })
     const homepage = flags?.homepage || await input({message: 'homepage', required: false})
 
-    let redirect_uri = null
+    let redirect_uri: string[] | undefined
     if (redirect_uri_str) {
       redirect_uri = redirect_uri_str.split(',').map((e: string) => e.trim())
     }
@@ -62,20 +61,23 @@ export default class Add extends Command {
     const allow_signup = flags?.allow_signup || await confirm({message: 'Allow users to signup', default: false})
     const social_signup = flags?.social_signup || await confirm({message: 'Enable social signup', default: false})
 
-    let payload: any = {}
-    payload.name = name
-    payload.public = _public
-    payload._confirm = _confirm
-    payload.two_factor = two_factor
-    payload.allow_signup = allow_signup
-    payload.social_signup = social_signup
-    if (id) payload.id = id
-    if (description) payload.description = description
-    if (redirect_uri) payload.redirect_uri = redirect_uri
-    if (homepage) payload.homepage = homepage
-
-    const response = await make('4', `clients`, 'POST', payload)
-    const data = await get(response, 201)
-    this.log(`Client created with here ${chalk.green(response.headers.get('Location'))}\nsecret ${chalk.green(data.secret)}\nThis secret will can not be retrieved, so please keep it save.`)
+    try {
+      const client = createCliCentiaAdminClient()
+      const response = await client.provisioning.clients.postClient({
+        name,
+        id: id || undefined,
+        description: description || undefined,
+        redirect_uri,
+        homepage: homepage || undefined,
+        public: _public,
+        confirm: _confirm,
+        two_factor,
+        allow_signup,
+        social_signup,
+      })
+      this.log(`Client created with here ${chalk.green(response.location)}\nsecret ${chalk.green(response.secret)}\nThis secret will can not be retrieved, so please keep it save.`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }

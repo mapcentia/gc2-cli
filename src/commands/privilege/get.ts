@@ -31,7 +31,7 @@ export default class Get extends Command {
     const table = args?.table || await tableList(schema)
     const res = await privileges(schema, table)
 
-    if (Object.keys(res.privileges).length === 0) {
+    if (!res || res.length === 0) {
       ux.log(`⚠️ No privilege set yet`)
       this.exit(1)
     }
@@ -46,8 +46,7 @@ export default class Get extends Command {
     }
     const data: object[] = []
     const rows: row = {subuser: {}, privilege: {}, group: {}}
-    for (const c in res.privileges) {
-      const v: user = res.privileges[c]
+    for (const v of res as any[]) {
       data.push({
         subuser: v.subuser,
         privilege: v.privilege,

@@ -9,10 +9,9 @@ import {confirm} from '@inquirer/prompts'
 import {Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import args from '../../common/base_args'
-import get from '../../util/get-response'
 import {schemasList, tableList} from '../../util/lists'
-import make from '../../util/make-request'
 import setSchema from '../../util/set-schema'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 let base_args = args
 let specific_args = {}
@@ -34,8 +33,12 @@ export default class Drop extends Command {
       this.exit();
     }
 
-    const response = await make('4', `schemas/${schema}/tables/${table}`, 'DELETE', null)
-    await get(response, 204)
-    this.log(`Table ${chalk.green(table)} dropped`)
+    try {
+      const client = createCliCentiaAdminClient()
+      await client.provisioning.tables.deleteTable(schema, table)
+      this.log(`Table ${chalk.green(table)} dropped`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }

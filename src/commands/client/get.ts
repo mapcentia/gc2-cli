@@ -27,15 +27,16 @@ export default class Get extends Command {
 
   async run() {
     let {args} = await this.parse(Get)
-    let res = await clients(args?.id)
+    const res = await clients(args?.id)
+    const items: any[] = Array.isArray(res) ? res : [res]
+
     type row = {
       [key: string]: any
     }
 
     const data: object[] = []
     const rows: row = {id: {}, name: {}, homepage: {}, description: {}, redirect_uri: {}, public: {}, confirm: {}, two_factor: {}, allow_signup: {}, social_signup: {}}
-    for (const c in res.clients) {
-      const v = res.clients[c]
+    for (const v of items) {
       data.push({
         id: v.id,
         name: v.name,

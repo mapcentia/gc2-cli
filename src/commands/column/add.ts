@@ -9,10 +9,9 @@ import {input} from '@inquirer/prompts'
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import args from '../../common/base_args'
-import get from '../../util/get-response'
 import {schemasList, tableList, typeList} from '../../util/lists'
-import make from '../../util/make-request'
 import setSchema from '../../util/set-schema'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 let base_args = args
 let specific_args = {
@@ -46,12 +45,12 @@ export default class Add extends Command {
     const name = args?.column || await input({message: 'Name', required: true})
     const type = args?.type || await typeList()
 
-    const body = {
-      name,
-      type,
+    try {
+      const client = createCliCentiaAdminClient()
+      const response = await client.provisioning.columns.postColumn(schema, table, {name, type})
+      this.log(`Column created here: ${chalk.green(response.location)}`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
     }
-    const response = await make('4', `schemas/${schema}/tables/${table}/columns`, 'POST', body)
-    await get(response, 201)
-    this.log(`Column created here: ${chalk.green(response.headers.get('Location'))}`)
   }
 }

@@ -44,7 +44,7 @@ export default class Update extends Command {
     let {args, flags} = await this.parse(Update)
 
     const id = args?.id || await ruleList()
-    const rule = await rules(id)
+    const rule: any = await rules(id)
 
     // Interactive
     const priority = flags?.priority || parseInt(await input({message: 'Priority', required: true, validate: async (input) => {

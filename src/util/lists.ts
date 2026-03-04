@@ -15,7 +15,7 @@ const schemasList = async (message: string = 'Choose a schema') => {
   let r: string = await select({
     message,
     default: null,
-    choices: s.schemas.map((v: { name: string }) => {
+    choices: s.map((v: { name: string }) => {
       return {value: v.name}
     })
   })
@@ -27,7 +27,7 @@ const tableList = async (schema: string) => {
   let r: string = await select({
     message: 'Choose a table',
     default: null,
-    choices: s.tables.map((v: { name: string }) => {
+    choices: s.map((v: { name: string }) => {
       return {value: v.name.split('.').reverse()[0]}
     })
   })
@@ -103,14 +103,14 @@ const constraintList = async (schema: string, table: string) => {
 
 const clientList = async () => {
   const s: any = await clients()
-  if (s.clients.length < 1) {
+  if (s.length < 1) {
     ux.log(`⚠️ No clients yet`)
     exit(0)
   }
   let r: any = await select({
     message: 'Choose a client',
     default: null,
-    choices: s.clients.map((v: { id: string, name: string }) => {
+    choices: s.map((v: { id: string, name: string }) => {
       return {value: v.id + ' ' + v.name}
     })
   })
@@ -119,14 +119,14 @@ const clientList = async () => {
 
 const ruleList = async () => {
   const s: any = await rules()
-  if (s.rules.length < 1) {
+  if (s.length < 1) {
     ux.log(`⚠️ No rules yet`)
     exit(0)
   }
   let r: string = await select({
     message: 'Choose a rule',
     default: null,
-    choices: s.rules.map((v: { id: string }) => {
+    choices: s.map((v: { id: string }) => {
       return {value: v.id}
     })
   })
@@ -190,7 +190,7 @@ const userList = async (defaultValue?: string) => {
   let r: string = await select({
     message: 'Choose a user',
     default: defaultValue,
-    choices: s.users.map((v: {
+    choices: s.map((v: {
       default_user: string;
       name: string }) => {
       return {value: v.name, name: `${v.name} (default user: ${v.default_user})`}
@@ -204,7 +204,7 @@ const groupList = async (exclude: string, defaultValue?: string) => {
   let r: string = await select({
     message: 'Choose a group',
     default: defaultValue || '',
-    choices: [{value: '', name: 'None'}, ...s.users.filter((e: { name: string }) => e.name !== exclude).map((v: {
+    choices: [{value: '', name: 'None'}, ...s.filter((e: { name: string }) => e.name !== exclude).map((v: {
       name: string
     }) => {
       return {value: v.name}

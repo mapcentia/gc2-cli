@@ -8,10 +8,9 @@
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import args from '../../common/base_args'
-import get from '../../util/get-response'
 import {constraintList, schemasList, tableList} from '../../util/lists'
-import make from '../../util/make-request'
 import setSchema from '../../util/set-schema'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 let base_args = args
 let specific_args = {
@@ -37,8 +36,12 @@ export default class Drop extends Command {
     const table = args?.table || await tableList(schema)
     const name = args?.name || await constraintList(schema, table)
 
-    const response = await make('4', `schemas/${schema}/tables/${table}/constraints/${name}`, 'DELETE', null)
-    await get(response, 204)
-    this.log(`Dropped constraint ${name} on ${chalk.green(table)}`)
+    try {
+      const client = createCliCentiaAdminClient()
+      await client.provisioning.constraints.deleteConstraint(schema, table, name)
+      this.log(`Dropped constraint ${name} on ${chalk.green(table)}`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }

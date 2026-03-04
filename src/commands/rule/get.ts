@@ -26,10 +26,8 @@ export default class Get extends Command {
   static args = {...specific_args}
   async run() {
     let {args} = await this.parse(Get)
-    let res = await rules(args?.id)
-    if (args?.id) {
-      res = {rules: [res]};
-    }
+    const res = await rules(args?.id)
+    const items: any[] = Array.isArray(res) ? res : [res]
     type row = {
       [key: string]: any
     }
@@ -48,8 +46,7 @@ export default class Get extends Command {
     const data: object[] = []
     const rows: row = {id: {}, priority: {}, username: {} , service: {}, request: {},
       schema: {}, table: {}, iprange: {}, access: {}, filter: {}}
-    for (const c in res.rules) {
-      const v: rule = res.rules[c]
+    for (const v of items) {
       data.push({
         id: v.id,
         priority: v.priority,

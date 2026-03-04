@@ -5,12 +5,11 @@
  *
  */
 
-import {Args, Command, Flags, ux as cli, ux} from '@oclif/core'
+import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
-import get from '../../util/get-response'
 import {schemasList} from '../../util/lists'
-import make from '../../util/make-request'
 import {confirm} from '@inquirer/prompts'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 export default class Drop extends Command {
   static description = 'Drop a schema.'
@@ -31,8 +30,12 @@ export default class Drop extends Command {
     if (!await confirm({message: '⚠️ The whole schema will be deleted. Are you sure', default: false})) {
       this.exit();
     }
-    const response = await make('4', `schemas/${schema}`, 'DELETE', null)
-    await get(response, 204)
-    this.log(`Schema ${chalk.green(schema)} dropped.`)
+    try {
+      const client = createCliCentiaAdminClient()
+      await client.provisioning.schemas.deleteSchema(schema)
+      this.log(`Schema ${chalk.green(schema)} dropped.`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }

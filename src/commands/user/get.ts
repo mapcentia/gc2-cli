@@ -5,7 +5,7 @@
  *
  */
 
-import {Args, Command, Flags, ux} from '@oclif/core'
+import {Args, Command, Flags} from '@oclif/core'
 import cli from 'cli-ux'
 import {users} from '../../util/getters'
 
@@ -27,7 +27,8 @@ export default class Get extends Command {
 
   async run() {
     let {args} = await this.parse(Get)
-    let res = await users(args?.id)
+    const res = await users(args?.id)
+    const items: any[] = Array.isArray(res) ? res : [res]
 
     type row = {
       [key: string]: any
@@ -35,8 +36,7 @@ export default class Get extends Command {
 
     const data: object[] = []
     const rows: row = {name: {}, user_group: {}, email: {}, default_user: {}}
-    for (const c in res.users) {
-      const v = res.users[c]
+    for (const v of items) {
       data.push({
         name: v.name,
         user_group: v.user_group || '',

@@ -6,12 +6,11 @@
  */
 
 import {input, confirm} from '@inquirer/prompts'
-import {Args, Command, Flags, ux as cli} from '@oclif/core'
+import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
-import get from '../../util/get-response'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 import {clients} from '../../util/getters'
 import {clientList} from '../../util/lists'
-import make from '../../util/make-request'
 
 export default class Update extends Command {
   static description = 'Update a client.'
@@ -45,43 +44,47 @@ export default class Update extends Command {
     const {args} = await this.parse(Update)
     const {flags} = await this.parse(Update)
     let id = args?.id || await clientList()
-    const clientResult = await clients(id)
-    const client = clientResult.clients[0]
+    const existingClient: any = await clients(id)
 
-    const name = flags?.name || await input({message: 'Name', required: false, default: client.name})
+    const name = flags?.name || await input({message: 'Name', required: false, default: existingClient.name})
     const description = flags?.description || await input({
       message: 'Description',
       required: true,
-      default: client.description
+      default: existingClient.description
     })
     const redirect_uri_str = flags?.redirect_uri || await input({
       message: 'Redirect uri (comma separated)',
       required: true,
-      default: client.redirect_uri?.join(',')
+      default: existingClient.redirect_uri?.join(',')
     })
-    const homepage = flags?.homepage || await input({message: 'homepage', required: false, default: client.homepage})
+    const homepage = flags?.homepage || await input({message: 'homepage', required: false, default: existingClient.homepage})
 
-    let redirect_uri = null
+    let redirect_uri: string[] | undefined
     if (redirect_uri_str) {
       redirect_uri = redirect_uri_str.split(',').map((e: string) => e.trim())
     }
-    const _public = flags?.public || await confirm({message: 'Public client?', default: client.public})
-    const _confirm = flags?.confirm || await confirm({message: 'Confirm token exchange?', default: client.confirm})
-    const two_factor = flags?.two_factor || await confirm({message: 'Enable two factor authentication', default: client.two_factor})
-    const allow_signup = flags?.allow_signup || await confirm({message: 'Allow users to sign up', default: client.allow_signup})
-    const social_signup = flags?.social_signup || await confirm({message: 'Enable users to sign up with social login', default: client.social_signup})
-    const response = await make('4', `clients/${id}`, 'PATCH', {
-      name,
-      description,
-      redirect_uri,
-      homepage,
-      public: _public,
-      confirm: _confirm,
-      two_factor,
-      allow_signup,
-      social_signup,
-    })
-    await get(response, 303)
-    this.log(`Client is here ${chalk.green(response.headers.get('Location'))}`)
+    const _public = flags?.public || await confirm({message: 'Public client?', default: existingClient.public})
+    const _confirm = flags?.confirm || await confirm({message: 'Confirm token exchange?', default: existingClient.confirm})
+    const two_factor = flags?.two_factor || await confirm({message: 'Enable two factor authentication', default: existingClient.two_factor})
+    const allow_signup = flags?.allow_signup || await confirm({message: 'Allow users to sign up', default: existingClient.allow_signup})
+    const social_signup = flags?.social_signup || await confirm({message: 'Enable users to sign up with social login', default: existingClient.social_signup})
+
+    try {
+      const client = createCliCentiaAdminClient()
+      const response = await client.provisioning.clients.patchClient(id, {
+        name,
+        description,
+        redirect_uri,
+        homepage,
+        public: _public,
+        confirm: _confirm,
+        two_factor,
+        allow_signup,
+        social_signup,
+      })
+      this.log(`Client is here ${chalk.green(response.location)}`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }

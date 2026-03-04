@@ -5,15 +5,13 @@
  *
  */
 
-import {checkbox} from '@inquirer/prompts'
-import {Args, Command, Flags, ux as cli} from '@oclif/core'
+import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import args from '../../common/base_args'
-import get from '../../util/get-response'
 import {schemasList, tableList} from '../../util/lists'
-import make from '../../util/make-request'
 import setSchema from '../../util/set-schema'
 import {confirm} from '@inquirer/prompts'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 
 let base_args = args
@@ -39,8 +37,12 @@ export default class Event extends Command {
     const schema: string = args?.schema || await schemasList()
     const table: string = args?.table || await tableList(schema)
     const event: boolean = args.event !== undefined ? args.event : await confirm({message: 'Emit events', default: true})
-    const response = await make('4', `schemas/${schema}/tables/${table}`, 'PATCH', {emit_events: event})
-    await get(response, 303)
-    this.log(`Table relocated to here ${chalk.green(response.headers.get('Location'))}`)
+    try {
+      const client = createCliCentiaAdminClient()
+      const response = await client.provisioning.tables.patchTable(schema, table, {emit_events: event})
+      this.log(`Table relocated to here ${chalk.green(response.location)}`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }

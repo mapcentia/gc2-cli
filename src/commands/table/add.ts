@@ -6,13 +6,12 @@
  */
 
 import {input} from '@inquirer/prompts'
-import {Command, Flags, ux as cli} from '@oclif/core'
+import {Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import args from '../../common/base_args'
-import get from '../../util/get-response'
 import {schemasList} from '../../util/lists'
-import make from '../../util/make-request'
 import setSchema from '../../util/set-schema'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 let base_args = args
 let specific_args = {}
@@ -32,8 +31,12 @@ export default class Add extends Command {
     const schema = args?.schema || await schemasList()
     const name = args?.table || await input({message: 'Table', required: true})
 
-    const response = await make('4', `schemas/${schema}/tables`, 'POST', {name})
-    await get(response, 201)
-    this.log(`Table created here ${chalk.green(response.headers.get('Location'))}`)
+    try {
+      const client = createCliCentiaAdminClient()
+      const response = await client.provisioning.tables.postTable(schema, {name})
+      this.log(`Table created here ${chalk.green(response.location)}`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }

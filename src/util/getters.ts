@@ -5,88 +5,70 @@
  *
  */
 
-import get from './get-response'
-import make from './make-request'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../centiaClient'
 
-type Client = {
-  id: string
-  name: string
-  description: string
-  redirect_uri: string[]
-  homepage: string
-  public: boolean
-  confirm: boolean
-  two_factor: boolean
-  allow_signup: boolean
-  social_signup: boolean
-}
-
-const clients = async (id?: string): Promise<{ clients: Client[] }> => {
-  const res = id ? `clients/${id}` : 'clients'
-  const response = await make('4', res, 'GET')
-  let t = await get(response, 200)
-  if (!t?.clients) {
-    t = {clients: [t]};
+const clients = async (id?: string) => {
+  try {
+    const client = createCliCentiaAdminClient()
+    return id
+      ? await client.provisioning.clients.getClient(id)
+      : await client.provisioning.clients.getClient()
+  } catch (error) {
+    logCentiaErrorAndExit(error)
   }
-  return t;
 }
 
-type User = {
-  name: string;
-  user_group?: string;
-  email: string;
-  properties: string;
-  default_user: boolean;
-}
-
-const users = async (id?: string): Promise<{ users: User[] }> => {
-  const res = id ? `users/${id}` : 'users'
-  const response = await make('4', res, 'GET')
-  let t: any = await get(response, 200);
-  if (!t?.users) {
-    t = {users: [t]}
+const users = async (id?: string) => {
+  try {
+    const client = createCliCentiaAdminClient()
+    return id
+      ? await client.provisioning.users.getUser(id)
+      : await client.provisioning.users.getUser()
+  } catch (error) {
+    logCentiaErrorAndExit(error)
   }
-  return t
 }
 
 const rules = async (id?: string) => {
-  const res = id ? `rules/${id}` : 'rules'
-  const response = await make('4', res, 'GET')
-  const t: any = await get(response, 200);
-  if (!t?.rules) {
-    t.rules = [t]
+  try {
+    const client = createCliCentiaAdminClient()
+    return id != null
+      ? await client.provisioning.rules.getRule(Number(id))
+      : await client.provisioning.rules.getRule()
+  } catch (error) {
+    logCentiaErrorAndExit(error)
   }
-  return t
 }
 
 const schemas = async (id?: string, namesOnly: boolean = true) => {
-  const res = (id ? `schemas/${id}` : 'schemas') + (namesOnly ? '?namesOnly' : '')
-  const response = await make('4', res, 'GET')
-  const t: any = await get(response, 200);
-  if (!t?.schemas) {
-    t.schemas = [t]
+  try {
+    const client = createCliCentiaAdminClient()
+    return id
+      ? await client.provisioning.schemas.getSchema(id, {namesOnly})
+      : await client.provisioning.schemas.getSchema(undefined, {namesOnly})
+  } catch (error) {
+    logCentiaErrorAndExit(error)
   }
-  return t
 }
 
 const tables = async (schema: string, table?: string) => {
-  const res = table ? `schemas/${schema}/tables/${table}?namesOnly` : `schemas/${schema}/tables?namesOnly`
-  const response = await make('4', res, 'GET')
-  const t = await get(response, 200);
-  if (!t?.tables) {
-    t.tables = [t]
+  try {
+    const client = createCliCentiaAdminClient()
+    return table
+      ? await client.provisioning.tables.getTable(schema, table)
+      : await client.provisioning.tables.getTable(schema)
+  } catch (error) {
+    logCentiaErrorAndExit(error)
   }
-  return t
 }
 
 const privileges = async (schema: string, table: string) => {
-  const res = `schemas/${schema}/tables/${table}/privileges`
-  const response = await make('4', res, 'GET')
-  const t = await get(response, 200, true);
-  if (!t?.privileges) {
-    t.privileges = [t]
+  try {
+    const client = createCliCentiaAdminClient()
+    return await client.provisioning.privileges.getPrivileges(schema, table)
+  } catch (error) {
+    logCentiaErrorAndExit(error)
   }
-  return t
 }
 
 export {clients, rules, schemas, tables, users, privileges}

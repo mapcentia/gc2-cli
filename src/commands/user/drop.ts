@@ -8,9 +8,8 @@
 import {confirm} from '@inquirer/prompts'
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
-import get from '../../util/get-response'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 import {userList} from '../../util/lists'
-import make from '../../util/make-request'
 
 export default class Drop extends Command {
   static description = 'Drop existing user.'
@@ -31,8 +30,12 @@ export default class Drop extends Command {
     if (!await confirm({message: '⚠️ The user will be deleted. Are you sure', default: false})) {
       this.exit();
     }
-    const response = await make('4', `users/${name}`, 'DELETE', null)
-    await get(response, 204)
-    this.log(`User ${chalk.green(name)} dropped.`)
+    try {
+      const client = createCliCentiaAdminClient()
+      await client.provisioning.users.deleteUser(name)
+      this.log(`User ${chalk.green(name)} dropped.`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }

@@ -30,8 +30,8 @@ export default class Get extends Command {
     const {args} = await this.parse(Get)
     let {flags} = await this.parse(Get)
     let schema = args?.schema || await schemasList()
-    const res = await schemas(schema, false)
-    if (res.tables.length < 1) {
+    const res: any = await schemas(schema, false)
+    if (!res?.tables || res.tables.length < 1) {
       ux.log(`⚠️ No tables found for schema ${schema}`)
       exit(0)
     }
