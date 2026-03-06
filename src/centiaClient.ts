@@ -1,15 +1,21 @@
 import Configstore from 'configstore'
-import {createCentiaAdminClient, isCentiaApiError} from '@centia-io/sdk'
+import {CodeFlow, createCentiaAdminClient, isCentiaApiError} from '@centia-io/sdk'
 import type {CentiaAdminClient} from '@centia-io/sdk'
 import {exit} from '@oclif/core/lib/errors'
 import {logToStderr} from '@oclif/core/lib/cli-ux'
 import User from './common/user'
-import {GC2_SERVER_ADDRESS, isTokenExpired, noLogin} from './util/utils'
-import {Gc2Service} from './services/gc2.service'
+import {CLI_SERVER_ADDRESS_CALLBACK, GC2_SERVER_ADDRESS, isTokenExpired, noLogin} from './util/utils'
 
 const config: Configstore = new Configstore('gc2-env')
 
 const getUser = (): User => config.all as User
+
+export const createAuthService = () =>
+  new CodeFlow({
+    host: GC2_SERVER_ADDRESS,
+    clientId: 'gc2-cli',
+    redirectUri: CLI_SERVER_ADDRESS_CALLBACK,
+  }).service
 
 const getAccessToken = async (): Promise<string | undefined> => {
   const user = getUser()
@@ -25,7 +31,7 @@ const getAccessToken = async (): Promise<string | undefined> => {
     }
 
     try {
-      const service = new Gc2Service()
+      const service = createAuthService()
       const data = await service.getRefreshToken(user.refresh_token)
       config.set({token: data.access_token})
       return data.access_token

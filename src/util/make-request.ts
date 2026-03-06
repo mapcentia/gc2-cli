@@ -14,7 +14,7 @@ import getHeaders from './request-headers'
 import Method from '../common/http-verbs'
 import User from '../common/user'
 import {isTokenExpired, noLogin, GC2_SERVER_ADDRESS} from './utils'
-import {Gc2Service} from '../services/gc2.service'
+import {createAuthService} from '../centiaClient'
 
 const make = async (version: string, resource: string, method: Method, payload?: any, checkConnection: boolean = true, contentType: string | null = 'application/json', host: string | null = null): Promise<any> => {
   const config: Configstore = new Configstore('gc2-env')
@@ -29,9 +29,9 @@ const make = async (version: string, resource: string, method: Method, payload?:
       logToStderr('⚠️ Refresh token has expired. Please login again')
       exit(1)
     }
-    const keycloakService = new Gc2Service()
+    const authService = createAuthService()
     try {
-      const data = await keycloakService.getRefreshToken(user.refresh_token)
+      const data = await authService.getRefreshToken(user.refresh_token)
       config.set({token: data.access_token})
       headers.Authorization = 'Bearer ' + data.access_token
     } catch (e) {

@@ -15,10 +15,11 @@ import * as http from 'http'
 import * as querystring from 'querystring'
 
 import User from '../common/user'
-import {Gc2Service} from '../services/gc2.service'
+import {PasswordFlow} from '@centia-io/sdk'
+import {createAuthService} from '../centiaClient'
 import get from '../util/get-response'
 import make from '../util/make-request'
-import {CLI_SERVER_ADDRESS, CLI_SERVER_ADDRESS_CALLBACK, generatePkceChallenge, waitFor,} from '../util/utils'
+import {CLI_SERVER_ADDRESS, CLI_SERVER_ADDRESS_CALLBACK, GC2_SERVER_ADDRESS, generatePkceChallenge, waitFor,} from '../util/utils'
 import EventEmitter = require('events')
 
 type AuthoricationCodeCallbackParams = {
@@ -119,9 +120,15 @@ export default class Login extends Command {
     cli.action.stop(chalk.green('success'))
   }
 
-  private async startPasswordFlow(user: string, password: string, database: string): Promise<any> {
-    const keycloakService = new Gc2Service()
-    const {access_token, refresh_token} = await keycloakService.getPasswordToken(user, password, database)
+  private async startPasswordFlow(user: string, pwd: string, database: string): Promise<any> {
+    const service = new PasswordFlow({
+      host: GC2_SERVER_ADDRESS,
+      clientId: 'gc2-cli',
+      username: user,
+      password: pwd,
+      database,
+    }).service
+    const {access_token, refresh_token} = await service.getPasswordToken()
     return {
       access_token: access_token,
       refresh_token: refresh_token,
@@ -129,13 +136,13 @@ export default class Login extends Command {
   }
 
   private async startAuthorizationCodeFlow(): Promise<any> {
-    const keycloakService = new Gc2Service()
+    const authService = createAuthService()
     const {codeVerifier, codeChallenge, state} = generatePkceChallenge()
     const port = CLI_SERVER_ADDRESS.split(':').pop()
     const callbackPath = CLI_SERVER_ADDRESS_CALLBACK.split(':')[2].replace(
       port!, '',
     )
-    const authorizationCodeURL = keycloakService.getAuthorizationCodeURL(
+    const authorizationCodeURL = authService.getAuthorizationCodeURL(
       codeChallenge,
       state,
     )
@@ -163,7 +170,7 @@ export default class Login extends Command {
     if (stateFromParams !== state) {
       throw new Error('Possible CSRF attack. Aborting login! ⚠️')
     }
-    const {access_token, refresh_token} = await keycloakService.getAuthorizationCodeToken(code, codeVerifier)
+    const {access_token, refresh_token} = await authService.getAuthorizationCodeToken(code!, codeVerifier)
     return {
       access_token: access_token,
       refresh_token: refresh_token,
@@ -171,14 +178,14 @@ export default class Login extends Command {
   }
 
   private async startDeviceCodeFlow(): Promise<any> {
-    const keycloakService = new Gc2Service()
-    const {device_code, interval, verification_uri, user_code} = await keycloakService.getDeviceCode()
+    const authService = createAuthService()
+    const {device_code, interval, verification_uri, user_code} = await authService.getDeviceCode()
     console.log(device_code)
     this.log(`First copy your one-time code: ${user_code}`)
     this.log('When open a browser at ' + verification_uri)
     cli.action.start('Waiting for authentication')
     try {
-      const {access_token, refresh_token} = await keycloakService.poolToken(device_code, interval)
+      const {access_token, refresh_token} = await authService.pollToken(device_code, interval)
       return {
         access_token: access_token,
         refresh_token: refresh_token,
