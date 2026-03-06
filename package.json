@@ -1,7 +1,7 @@
 {
   "name": "@mapcentia/gc2-cli",
   "description": "GC2 CLI",
-  "version": "2026.3.1",
+  "version": "2026.3.2",
   "author": "Martin Høgh @mapcentia",
   "bin": {
     "gc2": "./bin/run"
@@ -26,7 +26,6 @@
     "@types/url-parse": "^1.4.3",
     "@types/uuid": "^8.3.4",
     "adm-zip": "^0.5.9",
-    "axios": "^1.6.8",
     "base64url": "^3.0.1",
     "chalk": "^4.1.0",
     "cli-ux": "^5.5.1",
@@ -44,7 +43,6 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@aws-sdk/client-s3": "^3.525.0",
     "@oclif/test": "^3.1.2",
     "@oclif/tslint": "^3.1.1",
     "@types/chai": "^4.3.10",
@@ -52,7 +50,6 @@
     "@types/lodash": "^4.14.202",
     "@types/mocha": "^10.0.4",
     "@types/node": "^10.17.60",
-    "aws-sdk": "^2.1159.0",
     "chai": "^4.3.10",
     "globby": "^10.0.2",
     "mocha": "^10.8.2",
