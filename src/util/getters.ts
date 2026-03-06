@@ -7,12 +7,13 @@
 
 import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../centiaClient'
 
+const asArray = <T>(result: T | T[]): T[] => Array.isArray(result) ? result : [result]
+
 const clients = async (id?: string) => {
   try {
     const client = createCliCentiaAdminClient()
-    return id
-      ? await client.provisioning.clients.getClient(id)
-      : await client.provisioning.clients.getClient()
+    if (id) return await client.provisioning.clients.getClient(id)
+    return asArray(await client.provisioning.clients.getClient())
   } catch (error) {
     logCentiaErrorAndExit(error)
   }
@@ -21,9 +22,8 @@ const clients = async (id?: string) => {
 const users = async (id?: string) => {
   try {
     const client = createCliCentiaAdminClient()
-    return id
-      ? await client.provisioning.users.getUser(id)
-      : await client.provisioning.users.getUser()
+    if (id) return await client.provisioning.users.getUser(id)
+    return asArray(await client.provisioning.users.getUser())
   } catch (error) {
     logCentiaErrorAndExit(error)
   }
@@ -32,9 +32,8 @@ const users = async (id?: string) => {
 const rules = async (id?: string) => {
   try {
     const client = createCliCentiaAdminClient()
-    return id != null
-      ? await client.provisioning.rules.getRule(Number(id))
-      : await client.provisioning.rules.getRule()
+    if (id != null) return await client.provisioning.rules.getRule(Number(id))
+    return asArray(await client.provisioning.rules.getRule())
   } catch (error) {
     logCentiaErrorAndExit(error)
   }
@@ -43,9 +42,8 @@ const rules = async (id?: string) => {
 const schemas = async (id?: string, namesOnly: boolean = true) => {
   try {
     const client = createCliCentiaAdminClient()
-    return id
-      ? await client.provisioning.schemas.getSchema(id, {namesOnly})
-      : await client.provisioning.schemas.getSchema(undefined, {namesOnly})
+    if (id) return await client.provisioning.schemas.getSchema(id, {namesOnly})
+    return asArray(await client.provisioning.schemas.getSchema(undefined, {namesOnly}))
   } catch (error) {
     logCentiaErrorAndExit(error)
   }
@@ -54,9 +52,8 @@ const schemas = async (id?: string, namesOnly: boolean = true) => {
 const tables = async (schema: string, table?: string) => {
   try {
     const client = createCliCentiaAdminClient()
-    return table
-      ? await client.provisioning.tables.getTable(schema, table)
-      : await client.provisioning.tables.getTable(schema)
+    if (table) return await client.provisioning.tables.getTable(schema, table)
+    return asArray(await client.provisioning.tables.getTable(schema))
   } catch (error) {
     logCentiaErrorAndExit(error)
   }

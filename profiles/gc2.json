@@ -1,0 +1,13 @@
+{
+  "name": "@mapcentia/gc2-cli",
+  "description": "GC2 CLI",
+  "bin": {
+    "gc2": "./bin/run"
+  },
+  "oclif": {
+    "bin": "gc2"
+  },
+  "dependencies": {
+    "@centia-io/sdk": "^0.0.45"
+  }
+}

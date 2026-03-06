@@ -1,82 +1,85 @@
-const fs = require('fs');
-const path = require('path');
+#!/usr/bin/env node
+/**
+ * Removes compiled command files from lib/commands/ that are NOT in the
+ * active profile's command whitelist.
+ *
+ * Reads whitelist from profiles/<active>.json → "commands" array.
+ * If no profile is active or the profile has no "commands" key, all
+ * commands are kept (GC2 full build).
+ *
+ * Whitelist entries:
+ *   "login"      → keeps lib/commands/login.js (+ .d.ts, .js.map)
+ *   "client/*"   → keeps everything under lib/commands/client/
+ */
 
-const projectRoot = path.resolve(__dirname, '..');
-const libCommandsDir = path.join(projectRoot, 'lib', 'commands');
+const fs = require('fs')
+const path = require('path')
 
-// Whitelisted command paths relative to lib/commands (exact files)
-const whitelistFiles = new Set([
-  'login.js',
-  'logout.js',
-  'import.js',
-  'sql.js',
-  'connect.js',
-]);
+const root = path.resolve(__dirname, '..')
+const libCommandsDir = path.join(root, 'lib', 'commands')
+const activePath = path.join(root, '.active-profile')
 
-// Whitelisted directories (relative to lib/commands). All files under these are kept.
-const whitelistDirs = new Set([
-  'client',
-  'column',
-  'constraint',
-  'index',
-  'privilege',
-  'rule',
-  'schema',
-  'table',
-  'user',
-]);
+if (!fs.existsSync(libCommandsDir)) process.exit(0)
 
-function isWhitelisted(jsRelative) {
-  // Exact file match
-  if (whitelistFiles.has(jsRelative)) return true;
+// Determine active profile
+let commands = null
+if (fs.existsSync(activePath)) {
+  const profileName = fs.readFileSync(activePath, 'utf8').trim()
+  const profilePath = path.join(root, 'profiles', `${profileName}.json`)
+  if (fs.existsSync(profilePath)) {
+    const profile = JSON.parse(fs.readFileSync(profilePath, 'utf8'))
+    commands = profile.commands || null
+  }
+}
 
-  // Directory (prefix) match
+// No whitelist → keep everything
+if (!commands) {
+  console.log('  ○ No command whitelist — keeping all commands')
+  process.exit(0)
+}
+
+// Build sets for exact files and directory prefixes
+const whitelistFiles = new Set()
+const whitelistDirs = new Set()
+
+for (const entry of commands) {
+  if (entry.endsWith('/*')) {
+    whitelistDirs.add(entry.slice(0, -2))
+  } else {
+    whitelistFiles.add(entry + '.js')
+    whitelistFiles.add(entry + '.d.ts')
+    whitelistFiles.add(entry + '.js.map')
+  }
+}
+
+function isWhitelisted(relPath) {
+  if (whitelistFiles.has(relPath)) return true
   for (const dir of whitelistDirs) {
-    const prefix = dir.endsWith(path.sep) ? dir : dir + path.sep;
-    if (jsRelative.startsWith(prefix)) return true;
+    if (relPath.startsWith(dir + path.sep)) return true
   }
-  return false;
+  return false
 }
 
-function removeIfNotWhitelisted(currentPath, relativeFromCommands) {
-  const stats = fs.statSync(currentPath);
+let removed = 0
+
+function prune(currentPath, relFromCommands) {
+  const stats = fs.statSync(currentPath)
   if (stats.isDirectory()) {
-    const entries = fs.readdirSync(currentPath);
-    for (const entry of entries) {
-      const child = path.join(currentPath, entry);
-      const rel = path.join(relativeFromCommands, entry);
-      removeIfNotWhitelisted(child, rel);
+    for (const entry of fs.readdirSync(currentPath)) {
+      prune(path.join(currentPath, entry), path.join(relFromCommands, entry))
     }
-    // After processing children, if directory is now empty and not a whitelisted file path, remove it
-    const remaining = fs.readdirSync(currentPath);
-    if (remaining.length === 0 && currentPath !== libCommandsDir) {
-      fs.rmdirSync(currentPath);
+    // Remove empty dirs
+    if (fs.readdirSync(currentPath).length === 0 && currentPath !== libCommandsDir) {
+      fs.rmdirSync(currentPath)
     }
-    return;
+    return
   }
 
-  // For files: keep only .js and .map associated with whitelisted modules; remove others
-  const isMap = currentPath.endsWith('.map');
-  const jsRelative = isMap ? relativeFromCommands.replace(/\.map$/, '') : relativeFromCommands;
-
-  // ... existing code ...
-  const baseIsWhitelisted = isWhitelisted(jsRelative);
-
-  if (baseIsWhitelisted) {
-    // Keep the .js file; also keep its .map if present
-    return;
-  }
-
-  // Not in whitelist -> remove file
-  try {
-    fs.unlinkSync(currentPath);
-  } catch (e) {
-    // ignore
+  if (!isWhitelisted(relFromCommands)) {
+    fs.unlinkSync(currentPath)
+    removed++
   }
 }
 
-if (!fs.existsSync(libCommandsDir)) {
-  process.exit(0);
-}
-
-removeIfNotWhitelisted(libCommandsDir, '');
+prune(libCommandsDir, '')
+console.log(`  ● Pruned ${removed} files (whitelist: ${commands.length} entries)`)

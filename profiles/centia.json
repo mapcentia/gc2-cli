@@ -1,0 +1,29 @@
+{
+  "name": "@centia-io/cli",
+  "description": "Centia.io CLI",
+  "bin": {
+    "centia": "./bin/run"
+  },
+  "oclif": {
+    "bin": "centia"
+  },
+  "dependencies": {
+    "@centia-io/sdk": "^0.0.45"
+  },
+  "commands": [
+    "login",
+    "logout",
+    "import",
+    "sql",
+    "connect",
+    "client/*",
+    "column/*",
+    "constraint/*",
+    "index/*",
+    "privilege/*",
+    "rule/*",
+    "schema/*",
+    "table/*",
+    "user/*"
+  ]
+}

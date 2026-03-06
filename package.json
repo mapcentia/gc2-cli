@@ -1,7 +1,7 @@
 {
   "name": "@mapcentia/gc2-cli",
   "description": "GC2 CLI",
-  "version": "2026.2.0",
+  "version": "2026.3.1",
   "author": "Martin Høgh @mapcentia",
   "bin": {
     "gc2": "./bin/run"
@@ -149,20 +149,15 @@
     "url": "git+https://github.com/mapcentia/gc2-cli.git"
   },
   "scripts": {
-    "prebuild": "node scripts/build.js",
-    "postpack": "rm -f oclif.manifest.json",
     "posttest": "tslint -p test -t stylish",
-    "prepack": "rm -rf lib && tsc -b && oclif manifest && oclif readme",
+    "prepack": "node scripts/prepack-guard.js && rm -rf lib && tsc -b && node scripts/whitelist-commands.js && oclif manifest && oclif readme",
+    "postpack": "rm -f oclif.manifest.json",
+    "release:gc2": "node scripts/use-profile.js gc2 && npm pack; node scripts/use-profile.js --restore",
+    "release:centia": "node scripts/use-profile.js centia && npm pack; node scripts/use-profile.js --restore",
+    "publish:gc2": "node scripts/use-profile.js gc2 && npm publish --access public; node scripts/use-profile.js --restore",
+    "publish:centia": "node scripts/use-profile.js centia && npm publish --access public; node scripts/use-profile.js --restore",
     "test": " NODE_OPTIONS=\"--loader ts-node/esm\" nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
-    "version": "oclif-dev readme && git add README.md",
-    "packwin": "oclif pack win",
-    "uploadwin": "oclif upload win",
-    "packdeb": "oclif pack deb",
-    "uploaddeb": "oclif upload deb",
-    "packtarballs": "oclif pack tarballs",
-    "uploadtarballs": "oclif upload tarballs",
-    "promotewin": "oclif promote --win --targets=win32-x64 --sha=$(git rev-parse --short HEAD) --version=$(node -p \"require('./package.json').version\")",
-    "promotedeb": "oclif promote --deb --targets=linux-x64 --sha=$(git rev-parse --short HEAD) --version=$(node -p \"require('./package.json').version\")"
+    "version": "oclif-dev readme && git add README.md"
   },
   "types": "lib/index.d.ts",
   "directories": {
