@@ -8,11 +8,11 @@
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import args from '../../common/base_args'
-import get from '../../util/get-response'
 import {privileges} from '../../util/getters'
 import {privilegeList, schemasList, tableList, userList} from '../../util/lists'
-import make from '../../util/make-request'
 import setSchema from '../../util/set-schema'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
+import type {PrivilegeLevel} from '@centia-io/sdk'
 
 let base_args = args
 let specific_args = {
@@ -48,8 +48,12 @@ export default class Set extends Command {
     const v = current?.filter((e: { subuser: any }) => user === e.subuser)[0]
     const privilege = args?.privilege || await privilegeList(v?.privilege)
 
-    const response = await make('4', `schemas/${schema}/tables/${table}/privileges`, 'PATCH', {subuser: user, privilege})
-    await get(response, 303)
-    this.log(`Privileges update on ${chalk.green(table)}`)
+    try {
+      const client = createCliCentiaAdminClient()
+      await client.provisioning.privileges.patchPrivileges(schema, table, {subuser: user, privilege: privilege as PrivilegeLevel})
+      this.log(`Privileges update on ${chalk.green(table)}`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }

@@ -6,10 +6,8 @@
  */
 
 import {Command, Flags} from '@oclif/core'
-import {exit} from '@oclif/core/lib/errors'
 import cli from 'cli-ux'
-import get from '../../util/get-response'
-import make from '../../util/make-request'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 export default class Start extends Command {
   static description = 'Get jobs in progress.'
@@ -17,32 +15,39 @@ export default class Start extends Command {
     help: Flags.help({char: 'h'}),
   }
   async run() {
-    const response = await make('3', `scheduler`, 'GET', null)
-    const res = await get(response, 200)
-    type Columns = {
-      [key: string]: any
-    }
-    type Column = {
-      id: number;
-      pid: number;
-      name: string;
-    }
-    const data: object[] = []
-    const columns: Columns = {id: {}, pid: {}, name: {}}
-    if (res.jobs.length > 0) {
-      for (const c in res.jobs) {
-        const v: Column = res.jobs[c]
-        data.push({
-          id: v.id,
-          pid: v.pid,
-          name: v.name || '-',
-        })
-      }
-      cli.table(data, columns, {
-        printLine: this.log.bind(this)
+    try {
+      const client = createCliCentiaAdminClient()
+      const res = await client.http.request<any>({
+        path: 'api/v3/scheduler',
+        method: 'GET',
       })
-    } else {
-      this.exit(0)
+      type Columns = {
+        [key: string]: any
+      }
+      type Column = {
+        id: number;
+        pid: number;
+        name: string;
+      }
+      const data: object[] = []
+      const columns: Columns = {id: {}, pid: {}, name: {}}
+      if (res.jobs.length > 0) {
+        for (const c in res.jobs) {
+          const v: Column = res.jobs[c]
+          data.push({
+            id: v.id,
+            pid: v.pid,
+            name: v.name || '-',
+          })
+        }
+        cli.table(data, columns, {
+          printLine: this.log.bind(this)
+        })
+      } else {
+        this.exit(0)
+      }
+    } catch (error) {
+      logCentiaErrorAndExit(error)
     }
   }
 }

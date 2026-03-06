@@ -15,10 +15,9 @@ import FormData from 'form-data'
 import * as fs from 'fs'
 import * as path from 'path'
 import User from '../common/user'
-import get from '../util/get-response'
-import make from '../util/make-request'
 import {schemasList} from "../util/lists"
 import setSchema from "../util/set-schema"
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../centiaClient'
 
 const config: Configstore = new Configstore('gc2-env')
 const userConfig: User = config.all
@@ -104,6 +103,8 @@ export default class Import extends Command {
         cli.action.stop()
       }
 
+      const client = createCliCentiaAdminClient()
+
       cli.action.start('Uploading')
       const file = fs.readFileSync(tmpPath)
       const stats = fs.statSync(tmpPath)
@@ -119,15 +120,10 @@ export default class Import extends Command {
         form.append('filename', chunk, {
           filename: tmpFile
         })
-        const res = await make('4', `file/upload`, 'POST', form, true, null)
-        if (res.status !== 201) {
-          let errMsg = ''
-          try {
-            errMsg = await res.text()
-          } catch (e) {
-            // ignore
-          }
-          throw new Error(`Upload failed (status ${res.status}). ${errMsg}`)
+        try {
+          await client.provisioning.fileImport.postFileUpload(form as any)
+        } catch (error) {
+          logCentiaErrorAndExit(error)
         }
         chunkCount++
       }
@@ -141,9 +137,13 @@ export default class Import extends Command {
       if (schema) {
         body.schema = schema
       }
-      const res = await make('4', `file/process`, 'POST', body)
+      let data: any
+      try {
+        data = await client.provisioning.fileImport.postFileProcess(body)
+      } catch (error) {
+        logCentiaErrorAndExit(error)
+      }
       cli.action.stop()
-      const data = await get(res, 201)
       type tables = {
         [key: string]: any
       }

@@ -7,8 +7,7 @@
 
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
-import make from '../../util/make-request'
-import get from '../../util/get-response'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 export default class Materialize extends Command {
   static description = 'Create materialized views of foreign tables.'
@@ -44,14 +43,16 @@ export default class Materialize extends Command {
     const from = args.from.split(',').map(s => s.trim())
     const to = args?.to ? args.to.split(',').map(s => s.trim()) : null
     const include = args?.include ? args.include.split(',').map(s => s.trim()) : null
-    const response = await make('3', `foreign/materialize`, 'POST', {
-      from,
-      to,
-      include,
-      prefix: flags.prefix,
-      suffix: flags.suffix
-    })
-    const res = await get(response, 200)
-    this.log(`${chalk.green(res.count)} foreign tables materialized`)
+    try {
+      const client = createCliCentiaAdminClient()
+      const res = await client.http.request<any>({
+        path: 'api/v3/foreign/materialize',
+        method: 'POST',
+        body: {from, to, include, prefix: flags.prefix, suffix: flags.suffix},
+      })
+      this.log(`${chalk.green(res.count)} foreign tables materialized`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }

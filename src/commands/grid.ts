@@ -1,8 +1,7 @@
 import {Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import cli from 'cli-ux'
-import get from '../util/get-response'
-import make from '../util/make-request'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../centiaClient'
 
 export default class Grid extends Command {
   static description = 'Add a fishnet grid from an input polygon.'
@@ -14,10 +13,19 @@ export default class Grid extends Command {
   }
   async run() {
     const {flags} = await this.parse(Grid)
-    cli.action.start('Creating fishnet grid ')
-    const response = await make('3', `grid`, 'POST', flags)
-    const data  = await get(response, 200)
-    cli.action.stop('')
+    let data: any
+    try {
+      const client = createCliCentiaAdminClient()
+      cli.action.start('Creating fishnet grid ')
+      data = await client.http.request<any>({
+        path: 'api/v3/grid',
+        method: 'POST',
+        body: {table: flags.table, extent: flags.extent, size: flags.size},
+      })
+      cli.action.stop('')
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
     if (data.success) {
       this.log(chalk.green('SUCCESS: Fishnet grid was created.'))
     } else {

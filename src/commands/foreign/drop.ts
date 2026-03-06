@@ -7,8 +7,7 @@
 
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
-import make from '../../util/make-request'
-import get from '../../util/get-response'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 export default class Drop extends Command {
   static description = 'Drop all foreign tables in schema.'
@@ -34,8 +33,16 @@ export default class Drop extends Command {
     const {args} = await this.parse(Drop)
     const schemas = args.schemas.split(',').map(s => s.trim())
     const include = args?.include ? args.include.split(',').map(s => s.trim()) : null
-    const response = await make('3', 'foreign', 'DELETE', {schemas, include})
-    const res = await get(response, 200)
-    this.log(`${chalk.green(res.count)} foreign tables dropped`)
+    try {
+      const client = createCliCentiaAdminClient()
+      const res = await client.http.request<any>({
+        path: 'api/v3/foreign',
+        method: 'DELETE',
+        body: {schemas, include},
+      })
+      this.log(`${chalk.green(res.count)} foreign tables dropped`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }

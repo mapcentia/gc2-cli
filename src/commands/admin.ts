@@ -8,8 +8,7 @@
 import {Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import cli from 'cli-ux'
-import get from '../util/get-response'
-import make from '../util/make-request'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../centiaClient'
 import {adminTaskList} from "../util/lists";
 
 const tasks = ['mapfiles', 'mapcachefile', 'qgisfiles', 'schema', 'migrations', 'diskcleanup', 'cachestats', 'cachecleanup', 'insertmeta']
@@ -26,9 +25,17 @@ export default class Admin extends Command {
   async run() {
     const {flags} = await this.parse(Admin)
     const task = flags?.task || await adminTaskList()
-    cli.action.start('Running task')
-    const response = await make('3', `admin/${task}`, 'GET', null)
-    const data = await get(response, 200)
+    let data: any
+    try {
+      const client = createCliCentiaAdminClient()
+      cli.action.start('Running task')
+      data = await client.http.request<any>({
+        path: `api/v3/admin/${task}`,
+        method: 'GET',
+      })
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
     if (!data.success) {
       this.log(data.message)
       this.exit(1)

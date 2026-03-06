@@ -10,7 +10,15 @@ const config: Configstore = new Configstore('gc2-env')
 
 const getUser = (): User => config.all as User
 
-export const createAuthService = () =>
+export interface AuthService {
+  getDeviceCode(): Promise<{device_code: string; user_code: string; verification_uri: string; verification_uri_complete?: string; expires_in: number; interval: number}>
+  pollToken(deviceCode: string, interval: number): Promise<{access_token: string; refresh_token: string; [k: string]: unknown}>
+  getAuthorizationCodeURL(codeChallenge: string, state: string): string
+  getAuthorizationCodeToken(code: string | string[], codeVerifier: string | null): Promise<{access_token: string; refresh_token: string; [k: string]: unknown}>
+  getRefreshToken(token: string): Promise<{access_token: string; refresh_token: string; [k: string]: unknown}>
+}
+
+export const createAuthService = (): AuthService =>
   new CodeFlow({
     host: GC2_SERVER_ADDRESS,
     clientId: 'gc2-cli',

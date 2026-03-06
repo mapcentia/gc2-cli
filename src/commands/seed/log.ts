@@ -6,8 +6,7 @@
  */
 
 import {Command, Flags} from '@oclif/core'
-import get from '../../util/get-response'
-import make from '../../util/make-request'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 export default class Log extends Command {
   static description = 'Get progress of a running job.'
@@ -17,8 +16,15 @@ export default class Log extends Command {
   }
   async run() {
     const {flags} = await this.parse(Log)
-    const response = await make('3', `tileseeder/log/` + flags.uuid , 'GET', null)
-    const data = await get(response, 200)
-    this.log(data.data)
+    try {
+      const client = createCliCentiaAdminClient()
+      const data = await client.http.request<any>({
+        path: `api/v3/tileseeder/log/${flags.uuid}`,
+        method: 'GET',
+      })
+      this.log(data.data)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }

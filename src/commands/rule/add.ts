@@ -8,9 +8,8 @@
 import {input, select} from '@inquirer/prompts'
 import {Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
-import get from '../../util/get-response'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 import {accessList, requestList, serviceList} from '../../util/lists'
-import make from '../../util/make-request'
 
 export default class Add extends Command {
   static description = 'Create a new rule.'
@@ -50,8 +49,12 @@ export default class Add extends Command {
      }
     });
    // console.log(body)
-    const response = await make('4', `rules`, 'POST', body)
-    await get(response, 201)
-    this.log(`Rule created here ${chalk.green(response.headers.get('Location'))}`)
+    try {
+      const client = createCliCentiaAdminClient()
+      const result = await client.provisioning.rules.postRule(body)
+      this.log(`Rule created: ${chalk.green(JSON.stringify(result))}`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }

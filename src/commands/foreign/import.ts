@@ -7,8 +7,7 @@
 
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
-import make from '../../util/make-request'
-import get from '../../util/get-response'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 export default class Import extends Command {
   static description = 'Import schema from foreign server.'
@@ -47,8 +46,17 @@ export default class Import extends Command {
     const to = args?.to ? args.to.split(',').map(s => s.trim()) : null
     const include = args?.include ? args.include.split(',').map(s => s.trim()) : null
     const server = args.server
-    const response = await make('3', `foreign`, 'POST', {from, to, server, include})
-    await get(response, 201)
-    this.log(`${chalk.green('Schemas imported.')}`)
+    try {
+      const client = createCliCentiaAdminClient()
+      await client.http.request<any>({
+        path: 'api/v3/foreign',
+        method: 'POST',
+        body: {from, to, server, include},
+        expectedStatus: 201,
+      })
+      this.log(`${chalk.green('Schemas imported.')}`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }

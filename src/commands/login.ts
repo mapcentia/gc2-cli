@@ -17,8 +17,6 @@ import * as querystring from 'querystring'
 import User from '../common/user'
 import {PasswordFlow} from '@centia-io/sdk'
 import {createAuthService} from '../centiaClient'
-import get from '../util/get-response'
-import make from '../util/make-request'
 import {CLI_SERVER_ADDRESS, CLI_SERVER_ADDRESS_CALLBACK, GC2_SERVER_ADDRESS, generatePkceChallenge, waitFor,} from '../util/utils'
 import EventEmitter = require('events')
 
@@ -71,8 +69,9 @@ export default class Login extends Command {
       const user: string = flags?.user || obj.user
 
       if (obj.database === '') {
-        const response = await make('2', `database/search?userIdentifier=${user}`, 'GET', null, false, 'application/json', obj.host)
-        const res = await get(response, 200)
+        const host = obj.host || GC2_SERVER_ADDRESS
+        const response = await fetch(`${host}/api/v2/database/search?userIdentifier=${user}`)
+        const res = await response.json() as any
         if (!res.success) {
           this.log(chalk.red('fail'))
           return

@@ -7,8 +7,7 @@
 
 import {Command, Flags} from '@oclif/core'
 import cli from 'cli-ux'
-import get from '../util/get-response'
-import make from '../util/make-request'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../centiaClient'
 
 export default class Stat extends Command {
   static description = 'Get usage statistics.'
@@ -17,10 +16,18 @@ export default class Stat extends Command {
   }
   async run() {
    // const {flags} = await this.parse(Stat)
-    cli.action.start('Collecting statistics ')
-    const response = await make('4', `stats`, 'GET')
-    const data  = await get(response, 200)
-    cli.action.stop('done')
+    let data: any
+    try {
+      const client = createCliCentiaAdminClient()
+      cli.action.start('Collecting statistics ')
+      data = await client.http.request<any>({
+        path: 'api/v4/stats',
+        method: 'GET',
+      })
+      cli.action.stop('done')
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
     this.log('')
 
     //console.log(data)

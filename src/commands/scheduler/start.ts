@@ -7,8 +7,7 @@
 
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
-import get from '../../util/get-response'
-import make from '../../util/make-request'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 export default class Start extends Command {
   static description = 'Starts a scheduler job'
@@ -55,8 +54,17 @@ export default class Start extends Command {
       name: flags.name,
       force: flags.force
     }
-    const response = await make('3', `scheduler`, 'POST', payload)
-    await get(response, 202)
-    this.log(`See status here: ${chalk.green(response.headers.get('Location'))}`)
+    try {
+      const client = createCliCentiaAdminClient()
+      const res = await client.http.requestFull<any>({
+        path: 'api/v3/scheduler',
+        method: 'POST',
+        body: payload,
+        expectedStatus: 202,
+      })
+      this.log(`See status here: ${chalk.green(res.getHeader('Location') || 'N/A')}`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }

@@ -7,8 +7,7 @@
 
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
-import make from '../../util/make-request'
-import get from '../../util/get-response'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 export default class Refresh extends Command {
   static description = 'Refresh all materialized views in schema.'
@@ -33,8 +32,16 @@ export default class Refresh extends Command {
     const {args} = await this.parse(Refresh)
     const schemas = args.schemas.split(',').map(s => s.trim())
     const include = args?.include ? args.include.split(',').map(s => s.trim()) : null
-    const response = await make('3', `view/refresh`, 'PATCH',{schemas, include})
-    const res = await get(response, 200)
-    this.log(`${chalk.green(res.count)} views refreshed`)
+    try {
+      const client = createCliCentiaAdminClient()
+      const res = await client.http.request<any>({
+        path: 'api/v3/view/refresh',
+        method: 'PATCH',
+        body: {schemas, include},
+      })
+      this.log(`${chalk.green(res.count)} views refreshed`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }

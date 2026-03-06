@@ -1,6 +1,5 @@
 import {Command, Flags} from '@oclif/core'
-import get from '../../util/get-response'
-import make from '../../util/make-request'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 export default class Start extends Command {
   static description = 'Starts a seed job.'
@@ -22,8 +21,25 @@ export default class Start extends Command {
   }
   async run() {
     const {flags} = await this.parse(Start)
-    const response = await make('3', `tileseeder`, 'POST', flags)
-    const data = await get(response, 200)
-    console.log(data)
+    try {
+      const client = createCliCentiaAdminClient()
+      const data = await client.http.request<any>({
+        path: 'api/v3/tileseeder',
+        method: 'POST',
+        body: {
+          name: flags.name,
+          layer: flags.layer,
+          grid: flags.grid,
+          start: flags.start,
+          end: flags.end,
+          extent: flags.extent,
+          threads: flags.threads,
+          force: flags.force,
+        },
+      })
+      console.log(data)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }

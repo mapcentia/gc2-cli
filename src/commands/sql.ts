@@ -10,9 +10,8 @@ import base64url from 'base64url'
 import chalk from 'chalk'
 import cli from 'cli-ux'
 import * as fs from 'fs'
-import get from '../util/get-response'
-import make from '../util/make-request'
-import {constraintTypeList, outputFormatList} from '../util/lists'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../centiaClient'
+import {outputFormatList} from '../util/lists'
 
 
 interface Statement {
@@ -69,49 +68,51 @@ export default class Sql extends Command {
         convert_types: false
       }
 
-      const res = await make('4', `sql`, 'POST', statement)
-
-      // If we get JSON, when affected rows
-      if (res.headers.get('content-type')?.startsWith('application/json')) {
-        const data = await get(res, 200)
-        this.log(chalk.green('Affected rows: ' + data.affected_rows))
-        return
-      }
-
-      // We get a file
-      let fileStream: any
-      let fileName: string;
-
-      if (flags.format === 'ccsv' || flags.format === 'ndjson') {
-        fileName = 'file.' + flags.format
-      } else {
-        fileName = res.headers.get('content-disposition')?.split('=')[1].replace(/"/g, '')
-      }
-      if (flags.path) {
-        try {
-          const stat = fs.lstatSync(flags.path + '')
-          if (stat.isDirectory()) {
-            fileStream = fs.createWriteStream(flags.path + '/' + fileName) // existing dir
-          } else {
-            fileStream = fs.createWriteStream(flags.path + '') // existing file
-          }
-          // tslint:disable-next-line:no-unused
-        } catch (e) {
-          fileStream = fs.createWriteStream(flags.path + '') // non existing file
-        }
-      } else {
-        fileStream = fs.createWriteStream(fileName + '') // No use of path
-      }
-
-      await new Promise((resolve, reject) => {
-        res.body.pipe(fileStream)
-        res.body.on('error', reject)
-        fileStream.on('error', (e: any) => {
-          this.log(chalk.red(e.message))
+      try {
+        const client = createCliCentiaAdminClient()
+        const res = await client.http.requestFull<any>({
+          path: 'api/v4/sql',
+          method: 'POST',
+          body: statement,
         })
-        fileStream.on('finish', resolve)
+
+        // If we get JSON, show affected rows
+        const contentType = res.getHeader('content-type') || ''
+        if (contentType.startsWith('application/json')) {
+          this.log(chalk.green('Affected rows: ' + res.body.affected_rows))
+          return
+        }
+
+        // We get a file
+        let filePath: string
+        let fileName: string;
+
+        if (flags.format === 'ccsv' || flags.format === 'ndjson') {
+          fileName = 'file.' + flags.format
+        } else {
+          fileName = res.getHeader('content-disposition')?.split('=')[1].replace(/"/g, '') || 'output'
+        }
+        if (flags.path) {
+          try {
+            const stat = fs.lstatSync(flags.path + '')
+            if (stat.isDirectory()) {
+              filePath = flags.path + '/' + fileName // existing dir
+            } else {
+              filePath = flags.path + '' // existing file
+            }
+            // tslint:disable-next-line:no-unused
+          } catch (e) {
+            filePath = flags.path + '' // non existing file
+          }
+        } else {
+          filePath = fileName + '' // No use of path
+        }
+
+        fs.writeFileSync(filePath, res.body as string)
         this.log(chalk.green(fileName) + ` downloaded to ` + flags.path)
-      })
+      } catch (error) {
+        logCentiaErrorAndExit(error)
+      }
 
     } else {
       // tslint:disable-next-line:no-constant-condition
@@ -125,15 +126,21 @@ export default class Sql extends Command {
           lifetime: 0,
           base64: true
         }
-        const response = await make('4', `sql`, 'POST', statement)
-        const data = await get(response, 200, true)
-        if (response.status !== 200) {
+        try {
+          const client = createCliCentiaAdminClient()
+          const data = await client.http.request<any>({
+            path: 'api/v4/sql',
+            method: 'POST',
+            body: statement,
+          })
+          if (data?.affected_rows) {
+            this.log(chalk.green('Affected rows: ' + data.affected_rows))
+          } else {
+            cli.table(data.data, data.schema)
+          }
+        } catch {
+          // On error in interactive mode, continue to next prompt
           continue
-        }
-        if (data?.affected_rows) {
-          this.log(chalk.green('Affected rows: ' + data.affected_rows))
-        } else {
-          cli.table(data.data, data.schema)
         }
       }
     }

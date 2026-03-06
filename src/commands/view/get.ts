@@ -7,8 +7,7 @@
 
 import {Args, Command, Flags} from '@oclif/core'
 import cli from 'cli-ux'
-import make from '../../util/make-request'
-import get from '../../util/get-response'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 export default class Get extends Command {
   static description = 'Get "*" definitions from backup for schema.'
@@ -26,30 +25,37 @@ export default class Get extends Command {
 
   async run() {
     const {args} = await this.parse(Get)
-    const response = await make('3', `view/${args.schema}`, 'GET', null)
-    const res = await get(response, 200)
-    type Columns = {
-      [key: string]: any
-    }
-    type Column = {
-      definition: string;
-      name: string;
-      schemaname: string;
-      ismat: boolean;
-    }
-    const data: object[] = []
-    const columns: Columns = {name: {}, schemaname: {}, definition: {}, ismat: {}}
-    for (const c in res.views) {
-      const v: Column = res.views[c]
-      data.push({
-        definition: v.definition,
-        name: v.name,
-        schemaname: v.schemaname,
-        ismat: v.ismat,
+    try {
+      const client = createCliCentiaAdminClient()
+      const res = await client.http.request<any>({
+        path: `api/v3/view/${args.schema}`,
+        method: 'GET',
       })
+      type Columns = {
+        [key: string]: any
+      }
+      type Column = {
+        definition: string;
+        name: string;
+        schemaname: string;
+        ismat: boolean;
+      }
+      const data: object[] = []
+      const columns: Columns = {name: {}, schemaname: {}, definition: {}, ismat: {}}
+      for (const c in res.views) {
+        const v: Column = res.views[c]
+        data.push({
+          definition: v.definition,
+          name: v.name,
+          schemaname: v.schemaname,
+          ismat: v.ismat,
+        })
+      }
+      cli.table(data, columns, {
+        printLine: this.log.bind(this)
+      })
+    } catch (error) {
+      logCentiaErrorAndExit(error)
     }
-    cli.table(data, columns, {
-      printLine: this.log.bind(this)
-    })
   }
 }

@@ -7,8 +7,7 @@
 
 import {Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
-import get from '../../util/get-response'
-import make from '../../util/make-request'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 export default class Stop extends Command {
   static description = 'Stops a running seed job.'
@@ -18,13 +17,20 @@ export default class Stop extends Command {
   }
   async run() {
     const {flags} = await this.parse(Stop)
-    const response = await make('3', `tileseeder/index/` + flags.uuid, 'DELETE', null)
-    const data = await get(response, 200)
-    console.log(data)
-    if (data.success) {
-      this.log(chalk.green(`SUCCESS: Seed job ${data.pid.uuid} with name ${data.pid.name} was stopped.`))
-    } else {
-      this.log(chalk.red(`FAILURE: Seed job ${flags.uuid} doesn't exists`))
+    try {
+      const client = createCliCentiaAdminClient()
+      const data = await client.http.request<any>({
+        path: `api/v3/tileseeder/index/${flags.uuid}`,
+        method: 'DELETE',
+      })
+      console.log(data)
+      if (data.success) {
+        this.log(chalk.green(`SUCCESS: Seed job ${data.pid.uuid} with name ${data.pid.name} was stopped.`))
+      } else {
+        this.log(chalk.red(`FAILURE: Seed job ${flags.uuid} doesn't exists`))
+      }
+    } catch (error) {
+      logCentiaErrorAndExit(error)
     }
   }
 }

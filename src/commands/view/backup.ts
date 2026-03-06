@@ -7,8 +7,7 @@
 
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
-import make from '../../util/make-request'
-import get from '../../util/get-response'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 export default class Backup extends Command {
   static description = 'Backup all (mat)views definitions in schema.'
@@ -27,8 +26,17 @@ export default class Backup extends Command {
   async run() {
     const {args} = await this.parse(Backup)
     const schemas = args.schemas.split(',').map(s => s.trim())
-    const response = await make('3', 'view', 'POST', {schemas: schemas})
-    const res = await get(response, 201)
-    this.log(`${chalk.green(res.count)} views backed up.`)
+    try {
+      const client = createCliCentiaAdminClient()
+      const res = await client.http.request<any>({
+        path: 'api/v3/view',
+        method: 'POST',
+        body: {schemas},
+        expectedStatus: 201,
+      })
+      this.log(`${chalk.green(res.count)} views backed up.`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }

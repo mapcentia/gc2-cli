@@ -7,8 +7,7 @@
 
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
-import make from '../../util/make-request'
-import get from '../../util/get-response'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 export default class Restore extends Command {
   static description = 'Restore all (mat)views definitions from schema.'
@@ -40,8 +39,16 @@ export default class Restore extends Command {
     const from = args.from.split(',').map(s => s.trim())
     const to = args?.to ? args.to.split(',').map(s => s.trim()) : null
     const include = args?.include ? args.include.split(',').map(s => s.trim()) : null
-    const response = await make('3', `view`, 'PATCH', {from, to, include})
-    const res = await get(response, 200)
-    this.log(`${chalk.green(res.count)} views restored.`)
+    try {
+      const client = createCliCentiaAdminClient()
+      const res = await client.http.request<any>({
+        path: 'api/v3/view',
+        method: 'PATCH',
+        body: {from, to, include},
+      })
+      this.log(`${chalk.green(res.count)} views restored.`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }

@@ -5,14 +5,11 @@
  *
  */
 
-import {select} from '@inquirer/prompts'
+import {input, select} from '@inquirer/prompts'
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
-import {rules} from '../../util/getters'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 import {accessList, requestList, ruleList, serviceList} from '../../util/lists'
-import make from '../../util/make-request'
-import {input} from '@inquirer/prompts'
-import get from "../../util/get-response";
 
 
 let specific_args = {
@@ -44,7 +41,14 @@ export default class Update extends Command {
     let {args, flags} = await this.parse(Update)
 
     const id = args?.id || await ruleList()
-    const rule: any = await rules(id)
+
+    let rule: any
+    try {
+      const client = createCliCentiaAdminClient()
+      rule = await client.provisioning.rules.getRule(Number(id))
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
 
     // Interactive
     const priority = flags?.priority || parseInt(await input({message: 'Priority', required: true, validate: async (input) => {
@@ -65,8 +69,12 @@ export default class Update extends Command {
       }
     });
 
-    const response = await make('4', `rules/${id}`, 'PATCH', body)
-    await get(response, 303)
-    this.log(`Rule is here ${chalk.green(response.headers.get('Location'))}`)
+    try {
+      const client = createCliCentiaAdminClient()
+      const result = await client.provisioning.rules.patchRule(Number(id), body)
+      this.log(`Rule updated: ${chalk.green(JSON.stringify(result))}`)
+    } catch (error) {
+      logCentiaErrorAndExit(error)
+    }
   }
 }
