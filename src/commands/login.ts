@@ -27,8 +27,31 @@ type AuthoricationCodeCallbackParams = {
   session_state?: string;
 }
 
+const brand = chalk.hex('#4F46E5')
+const dim = chalk.dim
+const success = chalk.green
+const warn = chalk.yellow
+const err = chalk.red
+
+const LOGO = `
+  ${brand('█▀▀ █▀▀ █▄░█ ▀█▀ █ ▄▀█')}
+  ${brand('█▄▄ ██▄ █░▀█ ░█░ █ █▀█')}
+`
+
+const spinner = {
+  start(msg: string) {
+    process.stderr.write(dim(`  ◌ ${msg}…`))
+  },
+  stop(msg: string) {
+    process.stderr.write(`\r  ${success('●')} ${msg}\n`)
+  },
+  fail(msg: string) {
+    process.stderr.write(`\r  ${err('✖')} ${msg}\n`)
+  },
+}
+
 export default class Login extends Command {
-  static description = 'Sign in to GC2. You can set the connect options beforehand using the `connect` command. Providing the password on the commandline is considered insecure. It\'s better to be prompt for the password'
+  static description = 'Sign in to Centia. Use `connect` to set the host first.'
   static flags = {
     help: Flags.help({char: 'h'}),
     password: Flags.string({char: 'p', description: 'Password'}),
@@ -45,8 +68,10 @@ export default class Login extends Command {
   async run() {
     const {flags} = await this.parse(Login)
 
+    process.stderr.write(LOGO + '\n')
+
     const config: Configstore = new Configstore('gc2-env')
-    let obj: User = config.all // User object or empty object
+    let obj: User = config.all
 
     function instanceOfResponse(object: any, name: string): object is User {
       return name in object
@@ -56,67 +81,83 @@ export default class Login extends Command {
       obj = {database: '', user: '', host: '', token: '', superUser: false, refresh_token: ''}
     }
 
-    if (obj.host === '' && !process.env?.GC2_HOST) {
-      //  this.log('Connect is not set. Please use the \'connect\' command')
-      //  this.exit()
-    }
+    const host = obj.host || GC2_SERVER_ADDRESS
+    process.stderr.write(dim(`  Host  ${host}\n`))
+    process.stderr.write(dim(`  Flow  ${flags.flow}\n\n`))
 
     let data
     if (flags.flow === 'password') {
-      if (obj.user === '' && !flags?.user) {
-        obj.user = await input({message: 'User', required: true})
-      }
-      const user: string = flags?.user || obj.user
-
-      if (obj.database === '') {
-        const host = obj.host || GC2_SERVER_ADDRESS
-        const response = await fetch(`${host}/api/v2/database/search?userIdentifier=${user}`)
-        const res = await response.json() as any
-        if (!res.success) {
-          this.log(chalk.red('fail'))
-          return
-        }
-        if (res.databases.length === 1) {
-          obj.database = res.databases[0].parentdb ? res.databases[0].parentdb : res.databases[0].screenname
-        }
-        else if (res.databases.length > 1) {
-          obj.database = await select({
-            message: 'Database',
-            default: config.all.database, choices: res.databases.map((v: { parentdb: any }) => {
-              return {value: v.parentdb}
-            })
-          })
-        } else {
-          this.log(chalk.red('User not found'))
-          return
-        }
-      }
-      const pwd: string = flags?.password ? flags.password : await password({message: 'Password', mask:true})
-      // Warn about using pwd on the command line
-      if (flags?.password) {
-        this.log(chalk.yellow('Warning: Using a password on the command line interface can be insecure.'))
-      }
-      try {
-        data = await this.startPasswordFlow(user, pwd, obj.database)
-      } catch (error: any) {
-        this.log(error.response.data.error_description)
-        exit(1);
-      }
+      data = await this.runPasswordFlow(flags, obj, config)
     } else if (flags.flow === 'code') {
       data = await this.startAuthorizationCodeFlow()
     } else {
       data = await this.startDeviceCodeFlow()
     }
-    const user = JSON.parse(atob(data.access_token.split('.')[1])).uid
-    const database = JSON.parse(atob(data.access_token.split('.')[1])).database
-    const superUser = JSON.parse(atob(data.access_token.split('.')[1])).superUser
-    config.set({user: user})
-    config.set({database: database})
+
+    const claims = JSON.parse(atob(data.access_token.split('.')[1]))
+    config.set({user: claims.uid})
+    config.set({database: claims.database})
     config.set({token: data.access_token})
     config.set({refresh_token: data.refresh_token})
-    config.set({superUser})
-    cli.action.start(`Signing with ${chalk.yellow(user)}`)
-    cli.action.stop(chalk.green('success'))
+    config.set({superUser: claims.superUser})
+
+    process.stderr.write('\n')
+    process.stderr.write(`  ${success('✔')} Signed in as ${chalk.bold(claims.uid)}`)
+    if (claims.superUser) process.stderr.write(dim(' (admin)'))
+    process.stderr.write('\n')
+    process.stderr.write(dim(`  Database  ${claims.database}\n\n`))
+  }
+
+  private async runPasswordFlow(flags: any, obj: User, config: Configstore): Promise<any> {
+    if (obj.user === '' && !flags?.user) {
+      obj.user = await input({message: '  User', required: true})
+    }
+
+    const user: string = flags?.user || obj.user
+
+    if (obj.database === '') {
+      const host = obj.host || GC2_SERVER_ADDRESS
+      spinner.start('Looking up databases')
+      const response = await fetch(`${host}/api/v2/database/search?userIdentifier=${user}`)
+      const res = await response.json() as any
+      if (!res.success) {
+        spinner.fail('Database lookup failed')
+        exit(1)
+      }
+
+      if (res.databases.length === 0) {
+        spinner.fail('User not found')
+        exit(1)
+      }
+
+      spinner.stop(`Found ${res.databases.length} database${res.databases.length > 1 ? 's' : ''}`)
+
+      if (res.databases.length === 1) {
+        obj.database = res.databases[0].parentdb || res.databases[0].screenname
+      } else {
+        obj.database = await select({
+          message: '  Database',
+          default: config.all.database,
+          choices: res.databases.map((v: {parentdb: any}) => ({value: v.parentdb}))
+        })
+      }
+    }
+
+    const pwd: string = flags?.password ? flags.password : await password({message: '  Password', mask: true})
+
+    if (flags?.password) {
+      process.stderr.write(`  ${warn('!')} ${dim('Passing passwords via flags is insecure')}\n`)
+    }
+
+    spinner.start('Authenticating')
+    try {
+      const data = await this.startPasswordFlow(user, pwd, obj.database)
+      spinner.stop('Authenticated')
+      return data
+    } catch (error: any) {
+      spinner.fail(error?.response?.data?.error_description || 'Authentication failed')
+      exit(1)
+    }
   }
 
   private async startPasswordFlow(user: string, pwd: string, database: string): Promise<any> {
@@ -128,23 +169,16 @@ export default class Login extends Command {
       database,
     }).service
     const {access_token, refresh_token} = await service.getPasswordToken()
-    return {
-      access_token: access_token,
-      refresh_token: refresh_token,
-    }
+    return {access_token, refresh_token}
   }
 
   private async startAuthorizationCodeFlow(): Promise<any> {
     const authService = createAuthService()
     const {codeVerifier, codeChallenge, state} = generatePkceChallenge()
     const port = CLI_SERVER_ADDRESS.split(':').pop()
-    const callbackPath = CLI_SERVER_ADDRESS_CALLBACK.split(':')[2].replace(
-      port!, '',
-    )
-    const authorizationCodeURL = authService.getAuthorizationCodeURL(
-      codeChallenge,
-      state,
-    )
+    const callbackPath = CLI_SERVER_ADDRESS_CALLBACK.split(':')[2].replace(port!, '')
+    const authorizationCodeURL = authService.getAuthorizationCodeURL(codeChallenge, state)
+
     const emmiter = new EventEmitter()
     const eventName = 'authorication_code_callback_params'
     const server = http.createServer((req, res) => {
@@ -156,41 +190,41 @@ export default class Login extends Command {
         res.end('You can close this browser now.')
         server.close()
       } else {
-        // TODO: handle an invalid URL address
         res.end('Unsupported')
         emmiter.emit(eventName, new Error('Invalid URL address'))
       }
-    })
-      .listen(port)
-    await cli.anykey('Press any key to open GC2 in your browser')
+    }).listen(port)
+
+    await cli.anykey(`  Press any key to open the browser${dim('…')}`)
     await cli.open(authorizationCodeURL)
-    cli.action.start('Waiting for authentication')
+
+    spinner.start('Waiting for browser authentication')
     const {code, state: stateFromParams} = await waitFor<AuthoricationCodeCallbackParams>(eventName, emmiter)
     if (stateFromParams !== state) {
-      throw new Error('Possible CSRF attack. Aborting login! ⚠️')
+      spinner.fail('Possible CSRF attack — aborting')
+      exit(1)
     }
+
     const {access_token, refresh_token} = await authService.getAuthorizationCodeToken(code!, codeVerifier)
-    return {
-      access_token: access_token,
-      refresh_token: refresh_token,
-    }
+    spinner.stop('Authenticated')
+    return {access_token, refresh_token}
   }
 
   private async startDeviceCodeFlow(): Promise<any> {
     const authService = createAuthService()
     const {device_code, interval, verification_uri, user_code} = await authService.getDeviceCode()
-    console.log(device_code)
-    this.log(`First copy your one-time code: ${user_code}`)
-    this.log('When open a browser at ' + verification_uri)
-    cli.action.start('Waiting for authentication')
+
+    process.stderr.write(`  Your code  ${chalk.bold.white(user_code)}\n`)
+    process.stderr.write(dim(`  Open       ${verification_uri}\n\n`))
+    await cli.anykey(`  Press any key to continue${dim('…')}`)
+
+    spinner.start('Waiting for device authorization')
     try {
       const {access_token, refresh_token} = await authService.pollToken(device_code, interval)
-      return {
-        access_token: access_token,
-        refresh_token: refresh_token,
-      }
+      spinner.stop('Authorized')
+      return {access_token, refresh_token}
     } catch (e: any) {
-      this.log(`⚠️ ` + e.message)
+      spinner.fail(e.message)
       exit(1)
     }
   }
