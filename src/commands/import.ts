@@ -1,23 +1,24 @@
 /**
  * @author     Martin Høgh <mh@mapcentia.com>
- * @copyright  2013-2024 MapCentia ApS
+ * @copyright  2013-2026 MapCentia ApS
  * @license    http://www.gnu.org/licenses/#AGPL  GNU AFFERO GENERAL PUBLIC LICENSE 3
  *
  */
 
 import {Args, Command, Flags} from '@oclif/core'
-import cli from 'cli-ux'
 import AdmZip from 'adm-zip'
+import cli from 'cli-ux'
 import Configstore from 'configstore'
-import * as os from 'os'
-import {v4 as uuidv4} from 'uuid'
 import FormData from 'form-data'
 import * as fs from 'fs'
+import * as os from 'os'
 import * as path from 'path'
-import User from '../common/user'
-import {schemasList} from "../util/lists"
-import setSchema from "../util/set-schema"
+import {v4 as uuidv4} from 'uuid'
+
 import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../centiaClient'
+import User from '../common/user'
+import {schemasList} from '../util/lists'
+import setSchema from '../util/set-schema'
 
 const config: Configstore = new Configstore('gc2-env')
 const userConfig: User = config.all

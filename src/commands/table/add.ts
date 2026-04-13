@@ -1,6 +1,6 @@
 /**
  * @author     Martin Høgh <mh@mapcentia.com>
- * @copyright  2013-2024 MapCentia ApS
+ * @copyright  2013-2026 MapCentia ApS
  * @license    http://www.gnu.org/licenses/#AGPL  GNU AFFERO GENERAL PUBLIC LICENSE 3
  *
  */
@@ -8,15 +8,16 @@
 import {input} from '@inquirer/prompts'
 import {Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
+
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 import args from '../../common/base_args'
 import {schemasList} from '../../util/lists'
 import setSchema from '../../util/set-schema'
-import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 
 let base_args = args
 let specific_args = {}
 
-export default class Add extends Command {
+export class Add extends Command {
   static description = 'Create a new table.'
   static flags = {
     help: Flags.help({char: 'h'}),

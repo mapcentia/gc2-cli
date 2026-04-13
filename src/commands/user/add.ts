@@ -1,13 +1,14 @@
 /**
  * @author     Martin Høgh <mh@mapcentia.com>
- * @copyright  2013-2024 MapCentia ApS
+ * @copyright  2013-2026 MapCentia ApS
  * @license    http://www.gnu.org/licenses/#AGPL  GNU AFFERO GENERAL PUBLIC LICENSE 3
  *
  */
 
-import {input, password, confirm} from '@inquirer/prompts'
+import {confirm, input, password} from '@inquirer/prompts'
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
+
 import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
 import {passwordIsStrongEnough} from '../../util/utils'
 

@@ -1,8 +1,15 @@
-import Configstore from 'configstore'
-import {CodeFlow, createCentiaAdminClient, isCentiaApiError} from '@centia-io/sdk'
-import type {CentiaAdminClient} from '@centia-io/sdk'
-import {exit} from '@oclif/core/lib/errors'
+/**
+ * @author     Martin Høgh <mh@mapcentia.com>
+ * @copyright  2013-2026 MapCentia ApS
+ * @license    http://www.gnu.org/licenses/#AGPL  GNU AFFERO GENERAL PUBLIC LICENSE 3
+ *
+ */
+
+import {CodeFlow, createCentiaAdminClient, isCentiaApiError, type CentiaAdminClient} from '@centia-io/sdk'
 import {logToStderr} from '@oclif/core/lib/cli-ux'
+import {exit} from '@oclif/core/lib/errors'
+import Configstore from 'configstore'
+
 import User from './common/user'
 import {CLI_SERVER_ADDRESS_CALLBACK, GC2_SERVER_ADDRESS, isTokenExpired, noLogin} from './util/utils'
 
