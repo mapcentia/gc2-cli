@@ -95,12 +95,12 @@ export default class Login extends Command {
     }
 
     const claims = JSON.parse(atob(data.access_token.split('.')[1]))
-    config.set({user: claims.uid})
-    config.set({database: claims.database})
-    config.set({superUser: claims.superUser})
     await tokenStore.set({
       token: data.access_token,
       refresh_token: data.refresh_token,
+      user: claims.uid,
+      database: claims.database,
+      superUser: claims.superUser
     })
 
     process.stderr.write('\n')
