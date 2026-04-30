@@ -16,7 +16,7 @@ import * as querystring from 'querystring'
 
 import User from '../common/user'
 import {PasswordFlow} from '@centia-io/sdk'
-import {createAuthService} from '../centiaClient'
+import {createAuthService, tokenStore} from '../centiaClient'
 import {CLI_SERVER_ADDRESS, CLI_SERVER_ADDRESS_CALLBACK, GC2_SERVER_ADDRESS, generatePkceChallenge, waitFor,} from '../util/utils'
 import EventEmitter = require('events')
 
@@ -97,9 +97,11 @@ export default class Login extends Command {
     const claims = JSON.parse(atob(data.access_token.split('.')[1]))
     config.set({user: claims.uid})
     config.set({database: claims.database})
-    config.set({token: data.access_token})
-    config.set({refresh_token: data.refresh_token})
     config.set({superUser: claims.superUser})
+    await tokenStore.set({
+      token: data.access_token,
+      refresh_token: data.refresh_token,
+    })
 
     process.stderr.write('\n')
     process.stderr.write(`  ${success('✔')} Signed in as ${chalk.bold(claims.uid)}`)

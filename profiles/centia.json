@@ -13,11 +13,13 @@
   "commands": [
     "login",
     "logout",
+    "whoami",
     "import",
     "sql",
     "connect",
     "client/*",
     "column/*",
+    "config/*",
     "constraint/*",
     "index/*",
     "privilege/*",

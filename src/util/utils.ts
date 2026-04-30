@@ -5,7 +5,6 @@ import * as crypto from 'crypto'
 import Configstore from 'configstore'
 import User from '../common/user'
 import EventEmitter = require('events')
-import {jwtDecode} from 'jwt-decode'
 
 const config: Configstore = new Configstore('gc2-env')
 let obj: User = config.all // User object or empty object
@@ -49,18 +48,6 @@ export const waitFor = <T>(
 
     emitter.addListener(eventName, handleEvent)
   })
-}
-
-export const isTokenExpired = (token: string): boolean => {
-
-  let isJwtExpired = false
-  const {exp} = jwtDecode(token)
-  const currentTime = new Date().getTime() / 1000
-
-  if (exp) {
-    if (currentTime > exp) isJwtExpired = true
-  }
-  return isJwtExpired
 }
 
 export const passwordIsStrongEnough = (password: string, allowNull: boolean = false) => {

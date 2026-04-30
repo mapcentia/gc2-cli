@@ -5,13 +5,22 @@
  *
  */
 
-import {CodeFlow, createCentiaAdminClient, isCentiaApiError, type CentiaAdminClient} from '@centia-io/sdk'
+import {
+  CodeFlow,
+  createCentiaAdminClient,
+  createConfigstoreTokenStore,
+  createTokenProvider,
+  isCentiaApiError,
+  NotLoggedInError,
+  SessionExpiredError,
+  type CentiaAdminClient,
+} from '@centia-io/sdk'
 import {logToStderr} from '@oclif/core/lib/cli-ux'
 import {exit} from '@oclif/core/lib/errors'
 import Configstore from 'configstore'
 
 import User from './common/user'
-import {CLI_SERVER_ADDRESS_CALLBACK, GC2_SERVER_ADDRESS, isTokenExpired, noLogin} from './util/utils'
+import {CLI_SERVER_ADDRESS_CALLBACK, GC2_SERVER_ADDRESS, noLogin} from './util/utils'
 
 const config: Configstore = new Configstore('gc2-env')
 
@@ -32,31 +41,26 @@ export const createAuthService = (): AuthService =>
     redirectUri: CLI_SERVER_ADDRESS_CALLBACK,
   }).service
 
-const getAccessToken = async (): Promise<string | undefined> => {
-  const user = getUser()
+export const tokenStore = createConfigstoreTokenStore('gc2-env')
 
-  if (!user?.token) {
-    noLogin()
-  }
+const tokenProvider = createTokenProvider({
+  store: tokenStore,
+  authService: createAuthService() as any,
+})
 
-  if (user?.token && isTokenExpired(user.token)) {
-    if (!user.refresh_token || isTokenExpired(user.refresh_token)) {
+const getAccessToken = async (): Promise<string> => {
+  try {
+    return await tokenProvider.getAccessToken()
+  } catch (e) {
+    if (e instanceof NotLoggedInError) {
+      noLogin()
+    }
+    if (e instanceof SessionExpiredError) {
       logToStderr('⚠️ Refresh token has expired. Please login again')
       exit(1)
     }
-
-    try {
-      const service = createAuthService()
-      const data = await service.getRefreshToken(user.refresh_token)
-      config.set({token: data.access_token})
-      return data.access_token
-    } catch {
-      logToStderr('⚠️ Could not get refresh token')
-      exit(1)
-    }
+    throw e
   }
-
-  return (config.all as User).token
 }
 
 export const createCliCentiaAdminClient = (): CentiaAdminClient => {

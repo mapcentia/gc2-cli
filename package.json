@@ -116,6 +116,9 @@
       },
       "view": {
         "description": "Backup views definitions and refresh materialized views."
+      },
+      "config": {
+        "description": "Inspect CLI configuration (e.g. configstore file path)."
       }
     },
     "additionalHelpFlags": [
