@@ -8,6 +8,6 @@
     "bin": "gc2"
   },
   "dependencies": {
-    "@centia-io/sdk": "^0.0.45"
+    "@centia-io/sdk": "^0.1.0"
   }
 }

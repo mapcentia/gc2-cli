@@ -1,7 +1,7 @@
 {
   "name": "@mapcentia/gc2-cli",
   "description": "GC2 CLI",
-  "version": "2026.4.0",
+  "version": "2026.5.0",
   "author": "Martin Høgh @mapcentia",
   "bin": {
     "gc2": "./bin/run"

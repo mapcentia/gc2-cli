@@ -15,108 +15,73 @@ CLI tool for GC2
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g @mapcentia/gc2-cli
-$ gc2 COMMAND
+$ npm install -g @centia-io/cli
+$ centia COMMAND
 running command...
-$ gc2 (--version|-v)
-@mapcentia/gc2-cli/2026.3.2 linux-x64 node-v24.14.1
-$ gc2 --help [COMMAND]
+$ centia (--version|-v)
+@centia-io/cli/2026.5.0 linux-x64 node-v24.14.1
+$ centia --help [COMMAND]
 USAGE
-  $ gc2 COMMAND
+  $ centia COMMAND
 ...
 ```
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`gc2 admin`](#gc2-admin)
-* [`gc2 client add [NAME]`](#gc2-client-add-name)
-* [`gc2 client drop [ID]`](#gc2-client-drop-id)
-* [`gc2 client get [ID]`](#gc2-client-get-id)
-* [`gc2 client update [ID]`](#gc2-client-update-id)
-* [`gc2 column add [SCHEMA] [TABLE] [COLUMN] [TYPE]`](#gc2-column-add-schema-table-column-type)
-* [`gc2 column default [SCHEMA] [TABLE] [COLUMN] [DEFAULT]`](#gc2-column-default-schema-table-column-default)
-* [`gc2 column drop [SCHEMA] [TABLE] [COLUMN]`](#gc2-column-drop-schema-table-column)
-* [`gc2 column get [SCHEMA] [TABLE] [COLUMN]`](#gc2-column-get-schema-table-column)
-* [`gc2 column nullable [SCHEMA] [TABLE] [COLUMN] [NULLABLE]`](#gc2-column-nullable-schema-table-column-nullable)
-* [`gc2 column rename [SCHEMA] [TABLE] [COLUMN] [NAME]`](#gc2-column-rename-schema-table-column-name)
-* [`gc2 column type [SCHEMA] [TABLE] [COLUMN] [TYPE]`](#gc2-column-type-schema-table-column-type)
-* [`gc2 connect [HOST]`](#gc2-connect-host)
-* [`gc2 constraint add [SCHEMA] [TABLE] [COLUMNS] [TYPE] [NAME]`](#gc2-constraint-add-schema-table-columns-type-name)
-* [`gc2 constraint drop [SCHEMA] [TABLE] [NAME]`](#gc2-constraint-drop-schema-table-name)
-* [`gc2 constraint get [SCHEMA] [TABLE] [NAME]`](#gc2-constraint-get-schema-table-name)
-* [`gc2 foreign drop SCHEMAS [INCLUDE]`](#gc2-foreign-drop-schemas-include)
-* [`gc2 foreign import SERVER FROM TO [INCLUDE]`](#gc2-foreign-import-server-from-to-include)
-* [`gc2 foreign materialize FROM [TO] [INCLUDE]`](#gc2-foreign-materialize-from-to-include)
-* [`gc2 grid`](#gc2-grid)
-* [`gc2 help [COMMAND]`](#gc2-help-command)
-* [`gc2 import [PATH] [SCHEMA]`](#gc2-import-path-schema)
-* [`gc2 index add [SCHEMA] [TABLE] [COLUMNS] [METHOD] [NAME]`](#gc2-index-add-schema-table-columns-method-name)
-* [`gc2 index drop [SCHEMA] [TABLE] [NAME]`](#gc2-index-drop-schema-table-name)
-* [`gc2 index get [SCHEMA] [TABLE] [NAME]`](#gc2-index-get-schema-table-name)
-* [`gc2 login`](#gc2-login)
-* [`gc2 logout`](#gc2-logout)
-* [`gc2 privilege get [SCHEMA] [TABLE]`](#gc2-privilege-get-schema-table)
-* [`gc2 privilege set [SCHEMA] [TABLE] [USER] [PRIVILEGE]`](#gc2-privilege-set-schema-table-user-privilege)
-* [`gc2 rule add`](#gc2-rule-add)
-* [`gc2 rule drop [ID]`](#gc2-rule-drop-id)
-* [`gc2 rule get [ID]`](#gc2-rule-get-id)
-* [`gc2 rule update [ID]`](#gc2-rule-update-id)
-* [`gc2 scheduler start JOB [INCLUDE]`](#gc2-scheduler-start-job-include)
-* [`gc2 scheduler status`](#gc2-scheduler-status)
-* [`gc2 schema add [SCHEMA]`](#gc2-schema-add-schema)
-* [`gc2 schema drop [SCHEMA]`](#gc2-schema-drop-schema)
-* [`gc2 schema get [SCHEMA]`](#gc2-schema-get-schema)
-* [`gc2 schema rename [SCHEMA] [NAME]`](#gc2-schema-rename-schema-name)
-* [`gc2 seed list`](#gc2-seed-list)
-* [`gc2 seed log`](#gc2-seed-log)
-* [`gc2 seed start`](#gc2-seed-start)
-* [`gc2 seed stop`](#gc2-seed-stop)
-* [`gc2 sql`](#gc2-sql)
-* [`gc2 stat`](#gc2-stat)
-* [`gc2 symbol PATH`](#gc2-symbol-path)
-* [`gc2 table add [SCHEMA] [TABLE]`](#gc2-table-add-schema-table)
-* [`gc2 table drop [SCHEMA] [TABLE]`](#gc2-table-drop-schema-table)
-* [`gc2 table event [SCHEMA] [TABLE] [EVENT]`](#gc2-table-event-schema-table-event)
-* [`gc2 table get [SCHEMA] [TABLE]`](#gc2-table-get-schema-table)
-* [`gc2 table move [SCHEMA] [TABLE] [DESTINATION]`](#gc2-table-move-schema-table-destination)
-* [`gc2 table rename [SCHEMA] [TABLE] [NAME]`](#gc2-table-rename-schema-table-name)
-* [`gc2 user add [NAME]`](#gc2-user-add-name)
-* [`gc2 user drop [NAME]`](#gc2-user-drop-name)
-* [`gc2 user get [ID]`](#gc2-user-get-id)
-* [`gc2 user update [NAME]`](#gc2-user-update-name)
-* [`gc2 view backup SCHEMAS`](#gc2-view-backup-schemas)
-* [`gc2 view get SCHEMA`](#gc2-view-get-schema)
-* [`gc2 view refresh SCHEMAS [INCLUDE]`](#gc2-view-refresh-schemas-include)
-* [`gc2 view restore FROM [TO] [INCLUDE]`](#gc2-view-restore-from-to-include)
+* [`centia client add [NAME]`](#centia-client-add-name)
+* [`centia client drop [ID]`](#centia-client-drop-id)
+* [`centia client get [ID]`](#centia-client-get-id)
+* [`centia client update [ID]`](#centia-client-update-id)
+* [`centia column add [TABLE] [COLUMN] [TYPE]`](#centia-column-add-table-column-type)
+* [`centia column default [TABLE] [COLUMN] [DEFAULT]`](#centia-column-default-table-column-default)
+* [`centia column drop [TABLE] [COLUMN]`](#centia-column-drop-table-column)
+* [`centia column get [TABLE] [COLUMN]`](#centia-column-get-table-column)
+* [`centia column nullable [TABLE] [COLUMN] [NULLABLE]`](#centia-column-nullable-table-column-nullable)
+* [`centia column rename [TABLE] [COLUMN] [NAME]`](#centia-column-rename-table-column-name)
+* [`centia column type [TABLE] [COLUMN] [TYPE]`](#centia-column-type-table-column-type)
+* [`centia config path`](#centia-config-path)
+* [`centia connect [HOST]`](#centia-connect-host)
+* [`centia constraint add [TABLE] [COLUMNS] [TYPE] [NAME]`](#centia-constraint-add-table-columns-type-name)
+* [`centia constraint drop [TABLE] [NAME]`](#centia-constraint-drop-table-name)
+* [`centia constraint get [TABLE] [NAME]`](#centia-constraint-get-table-name)
+* [`centia help [COMMAND]`](#centia-help-command)
+* [`centia import [PATH]`](#centia-import-path)
+* [`centia index add [TABLE] [COLUMNS] [METHOD] [NAME]`](#centia-index-add-table-columns-method-name)
+* [`centia index drop [TABLE] [NAME]`](#centia-index-drop-table-name)
+* [`centia index get [TABLE] [NAME]`](#centia-index-get-table-name)
+* [`centia login`](#centia-login)
+* [`centia logout`](#centia-logout)
+* [`centia privilege get [TABLE]`](#centia-privilege-get-table)
+* [`centia privilege set [TABLE] [USER] [PRIVILEGE]`](#centia-privilege-set-table-user-privilege)
+* [`centia rule add`](#centia-rule-add)
+* [`centia rule drop [ID]`](#centia-rule-drop-id)
+* [`centia rule get [ID]`](#centia-rule-get-id)
+* [`centia rule update [ID]`](#centia-rule-update-id)
+* [`centia schema add [SCHEMA]`](#centia-schema-add-schema)
+* [`centia schema drop [SCHEMA]`](#centia-schema-drop-schema)
+* [`centia schema get [SCHEMA]`](#centia-schema-get-schema)
+* [`centia schema rename [SCHEMA] [NAME]`](#centia-schema-rename-schema-name)
+* [`centia sql`](#centia-sql)
+* [`centia table add [TABLE]`](#centia-table-add-table)
+* [`centia table drop [TABLE]`](#centia-table-drop-table)
+* [`centia table event [TABLE] [EVENT]`](#centia-table-event-table-event)
+* [`centia table get [TABLE]`](#centia-table-get-table)
+* [`centia table move [TABLE] [DESTINATION]`](#centia-table-move-table-destination)
+* [`centia table rename [TABLE] [NAME]`](#centia-table-rename-table-name)
+* [`centia user add [NAME]`](#centia-user-add-name)
+* [`centia user drop [NAME]`](#centia-user-drop-name)
+* [`centia user get [ID]`](#centia-user-get-id)
+* [`centia user update`](#centia-user-update)
+* [`centia whoami`](#centia-whoami)
 
-## `gc2 admin`
-
-Run administration task on the GC2 installation.
-
-```
-USAGE
-  $ gc2 admin [-t
-    mapfiles|mapcachefile|qgisfiles|schema|migrations|diskcleanup|cachestats|cachecleanup|insertmeta]
-
-FLAGS
-  -t, --task=<option>  The task to run.
-                       <options:
-                       mapfiles|mapcachefile|qgisfiles|schema|migrations|diskcleanup|cachestats|cachecleanup|insertmeta>
-
-DESCRIPTION
-  Run administration task on the GC2 installation.
-```
-
-_See code: [src/commands/admin.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/admin.ts)_
-
-## `gc2 client add [NAME]`
+## `centia client add [NAME]`
 
 Create new client.
 
 ```
 USAGE
-  $ gc2 client add [NAME] [-i <value>] [-n <value>] [-d <value>] [-r <value>] [-H <value>] [-p] [-c] [-t] [-s]
-    [-S] [-h]
+  $ centia client add [NAME] [-i <value>] [-n <value>] [-d <value>] [-r <value>] [-H <value>] [-p] [-c] [-t]
+    [-s] [-S] [-h]
 
 ARGUMENTS
   [NAME]  Name of new client.
@@ -138,15 +103,15 @@ DESCRIPTION
   Create new client.
 ```
 
-_See code: [src/commands/client/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/client/add.ts)_
+_See code: [src/commands/client/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/client/add.ts)_
 
-## `gc2 client drop [ID]`
+## `centia client drop [ID]`
 
 Drop a client.
 
 ```
 USAGE
-  $ gc2 client drop [ID] [-h]
+  $ centia client drop [ID] [-h]
 
 ARGUMENTS
   [ID]  Id of client.
@@ -158,15 +123,15 @@ DESCRIPTION
   Drop a client.
 ```
 
-_See code: [src/commands/client/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/client/drop.ts)_
+_See code: [src/commands/client/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/client/drop.ts)_
 
-## `gc2 client get [ID]`
+## `centia client get [ID]`
 
 List client(s).
 
 ```
 USAGE
-  $ gc2 client get [ID] [-h]
+  $ centia client get [ID] [-h]
 
 ARGUMENTS
   [ID]  Client id
@@ -178,15 +143,15 @@ DESCRIPTION
   List client(s).
 ```
 
-_See code: [src/commands/client/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/client/get.ts)_
+_See code: [src/commands/client/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/client/get.ts)_
 
-## `gc2 client update [ID]`
+## `centia client update [ID]`
 
 Update a client.
 
 ```
 USAGE
-  $ gc2 client update [ID] [-n <value>] [-d <value>] [-r <value>] [-p <value>] [-p] [-c] [-t] [-s] [-S] [-h]
+  $ centia client update [ID] [-n <value>] [-d <value>] [-r <value>] [-p <value>] [-p] [-c] [-t] [-s] [-S] [-h]
 
 ARGUMENTS
   [ID]  Id of client.
@@ -207,18 +172,17 @@ DESCRIPTION
   Update a client.
 ```
 
-_See code: [src/commands/client/update.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/client/update.ts)_
+_See code: [src/commands/client/update.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/client/update.ts)_
 
-## `gc2 column add [SCHEMA] [TABLE] [COLUMN] [TYPE]`
+## `centia column add [TABLE] [COLUMN] [TYPE]`
 
 Add a new column to a table.
 
 ```
 USAGE
-  $ gc2 column add [SCHEMA] [TABLE] [COLUMN] [TYPE] [-h]
+  $ centia column add [TABLE] [COLUMN] [TYPE] [-h]
 
 ARGUMENTS
-  [SCHEMA]  Name of schema.
   [TABLE]   Name of table.
   [COLUMN]  Name of new column.
   [TYPE]    Data type of new column.
@@ -230,18 +194,17 @@ DESCRIPTION
   Add a new column to a table.
 ```
 
-_See code: [src/commands/column/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/column/add.ts)_
+_See code: [src/commands/column/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/column/add.ts)_
 
-## `gc2 column default [SCHEMA] [TABLE] [COLUMN] [DEFAULT]`
+## `centia column default [TABLE] [COLUMN] [DEFAULT]`
 
 Set default value for column. The default value is set when inserting a new row without a value for the column.
 
 ```
 USAGE
-  $ gc2 column default [SCHEMA] [TABLE] [COLUMN] [DEFAULT] [-h]
+  $ centia column default [TABLE] [COLUMN] [DEFAULT] [-h]
 
 ARGUMENTS
-  [SCHEMA]   Name of schema.
   [TABLE]    Name of table.
   [COLUMN]   Name of column.
   [DEFAULT]  Default value. Set to 'null' for removing an already set value.
@@ -253,18 +216,17 @@ DESCRIPTION
   Set default value for column. The default value is set when inserting a new row without a value for the column.
 ```
 
-_See code: [src/commands/column/default.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/column/default.ts)_
+_See code: [src/commands/column/default.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/column/default.ts)_
 
-## `gc2 column drop [SCHEMA] [TABLE] [COLUMN]`
+## `centia column drop [TABLE] [COLUMN]`
 
 Drop a column from table.
 
 ```
 USAGE
-  $ gc2 column drop [SCHEMA] [TABLE] [COLUMN] [-h]
+  $ centia column drop [TABLE] [COLUMN] [-h]
 
 ARGUMENTS
-  [SCHEMA]  Name of schema.
   [TABLE]   Name of table.
   [COLUMN]  Name of column to drop.
 
@@ -275,18 +237,17 @@ DESCRIPTION
   Drop a column from table.
 ```
 
-_See code: [src/commands/column/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/column/drop.ts)_
+_See code: [src/commands/column/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/column/drop.ts)_
 
-## `gc2 column get [SCHEMA] [TABLE] [COLUMN]`
+## `centia column get [TABLE] [COLUMN]`
 
 Get description of a column.
 
 ```
 USAGE
-  $ gc2 column get [SCHEMA] [TABLE] [COLUMN] [-h]
+  $ centia column get [TABLE] [COLUMN] [-h]
 
 ARGUMENTS
-  [SCHEMA]  Name of schema.
   [TABLE]   Name of table.
   [COLUMN]  Name of column.
 
@@ -297,18 +258,17 @@ DESCRIPTION
   Get description of a column.
 ```
 
-_See code: [src/commands/column/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/column/get.ts)_
+_See code: [src/commands/column/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/column/get.ts)_
 
-## `gc2 column nullable [SCHEMA] [TABLE] [COLUMN] [NULLABLE]`
+## `centia column nullable [TABLE] [COLUMN] [NULLABLE]`
 
 Set nullable on column. If set the column can't be empty.
 
 ```
 USAGE
-  $ gc2 column nullable [SCHEMA] [TABLE] [COLUMN] [NULLABLE] [-h]
+  $ centia column nullable [TABLE] [COLUMN] [NULLABLE] [-h]
 
 ARGUMENTS
-  [SCHEMA]    Name of schema.
   [TABLE]     Name of table.
   [COLUMN]    Name of column.
   [NULLABLE]  (true|false) Set column to nullable.
@@ -320,18 +280,17 @@ DESCRIPTION
   Set nullable on column. If set the column can't be empty.
 ```
 
-_See code: [src/commands/column/nullable.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/column/nullable.ts)_
+_See code: [src/commands/column/nullable.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/column/nullable.ts)_
 
-## `gc2 column rename [SCHEMA] [TABLE] [COLUMN] [NAME]`
+## `centia column rename [TABLE] [COLUMN] [NAME]`
 
 Rename a column.
 
 ```
 USAGE
-  $ gc2 column rename [SCHEMA] [TABLE] [COLUMN] [NAME] [-h]
+  $ centia column rename [TABLE] [COLUMN] [NAME] [-h]
 
 ARGUMENTS
-  [SCHEMA]  Name of schema.
   [TABLE]   Name of table.
   [COLUMN]  Existing name of column.
   [NAME]    New name for column.
@@ -343,18 +302,17 @@ DESCRIPTION
   Rename a column.
 ```
 
-_See code: [src/commands/column/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/column/rename.ts)_
+_See code: [src/commands/column/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/column/rename.ts)_
 
-## `gc2 column type [SCHEMA] [TABLE] [COLUMN] [TYPE]`
+## `centia column type [TABLE] [COLUMN] [TYPE]`
 
 Set the data on column. It might be, the existing data type can't be transformed to the chosen one.
 
 ```
 USAGE
-  $ gc2 column type [SCHEMA] [TABLE] [COLUMN] [TYPE] [-h]
+  $ centia column type [TABLE] [COLUMN] [TYPE] [-h]
 
 ARGUMENTS
-  [SCHEMA]  Name of schema.
   [TABLE]   Name of table.
   [COLUMN]  Name of column.
   [TYPE]    New data type for column.
@@ -366,15 +324,32 @@ DESCRIPTION
   Set the data on column. It might be, the existing data type can't be transformed to the chosen one.
 ```
 
-_See code: [src/commands/column/type.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/column/type.ts)_
+_See code: [src/commands/column/type.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/column/type.ts)_
 
-## `gc2 connect [HOST]`
+## `centia config path`
+
+Print the absolute path to the configstore JSON file used by the CLI.
+
+```
+USAGE
+  $ centia config path [-h]
+
+FLAGS
+  -h, --help  Show CLI help.
+
+DESCRIPTION
+  Print the absolute path to the configstore JSON file used by the CLI.
+```
+
+_See code: [src/commands/config/path.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/config/path.ts)_
+
+## `centia connect [HOST]`
 
 Set connection. You can use flags to set host, database and user. If one or more flags are missing, you will be prompted instead.
 
 ```
 USAGE
-  $ gc2 connect [HOST] [-h] [-r]
+  $ centia connect [HOST] [-h] [-r]
 
 ARGUMENTS
   [HOST]  Server host with scheme: http(s)
@@ -388,18 +363,17 @@ DESCRIPTION
   prompted instead.
 ```
 
-_See code: [src/commands/connect.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/connect.ts)_
+_See code: [src/commands/connect.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/connect.ts)_
 
-## `gc2 constraint add [SCHEMA] [TABLE] [COLUMNS] [TYPE] [NAME]`
+## `centia constraint add [TABLE] [COLUMNS] [TYPE] [NAME]`
 
 Add a constraint.
 
 ```
 USAGE
-  $ gc2 constraint add [SCHEMA] [TABLE] [COLUMNS] [TYPE] [NAME] [-h] [-t <value>] [-e <value>] [-c <value>]
+  $ centia constraint add [TABLE] [COLUMNS] [TYPE] [NAME] [-h] [-t <value>] [-e <value>] [-c <value>]
 
 ARGUMENTS
-  [SCHEMA]   Name of schema.
   [TABLE]    Name of table.
   [COLUMNS]  Columns for use in the constraint (comma separated).
   [TYPE]     (primary|unique|foreign|check) Type of constraint.
@@ -419,20 +393,19 @@ DESCRIPTION
   Add a constraint.
 ```
 
-_See code: [src/commands/constraint/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/constraint/add.ts)_
+_See code: [src/commands/constraint/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/constraint/add.ts)_
 
-## `gc2 constraint drop [SCHEMA] [TABLE] [NAME]`
+## `centia constraint drop [TABLE] [NAME]`
 
 Drop a constraint.
 
 ```
 USAGE
-  $ gc2 constraint drop [SCHEMA] [TABLE] [NAME] [-h]
+  $ centia constraint drop [TABLE] [NAME] [-h]
 
 ARGUMENTS
-  [SCHEMA]  Name of schema.
-  [TABLE]   Name of table.
-  [NAME]    Name of constraint.
+  [TABLE]  Name of table.
+  [NAME]   Name of constraint.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -441,20 +414,19 @@ DESCRIPTION
   Drop a constraint.
 ```
 
-_See code: [src/commands/constraint/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/constraint/drop.ts)_
+_See code: [src/commands/constraint/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/constraint/drop.ts)_
 
-## `gc2 constraint get [SCHEMA] [TABLE] [NAME]`
+## `centia constraint get [TABLE] [NAME]`
 
 Get constraint details.
 
 ```
 USAGE
-  $ gc2 constraint get [SCHEMA] [TABLE] [NAME] [-h]
+  $ centia constraint get [TABLE] [NAME] [-h]
 
 ARGUMENTS
-  [SCHEMA]  Name of schema.
-  [TABLE]   Name of table.
-  [NAME]    Name of constraint.
+  [TABLE]  Name of table.
+  [NAME]   Name of constraint.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -463,103 +435,15 @@ DESCRIPTION
   Get constraint details.
 ```
 
-_See code: [src/commands/constraint/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/constraint/get.ts)_
+_See code: [src/commands/constraint/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/constraint/get.ts)_
 
-## `gc2 foreign drop SCHEMAS [INCLUDE]`
+## `centia help [COMMAND]`
 
-Drop all foreign tables in schema.
-
-```
-USAGE
-  $ gc2 foreign drop SCHEMAS [INCLUDE] [-h]
-
-ARGUMENTS
-  SCHEMAS    Schemas for dropping (comma separated).
-  [INCLUDE]  Only drop named foreign tables. Comma separated.
-
-FLAGS
-  -h, --help  Show CLI help.
-
-DESCRIPTION
-  Drop all foreign tables in schema.
-```
-
-_See code: [src/commands/foreign/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/foreign/drop.ts)_
-
-## `gc2 foreign import SERVER FROM TO [INCLUDE]`
-
-Import schema from foreign server.
+Display help for centia.
 
 ```
 USAGE
-  $ gc2 foreign import SERVER FROM TO [INCLUDE] [-h]
-
-ARGUMENTS
-  SERVER     Name of foreign server.
-  FROM       Comma separated list of foreign schemas.
-  TO         Comma separated list of local schemas.
-  [INCLUDE]  Only include named relations in import. Comma separated.
-
-FLAGS
-  -h, --help  Show CLI help.
-
-DESCRIPTION
-  Import schema from foreign server.
-```
-
-_See code: [src/commands/foreign/import.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/foreign/import.ts)_
-
-## `gc2 foreign materialize FROM [TO] [INCLUDE]`
-
-Create materialized views of foreign tables.
-
-```
-USAGE
-  $ gc2 foreign materialize FROM [TO] [INCLUDE] [-h] [-p <value>] [-s <value>]
-
-ARGUMENTS
-  FROM       Comma separated list of source schemas.
-  [TO]       comma separated list of target schemas.
-  [INCLUDE]  only include named foreign tables. Comma separated.
-
-FLAGS
-  -h, --help            Show CLI help.
-  -p, --prefix=<value>  prefix for created foreign tables
-  -s, --suffix=<value>  suffix for created foreign tables
-
-DESCRIPTION
-  Create materialized views of foreign tables.
-```
-
-_See code: [src/commands/foreign/materialize.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/foreign/materialize.ts)_
-
-## `gc2 grid`
-
-Add a fishnet grid from an input polygon.
-
-```
-USAGE
-  $ gc2 grid -t <value> -e <value> -s <value> [-h]
-
-FLAGS
-  -e, --extent=<value>  (required) Polygon table which should be used for extent.
-  -h, --help            Show CLI help.
-  -s, --size=<value>    (required) Cell size in map units.
-  -t, --table=<value>   (required) Name of the new fishnet table.
-
-DESCRIPTION
-  Add a fishnet grid from an input polygon.
-```
-
-_See code: [src/commands/grid.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/grid.ts)_
-
-## `gc2 help [COMMAND]`
-
-Display help for gc2.
-
-```
-USAGE
-  $ gc2 help [COMMAND...] [-n]
+  $ centia help [COMMAND...] [-n]
 
 ARGUMENTS
   [COMMAND...]  Command to show help for.
@@ -568,23 +452,22 @@ FLAGS
   -n, --nested-commands  Include all nested commands in the output.
 
 DESCRIPTION
-  Display help for gc2.
+  Display help for centia.
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.37/src/commands/help.ts)_
 
-## `gc2 import [PATH] [SCHEMA]`
+## `centia import [PATH]`
 
 Import files. Set path to a file or folder, which will be compressed, uploaded and imported into GC2.
 
 ```
 USAGE
-  $ gc2 import [PATH] [SCHEMA] [-s <value>] [-t <value>] [-T <value>] [-x <value>] [-y <value>] [-d] [-a]
-    [-r] [-p] [-n <value>] [-h]
+  $ centia import [PATH] [-s <value>] [-t <value>] [-T <value>] [-x <value>] [-y <value>] [-d] [-a] [-r]
+    [-p] [-n <value>] [-h]
 
 ARGUMENTS
-  [PATH]    [default: .] Input path to file or folder.
-  [SCHEMA]  Destination schema.
+  [PATH]  [default: .] Input path to file or folder.
 
 FLAGS
   -T, --timestamp=<value>         Name of timestamp field. Create a timestamp field in the import table. Omit argument
@@ -608,18 +491,17 @@ DESCRIPTION
   Import files. Set path to a file or folder, which will be compressed, uploaded and imported into GC2.
 ```
 
-_See code: [src/commands/import.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/import.ts)_
+_See code: [src/commands/import.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/import.ts)_
 
-## `gc2 index add [SCHEMA] [TABLE] [COLUMNS] [METHOD] [NAME]`
+## `centia index add [TABLE] [COLUMNS] [METHOD] [NAME]`
 
 Add an new index to table.
 
 ```
 USAGE
-  $ gc2 index add [SCHEMA] [TABLE] [COLUMNS] [METHOD] [NAME] [-h]
+  $ centia index add [TABLE] [COLUMNS] [METHOD] [NAME] [-h]
 
 ARGUMENTS
-  [SCHEMA]   Name of schema.
   [TABLE]    Name of table.
   [COLUMNS]  Columns to index (comma separated).
   [METHOD]   (btree|brin|gin|gist|hash) Index method.
@@ -632,20 +514,19 @@ DESCRIPTION
   Add an new index to table.
 ```
 
-_See code: [src/commands/index/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/index/add.ts)_
+_See code: [src/commands/index/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/index/add.ts)_
 
-## `gc2 index drop [SCHEMA] [TABLE] [NAME]`
+## `centia index drop [TABLE] [NAME]`
 
 Drop an index from table.
 
 ```
 USAGE
-  $ gc2 index drop [SCHEMA] [TABLE] [NAME] [-h]
+  $ centia index drop [TABLE] [NAME] [-h]
 
 ARGUMENTS
-  [SCHEMA]  Name of schema.
-  [TABLE]   Name of table.
-  [NAME]    Name of index.
+  [TABLE]  Name of table.
+  [NAME]   Name of index.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -654,20 +535,19 @@ DESCRIPTION
   Drop an index from table.
 ```
 
-_See code: [src/commands/index/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/index/drop.ts)_
+_See code: [src/commands/index/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/index/drop.ts)_
 
-## `gc2 index get [SCHEMA] [TABLE] [NAME]`
+## `centia index get [TABLE] [NAME]`
 
 Get index definition.
 
 ```
 USAGE
-  $ gc2 index get [SCHEMA] [TABLE] [NAME] [-h]
+  $ centia index get [TABLE] [NAME] [-h]
 
 ARGUMENTS
-  [SCHEMA]  Name of schema.
-  [TABLE]   Name of table.
-  [NAME]    Name of index.
+  [TABLE]  Name of table.
+  [NAME]   Name of index.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -676,15 +556,15 @@ DESCRIPTION
   Get index definition.
 ```
 
-_See code: [src/commands/index/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/index/get.ts)_
+_See code: [src/commands/index/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/index/get.ts)_
 
-## `gc2 login`
+## `centia login`
 
 Sign in to Centia. Use `connect` to set the host first.
 
 ```
 USAGE
-  $ gc2 login [-h] [-p <value>] [-u <value>] [-f password|device|code]
+  $ centia login [-h] [-p <value>] [-u <value>] [-f password|device|code]
 
 FLAGS
   -f, --flow=<option>     [default: code] Authentication flow
@@ -697,15 +577,15 @@ DESCRIPTION
   Sign in to Centia. Use `connect` to set the host first.
 ```
 
-_See code: [src/commands/login.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/login.ts)_
 
-## `gc2 logout`
+## `centia logout`
 
 Logout the current user.
 
 ```
 USAGE
-  $ gc2 logout [-h]
+  $ centia logout [-h]
 
 FLAGS
   -h, --help  Show CLI help.
@@ -714,19 +594,18 @@ DESCRIPTION
   Logout the current user.
 ```
 
-_See code: [src/commands/logout.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/logout.ts)_
+_See code: [src/commands/logout.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/logout.ts)_
 
-## `gc2 privilege get [SCHEMA] [TABLE]`
+## `centia privilege get [TABLE]`
 
 Get user privileges on table.
 
 ```
 USAGE
-  $ gc2 privilege get [SCHEMA] [TABLE] [-h]
+  $ centia privilege get [TABLE] [-h]
 
 ARGUMENTS
-  [SCHEMA]  Name of schema.
-  [TABLE]   Name of table.
+  [TABLE]  Name of table.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -735,18 +614,17 @@ DESCRIPTION
   Get user privileges on table.
 ```
 
-_See code: [src/commands/privilege/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/privilege/get.ts)_
+_See code: [src/commands/privilege/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/privilege/get.ts)_
 
-## `gc2 privilege set [SCHEMA] [TABLE] [USER] [PRIVILEGE]`
+## `centia privilege set [TABLE] [USER] [PRIVILEGE]`
 
 Set user privileges on table.
 
 ```
 USAGE
-  $ gc2 privilege set [SCHEMA] [TABLE] [USER] [PRIVILEGE] [-h]
+  $ centia privilege set [TABLE] [USER] [PRIVILEGE] [-h]
 
 ARGUMENTS
-  [SCHEMA]     Name of schema.
   [TABLE]      Name of table.
   [USER]       Name of user.
   [PRIVILEGE]  Which privilege.
@@ -758,15 +636,15 @@ DESCRIPTION
   Set user privileges on table.
 ```
 
-_See code: [src/commands/privilege/set.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/privilege/set.ts)_
+_See code: [src/commands/privilege/set.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/privilege/set.ts)_
 
-## `gc2 rule add`
+## `centia rule add`
 
 Create a new rule.
 
 ```
 USAGE
-  $ gc2 rule add [-P <value>] [-u <value>] [-s <value>] [-p <value>] [-c <value>] [-t <value>] [-i <value>]
+  $ centia rule add [-P <value>] [-u <value>] [-s <value>] [-p <value>] [-c <value>] [-t <value>] [-i <value>]
     [-a <value>] [-f <value>] [-h]
 
 FLAGS
@@ -785,15 +663,15 @@ DESCRIPTION
   Create a new rule.
 ```
 
-_See code: [src/commands/rule/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/rule/add.ts)_
+_See code: [src/commands/rule/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/rule/add.ts)_
 
-## `gc2 rule drop [ID]`
+## `centia rule drop [ID]`
 
 Drop a rule.
 
 ```
 USAGE
-  $ gc2 rule drop [ID] [-h]
+  $ centia rule drop [ID] [-h]
 
 ARGUMENTS
   [ID]  Id of rule
@@ -805,15 +683,15 @@ DESCRIPTION
   Drop a rule.
 ```
 
-_See code: [src/commands/rule/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/rule/drop.ts)_
+_See code: [src/commands/rule/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/rule/drop.ts)_
 
-## `gc2 rule get [ID]`
+## `centia rule get [ID]`
 
 Get rule(s).
 
 ```
 USAGE
-  $ gc2 rule get [ID] [-h]
+  $ centia rule get [ID] [-h]
 
 ARGUMENTS
   [ID]  Rule id
@@ -825,15 +703,15 @@ DESCRIPTION
   Get rule(s).
 ```
 
-_See code: [src/commands/rule/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/rule/get.ts)_
+_See code: [src/commands/rule/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/rule/get.ts)_
 
-## `gc2 rule update [ID]`
+## `centia rule update [ID]`
 
 Update a rule.
 
 ```
 USAGE
-  $ gc2 rule update [ID] [-p <value>] [-u <value>] [-s <value>] [-r <value>] [-c <value>] [-t <value>] [-i
+  $ centia rule update [ID] [-p <value>] [-u <value>] [-s <value>] [-r <value>] [-c <value>] [-t <value>] [-i
     <value>] [-a <value>] [-f <value>] [-h]
 
 ARGUMENTS
@@ -855,56 +733,15 @@ DESCRIPTION
   Update a rule.
 ```
 
-_See code: [src/commands/rule/update.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/rule/update.ts)_
+_See code: [src/commands/rule/update.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/rule/update.ts)_
 
-## `gc2 scheduler start JOB [INCLUDE]`
-
-Starts a scheduler job
-
-```
-USAGE
-  $ gc2 scheduler start JOB [INCLUDE] [-h] [-n <value>] [-f]
-
-ARGUMENTS
-  JOB        Job id to start. Can also be a schema name and all jobs for that schema will be started.
-  [INCLUDE]  Only include jobs for named tables. Comma separated. Will only have effect if schema is used in "job"
-             option.
-
-FLAGS
-  -f, --force         Force table to be recreated.
-  -h, --help          Show CLI help.
-  -n, --name=<value>  Name the started job(s). The name will be listed in the progress status.
-
-DESCRIPTION
-  Starts a scheduler job
-```
-
-_See code: [src/commands/scheduler/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/scheduler/start.ts)_
-
-## `gc2 scheduler status`
-
-Get jobs in progress.
-
-```
-USAGE
-  $ gc2 scheduler status [-h]
-
-FLAGS
-  -h, --help  Show CLI help.
-
-DESCRIPTION
-  Get jobs in progress.
-```
-
-_See code: [src/commands/scheduler/status.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/scheduler/status.ts)_
-
-## `gc2 schema add [SCHEMA]`
+## `centia schema add [SCHEMA]`
 
 Create a new schema.
 
 ```
 USAGE
-  $ gc2 schema add [SCHEMA] [-h]
+  $ centia schema add [SCHEMA] [-h]
 
 ARGUMENTS
   [SCHEMA]  Name of new schema.
@@ -916,15 +753,15 @@ DESCRIPTION
   Create a new schema.
 ```
 
-_See code: [src/commands/schema/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/schema/add.ts)_
+_See code: [src/commands/schema/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/schema/add.ts)_
 
-## `gc2 schema drop [SCHEMA]`
+## `centia schema drop [SCHEMA]`
 
 Drop a schema.
 
 ```
 USAGE
-  $ gc2 schema drop [SCHEMA] [-h]
+  $ centia schema drop [SCHEMA] [-h]
 
 ARGUMENTS
   [SCHEMA]  Name of schema.
@@ -936,15 +773,15 @@ DESCRIPTION
   Drop a schema.
 ```
 
-_See code: [src/commands/schema/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/schema/drop.ts)_
+_See code: [src/commands/schema/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/schema/drop.ts)_
 
-## `gc2 schema get [SCHEMA]`
+## `centia schema get [SCHEMA]`
 
 Get list of tables in schema.
 
 ```
 USAGE
-  $ gc2 schema get [SCHEMA] [-R] [-h]
+  $ centia schema get [SCHEMA] [-R] [-h]
 
 ARGUMENTS
   [SCHEMA]  Name of schema.
@@ -957,15 +794,15 @@ DESCRIPTION
   Get list of tables in schema.
 ```
 
-_See code: [src/commands/schema/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/schema/get.ts)_
+_See code: [src/commands/schema/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/schema/get.ts)_
 
-## `gc2 schema rename [SCHEMA] [NAME]`
+## `centia schema rename [SCHEMA] [NAME]`
 
 Rename schema.
 
 ```
 USAGE
-  $ gc2 schema rename [SCHEMA] [NAME] [-h]
+  $ centia schema rename [SCHEMA] [NAME] [-h]
 
 ARGUMENTS
   [SCHEMA]  Name of schema.
@@ -978,93 +815,15 @@ DESCRIPTION
   Rename schema.
 ```
 
-_See code: [src/commands/schema/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/schema/rename.ts)_
+_See code: [src/commands/schema/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/schema/rename.ts)_
 
-## `gc2 seed list`
-
-List running seed jobs.
-
-```
-USAGE
-  $ gc2 seed list [-h]
-
-FLAGS
-  -h, --help  Show CLI help.
-
-DESCRIPTION
-  List running seed jobs.
-```
-
-_See code: [src/commands/seed/list.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/seed/list.ts)_
-
-## `gc2 seed log`
-
-Get progress of a running job.
-
-```
-USAGE
-  $ gc2 seed log -u <value> [-h]
-
-FLAGS
-  -h, --help          Show CLI help.
-  -u, --uuid=<value>  (required) UUID of seed job.
-
-DESCRIPTION
-  Get progress of a running job.
-```
-
-_See code: [src/commands/seed/log.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/seed/log.ts)_
-
-## `gc2 seed start`
-
-Starts a seed job.
-
-```
-USAGE
-  $ gc2 seed start -n <value> -l <value> -g <value> -s <value> -e <value> -x <value> [-h] [-t <value>] [-f]
-
-FLAGS
-  -e, --end=<value>      (required) End zoom level (the higher number).
-  -f, --force            Force seed job - overwrites existing tiles.
-  -g, --grid=<value>     (required) Grid to use.
-  -h, --help             Show CLI help.
-  -l, --layer=<value>    (required) Layer to seed [schema].[relation]
-  -n, --name=<value>     (required) Name of seed job.
-  -s, --start=<value>    (required) Start zoom level (the lower number).
-  -t, --threads=<value>  Number of parallel threads that should be used to request tiles from the WMS source.
-  -x, --extent=<value>   (required) Polygon layer which set the extent for the seeding [schema].[relation]
-
-DESCRIPTION
-  Starts a seed job.
-```
-
-_See code: [src/commands/seed/start.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/seed/start.ts)_
-
-## `gc2 seed stop`
-
-Stops a running seed job.
-
-```
-USAGE
-  $ gc2 seed stop -u <value> [-h]
-
-FLAGS
-  -h, --help          Show CLI help.
-  -u, --uuid=<value>  (required) UUID of seed job.
-
-DESCRIPTION
-  Stops a running seed job.
-```
-
-_See code: [src/commands/seed/stop.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/seed/stop.ts)_
-
-## `gc2 sql`
+## `centia sql`
 
 Run SQL statements. If run without --statement inactive mode will be enabled.
 
 ```
 USAGE
-  $ gc2 sql [-s <value>] [-c <value>] [-f <value>] [-g wkt|geojson] [-p <value>] [-h]
+  $ centia sql [-s <value>] [-c <value>] [-f <value>] [-g wkt|geojson] [-p <value>] [-h]
 
 FLAGS
   -c, --srs=<value>         [default: 4326] Output spatial reference system. Use EPSG codes.
@@ -1079,57 +838,18 @@ DESCRIPTION
   Run SQL statements. If run without --statement inactive mode will be enabled.
 ```
 
-_See code: [src/commands/sql.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/sql.ts)_
+_See code: [src/commands/sql.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/sql.ts)_
 
-## `gc2 stat`
-
-Get usage statistics.
-
-```
-USAGE
-  $ gc2 stat [-h]
-
-FLAGS
-  -h, --help  Show CLI help.
-
-DESCRIPTION
-  Get usage statistics.
-```
-
-_See code: [src/commands/stat.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/stat.ts)_
-
-## `gc2 symbol PATH`
-
-Create a symbol file from a directory for use in Vidi Symbol extension.
-
-```
-USAGE
-  $ gc2 symbol PATH [-h] [-f <value>]
-
-ARGUMENTS
-  PATH  Path to directory with SVG files.
-
-FLAGS
-  -f, --file=<value>  Output file name. If omitted the content will be printed.
-  -h, --help          Show CLI help.
-
-DESCRIPTION
-  Create a symbol file from a directory for use in Vidi Symbol extension.
-```
-
-_See code: [src/commands/symbol.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/symbol.ts)_
-
-## `gc2 table add [SCHEMA] [TABLE]`
+## `centia table add [TABLE]`
 
 Create a new table.
 
 ```
 USAGE
-  $ gc2 table add [SCHEMA] [TABLE] [-h]
+  $ centia table add [TABLE] [-h]
 
 ARGUMENTS
-  [SCHEMA]  Name of schema.
-  [TABLE]   Name of table.
+  [TABLE]  Name of table.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -1138,19 +858,18 @@ DESCRIPTION
   Create a new table.
 ```
 
-_See code: [src/commands/table/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/table/add.ts)_
+_See code: [src/commands/table/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/table/add.ts)_
 
-## `gc2 table drop [SCHEMA] [TABLE]`
+## `centia table drop [TABLE]`
 
 Drop a table.
 
 ```
 USAGE
-  $ gc2 table drop [SCHEMA] [TABLE] [-h]
+  $ centia table drop [TABLE] [-h]
 
 ARGUMENTS
-  [SCHEMA]  Name of schema.
-  [TABLE]   Name of table.
+  [TABLE]  Name of table.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -1159,20 +878,19 @@ DESCRIPTION
   Drop a table.
 ```
 
-_See code: [src/commands/table/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/table/drop.ts)_
+_See code: [src/commands/table/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/table/drop.ts)_
 
-## `gc2 table event [SCHEMA] [TABLE] [EVENT]`
+## `centia table event [TABLE] [EVENT]`
 
 Enable emitting of realtime events from tables.
 
 ```
 USAGE
-  $ gc2 table event [SCHEMA] [TABLE] [EVENT] [-h]
+  $ centia table event [TABLE] [EVENT] [-h]
 
 ARGUMENTS
-  [SCHEMA]  Name of schema.
-  [TABLE]   Name of table.
-  [EVENT]   Emit events.
+  [TABLE]  Name of table.
+  [EVENT]  Emit events.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -1181,19 +899,18 @@ DESCRIPTION
   Enable emitting of realtime events from tables.
 ```
 
-_See code: [src/commands/table/event.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/table/event.ts)_
+_See code: [src/commands/table/event.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/table/event.ts)_
 
-## `gc2 table get [SCHEMA] [TABLE]`
+## `centia table get [TABLE]`
 
 Get table definition.
 
 ```
 USAGE
-  $ gc2 table get [SCHEMA] [TABLE] [-h]
+  $ centia table get [TABLE] [-h]
 
 ARGUMENTS
-  [SCHEMA]  Name of schema.
-  [TABLE]   Name of table.
+  [TABLE]  Name of table.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -1202,18 +919,17 @@ DESCRIPTION
   Get table definition.
 ```
 
-_See code: [src/commands/table/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/table/get.ts)_
+_See code: [src/commands/table/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/table/get.ts)_
 
-## `gc2 table move [SCHEMA] [TABLE] [DESTINATION]`
+## `centia table move [TABLE] [DESTINATION]`
 
 Move table to another schema.
 
 ```
 USAGE
-  $ gc2 table move [SCHEMA] [TABLE] [DESTINATION] [-h]
+  $ centia table move [TABLE] [DESTINATION] [-h]
 
 ARGUMENTS
-  [SCHEMA]       Name of schema.
   [TABLE]        Name of table.
   [DESTINATION]  Destination schema.
 
@@ -1224,20 +940,19 @@ DESCRIPTION
   Move table to another schema.
 ```
 
-_See code: [src/commands/table/move.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/table/move.ts)_
+_See code: [src/commands/table/move.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/table/move.ts)_
 
-## `gc2 table rename [SCHEMA] [TABLE] [NAME]`
+## `centia table rename [TABLE] [NAME]`
 
 Rename table.
 
 ```
 USAGE
-  $ gc2 table rename [SCHEMA] [TABLE] [NAME] [-h]
+  $ centia table rename [TABLE] [NAME] [-h]
 
 ARGUMENTS
-  [SCHEMA]  Name of schema.
-  [TABLE]   Name of table.
-  [NAME]    New name for table.
+  [TABLE]  Name of table.
+  [NAME]   New name for table.
 
 FLAGS
   -h, --help  Show CLI help.
@@ -1246,15 +961,15 @@ DESCRIPTION
   Rename table.
 ```
 
-_See code: [src/commands/table/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/table/rename.ts)_
+_See code: [src/commands/table/rename.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/table/rename.ts)_
 
-## `gc2 user add [NAME]`
+## `centia user add [NAME]`
 
 Create new user.
 
 ```
 USAGE
-  $ gc2 user add [NAME] [-h] [-p <value>] [-e <value>] [-P <value>] [-d]
+  $ centia user add [NAME] [-h] [-p <value>] [-e <value>] [-P <value>] [-d]
 
 ARGUMENTS
   [NAME]  Name of new user
@@ -1271,15 +986,15 @@ DESCRIPTION
   Create new user.
 ```
 
-_See code: [src/commands/user/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/user/add.ts)_
+_See code: [src/commands/user/add.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/user/add.ts)_
 
-## `gc2 user drop [NAME]`
+## `centia user drop [NAME]`
 
 Drop existing user.
 
 ```
 USAGE
-  $ gc2 user drop [NAME] [-h]
+  $ centia user drop [NAME] [-h]
 
 ARGUMENTS
   [NAME]  Name of user to drop.
@@ -1291,15 +1006,15 @@ DESCRIPTION
   Drop existing user.
 ```
 
-_See code: [src/commands/user/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/user/drop.ts)_
+_See code: [src/commands/user/drop.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/user/drop.ts)_
 
-## `gc2 user get [ID]`
+## `centia user get [ID]`
 
 Get user(s).
 
 ```
 USAGE
-  $ gc2 user get [ID] [-h]
+  $ centia user get [ID] [-h]
 
 ARGUMENTS
   [ID]  User id
@@ -1311,113 +1026,43 @@ DESCRIPTION
   Get user(s).
 ```
 
-_See code: [src/commands/user/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/user/get.ts)_
+_See code: [src/commands/user/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/user/get.ts)_
 
-## `gc2 user update [NAME]`
+## `centia user update`
 
 Update user.
 
 ```
 USAGE
-  $ gc2 user update [NAME] [-h] [-p <value>] [-d] [-e <value>] [-g <value>]
-
-ARGUMENTS
-  [NAME]  Name of user.
+  $ centia user update [-h] [-p <value>] [-d]
 
 FLAGS
-  -d, --default_user        The default user is the user that is used when no token is provided. Use for public
-                            applications where users should not be able to access data without a token.
-  -e, --properties=<value>  New properties.
-  -g, --group=<value>       New group.
-  -h, --help                Show CLI help.
-  -p, --password=<value>    New password for user.
+  -d, --default_user      The default user is the user that is used when no token is provided. Use for public
+                          applications where users should not be able to access data without a token.
+  -h, --help              Show CLI help.
+  -p, --password=<value>  New password for user.
 
 DESCRIPTION
   Update user.
 ```
 
-_See code: [src/commands/user/update.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/user/update.ts)_
+_See code: [src/commands/user/update.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/user/update.ts)_
 
-## `gc2 view backup SCHEMAS`
+## `centia whoami`
 
-Backup all (mat)views definitions in schema.
-
-```
-USAGE
-  $ gc2 view backup SCHEMAS [-h]
-
-ARGUMENTS
-  SCHEMAS  Schemas for backup (comma separated).
-
-FLAGS
-  -h, --help  Show CLI help.
-
-DESCRIPTION
-  Backup all (mat)views definitions in schema.
-```
-
-_See code: [src/commands/view/backup.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/view/backup.ts)_
-
-## `gc2 view get SCHEMA`
-
-Get "*" definitions from backup for schema.
+Show the current Centia session: host, user, database, and status.
 
 ```
 USAGE
-  $ gc2 view get SCHEMA [-h]
-
-ARGUMENTS
-  SCHEMA  Get star views for schema.
+  $ centia whoami [-h] [--json]
 
 FLAGS
   -h, --help  Show CLI help.
+      --json  Output as JSON.
 
 DESCRIPTION
-  Get "*" definitions from backup for schema.
+  Show the current Centia session: host, user, database, and status.
 ```
 
-_See code: [src/commands/view/get.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/view/get.ts)_
-
-## `gc2 view refresh SCHEMAS [INCLUDE]`
-
-Refresh all materialized views in schema.
-
-```
-USAGE
-  $ gc2 view refresh SCHEMAS [INCLUDE] [-h]
-
-ARGUMENTS
-  SCHEMAS    Comma separated list of schemas.
-  [INCLUDE]  Only include named views in restore. Comma separated.
-
-FLAGS
-  -h, --help  Show CLI help.
-
-DESCRIPTION
-  Refresh all materialized views in schema.
-```
-
-_See code: [src/commands/view/refresh.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/view/refresh.ts)_
-
-## `gc2 view restore FROM [TO] [INCLUDE]`
-
-Restore all (mat)views definitions from schema.
-
-```
-USAGE
-  $ gc2 view restore FROM [TO] [INCLUDE] [-h]
-
-ARGUMENTS
-  FROM       Comma separated list of source schemas.
-  [TO]       Comma separated list of target schemas.
-  [INCLUDE]  Only include named views in restore. Comma separated.
-
-FLAGS
-  -h, --help  Show CLI help.
-
-DESCRIPTION
-  Restore all (mat)views definitions from schema.
-```
-
-_See code: [src/commands/view/restore.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.3.2/src/commands/view/restore.ts)_
+_See code: [src/commands/whoami.ts](https://github.com/mapcentia/gc2-cli/blob/v2026.5.0/src/commands/whoami.ts)_
 <!-- commandsstop -->
