@@ -8,13 +8,14 @@
 import {
   CodeFlow,
   createCentiaAdminClient,
-  createConfigstoreTokenStore,
   createTokenProvider,
   isCentiaApiError,
   NotLoggedInError,
   SessionExpiredError,
   type CentiaAdminClient,
+  type TokenStore,
 } from '@centia-io/sdk'
+import {createConfigstoreTokenStore} from '@centia-io/sdk/node'
 import {logToStderr} from '@oclif/core/lib/cli-ux'
 import {exit} from '@oclif/core/lib/errors'
 import Configstore from 'configstore'
@@ -41,7 +42,7 @@ export const createAuthService = (): AuthService =>
     redirectUri: CLI_SERVER_ADDRESS_CALLBACK,
   }).service
 
-export const tokenStore = createConfigstoreTokenStore('gc2-env')
+export const tokenStore: TokenStore = createConfigstoreTokenStore('gc2-env')
 
 const tokenProvider = createTokenProvider({
   store: tokenStore,
