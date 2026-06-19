@@ -42,6 +42,9 @@ export const createAuthService = (): AuthService =>
     redirectUri: CLI_SERVER_ADDRESS_CALLBACK,
   }).service
 
+// The explicit TokenStore annotation is load-bearing: TokenStore comes from the
+// main @centia-io/sdk entry; the /node subpath does not re-export it, so without
+// this annotation the emitted .d.ts references a non-exported type (TS4023).
 export const tokenStore: TokenStore = createConfigstoreTokenStore('gc2-env')
 
 const tokenProvider = createTokenProvider({
