@@ -9,7 +9,6 @@ import {Args, Command, Flags} from '@oclif/core'
 import AdmZip from 'adm-zip'
 import cli from 'cli-ux'
 import Configstore from 'configstore'
-import FormData from 'form-data'
 import * as fs from 'fs'
 import * as os from 'os'
 import * as path from 'path'
@@ -116,13 +115,11 @@ export default class Import extends Command {
       for (let start = 0; start < fileSizeInBytes; start += chunkSize) {
         const form = new FormData()
         const chunk = file.slice(start, start + chunkSize)
-        form.append('chunk', chunkCount)
-        form.append('chunks', chunks)
-        form.append('filename', chunk, {
-          filename: tmpFile
-        })
+        form.append('chunk', String(chunkCount))
+        form.append('chunks', String(chunks))
+        form.append('filename', new Blob([chunk]), tmpFile)
         try {
-          await client.provisioning.fileImport.postFileUpload(form as any)
+          await client.provisioning.fileImport.postFileUpload(form)
         } catch (error) {
           logCentiaErrorAndExit(error)
         }
@@ -148,30 +145,18 @@ export default class Import extends Command {
       type tables = {
         [key: string]: any
       }
-      type table = {
-        driver: string;
-        featureCount: number;
-        type: string;
-        layerIndex: number;
-        layerName: string;
-        hasWkt: boolean;
-        authStr: string;
-        error: string;
-      }
       const rows: object[] = []
       const tables: tables = {driver: {}, count: {}, type: {}, index: {}, name: {}, hasWkt: {}, authStr: {}, error: {},}
-      for (const c in data.data) {
-        const v: table = data.data[c]
+      for (const v of data) {
         rows.push({
           driver: v.driver,
-          count: v.featureCount,
-          type: v.type,
-          index: v.layerIndex,
-          name: v.layerName,
-          hasWkt: v.hasWkt,
-          authStr: v.authStr,
+          count: v.count,
+          type: v.geom_type,
+          index: v.index,
+          name: v.name,
+          hasWkt: v.has_wkt,
+          authStr: v.auth_str,
           error: v.error,
-
         })
       }
       //  cli.action.stop()
