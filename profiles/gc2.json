@@ -2,8 +2,8 @@
   "name": "@mapcentia/gc2-cli",
   "description": "GC2 (Geo Compute Cloud) CLI",
   "bin": {
-    "gc2": "./bin/run",
-    "centia": "./bin/run-centia"
+    "gc2": "bin/run",
+    "centia": "bin/run-centia"
   },
   "oclif": {
     "bin": "gc2"

@@ -4,8 +4,8 @@
   "version": "2026.11.2",
   "author": "Martin Høgh @mapcentia",
   "bin": {
-    "gc2": "./bin/run",
-    "centia": "./bin/run-centia"
+    "gc2": "bin/run",
+    "centia": "bin/run-centia"
   },
   "bugs": {
     "url": "https://github.com/mapcentia/gc2-cli/issues"
