@@ -28,7 +28,7 @@ $ npm install -g @mapcentia/gc2-cli
 $ gc2 COMMAND
 running command...
 $ gc2 (--version|-v)
-@mapcentia/gc2-cli/2026.11.2 linux-x64 node-v24.22.2
+@mapcentia/gc2-cli/2026.11.2 linux-x64 node-v24.17.0
 $ gc2 --help [COMMAND]
 USAGE
   $ gc2 COMMAND
