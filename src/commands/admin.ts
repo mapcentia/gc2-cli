@@ -8,7 +8,7 @@
 import {Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import cli from 'cli-ux'
-import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../centiaClient'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../gc2Client'
 import {adminTaskList} from "../util/lists";
 
 const tasks = ['mapfiles', 'mapcachefile', 'qgisfiles', 'schema', 'migrations', 'diskcleanup', 'cachestats', 'cachecleanup', 'insertmeta']

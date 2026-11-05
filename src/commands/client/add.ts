@@ -8,7 +8,7 @@
 import {input, confirm} from '@inquirer/prompts'
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
-import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../gc2Client'
 
 export default class Add extends Command {
   static description = 'Create new client.'

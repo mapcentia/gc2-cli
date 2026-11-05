@@ -10,7 +10,7 @@ import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import Configstore from 'configstore'
 import User from '../../common/user'
-import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../gc2Client'
 import {users} from '../../util/getters'
 import {groupList, userList} from '../../util/lists'
 import {passwordIsStrongEnough} from '../../util/utils'
@@ -71,7 +71,7 @@ export default class Update extends Command {
       group = flags?.group || await groupList(name, user.user_group)
     }
 
-    const p: string | null = pwd === '' ? null : pwd
+    const p: string | undefined = pwd === '' ? undefined : pwd
 
     try {
       const client = createCliCentiaAdminClient()

@@ -15,8 +15,8 @@ import * as http from 'http'
 import * as querystring from 'querystring'
 
 import User from '../common/user'
-import {PasswordFlow} from '@centia-io/sdk'
-import {createAuthService, tokenStore} from '../centiaClient'
+import {PasswordFlow} from '@mapcentia/gc2-sdk'
+import {createAuthService, tokenStore} from '../gc2Client'
 import {CLI_SERVER_ADDRESS, CLI_SERVER_ADDRESS_CALLBACK, GC2_SERVER_ADDRESS, generatePkceChallenge, waitFor,} from '../util/utils'
 import EventEmitter = require('events')
 

@@ -24,7 +24,7 @@ function writeStore(creds: Record<string, unknown>): void {
 describe('whoami', () => {
   test
     .do(() => writeStore({
-      host: 'https://api.centia.io',
+      host: 'https://api.gc2.io',
       user: 'mhogh',
       database: 'fkg',
       superUser: false,
@@ -35,7 +35,7 @@ describe('whoami', () => {
     .command(['whoami'])
     .it('reports active session', (ctx: {stdout: string}) => {
       expect(ctx.stdout).to.contain('Host')
-      expect(ctx.stdout).to.contain('https://api.centia.io')
+      expect(ctx.stdout).to.contain('https://api.gc2.io')
       expect(ctx.stdout).to.contain('mhogh')
       expect(ctx.stdout).to.contain('fkg')
       expect(ctx.stdout).to.contain('active')
@@ -43,7 +43,7 @@ describe('whoami', () => {
 
   test
     .do(() => writeStore({
-      host: 'https://api.centia.io',
+      host: 'https://api.gc2.io',
       user: 'mhogh',
       database: 'fkg',
       superUser: true,
@@ -57,7 +57,7 @@ describe('whoami', () => {
     })
 
   test
-    .do(() => writeStore({host: 'https://api.centia.io'}))
+    .do(() => writeStore({host: 'https://api.gc2.io'}))
     .stdout()
     .command(['whoami'])
     .it('reports not logged in when no token', (ctx: {stdout: string}) => {
@@ -66,7 +66,7 @@ describe('whoami', () => {
 
   test
     .do(() => writeStore({
-      host: 'https://api.centia.io',
+      host: 'https://api.gc2.io',
       user: 'mhogh',
       database: 'fkg',
       superUser: true,
@@ -78,7 +78,7 @@ describe('whoami', () => {
     .it('emits machine-readable JSON', (ctx: {stdout: string}) => {
       const parsed = JSON.parse(ctx.stdout)
       expect(parsed).to.deep.equal({
-        host: 'https://api.centia.io',
+        host: 'https://api.gc2.io',
         user: 'mhogh',
         database: 'fkg',
         superUser: true,

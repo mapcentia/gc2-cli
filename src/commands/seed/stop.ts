@@ -7,7 +7,7 @@
 
 import {Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
-import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../gc2Client'
 
 export default class Stop extends Command {
   static description = 'Stops a running seed job.'

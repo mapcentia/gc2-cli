@@ -14,8 +14,8 @@ import {
   SessionExpiredError,
   type CentiaAdminClient,
   type TokenStore,
-} from '@centia-io/sdk'
-import {createConfigstoreTokenStore} from '@centia-io/sdk/node'
+} from '@mapcentia/gc2-sdk'
+import {createConfigstoreTokenStore} from '@mapcentia/gc2-sdk/node'
 import {logToStderr} from '@oclif/core/lib/cli-ux'
 import {exit} from '@oclif/core/lib/errors'
 import Configstore from 'configstore'
@@ -43,7 +43,7 @@ export const createAuthService = (): AuthService =>
   }).service
 
 // The explicit TokenStore annotation is load-bearing: TokenStore comes from the
-// main @centia-io/sdk entry; the /node subpath does not re-export it, so without
+// main @mapcentia/gc2-sdk entry; the /node subpath does not re-export it, so without
 // this annotation the emitted .d.ts references a non-exported type (TS4023).
 export const tokenStore: TokenStore = createConfigstoreTokenStore('gc2-env')
 

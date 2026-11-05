@@ -10,7 +10,7 @@ import chalk from 'chalk'
 import Configstore from 'configstore'
 import {jwtDecode} from 'jwt-decode'
 
-import {tokenStore} from '../centiaClient'
+import {tokenStore} from '../gc2Client'
 import User from '../common/user'
 
 type Status = 'active' | 'expired' | 'none'

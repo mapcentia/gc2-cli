@@ -5,7 +5,7 @@
  *
  */
 
-import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../centiaClient'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../gc2Client'
 
 const asArray = <T>(result: T | T[]): T[] => Array.isArray(result) ? result : [result]
 

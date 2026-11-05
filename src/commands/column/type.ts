@@ -10,7 +10,7 @@ import chalk from 'chalk'
 import args from '../../common/base_args'
 import {columnList, schemasList, tableList, typeList} from '../../util/lists'
 import setSchema from '../../util/set-schema'
-import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../gc2Client'
 
 let base_args = args
 let specific_args = {

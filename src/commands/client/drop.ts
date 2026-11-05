@@ -7,7 +7,7 @@
 
 import {confirm} from '@inquirer/prompts'
 import {Args, Command, Flags} from '@oclif/core'
-import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../gc2Client'
 import {clientList} from '../../util/lists'
 
 export default class Drop extends Command {

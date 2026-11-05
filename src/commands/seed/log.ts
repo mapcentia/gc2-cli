@@ -6,7 +6,7 @@
  */
 
 import {Command, Flags} from '@oclif/core'
-import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../gc2Client'
 
 export default class Log extends Command {
   static description = 'Get progress of a running job.'

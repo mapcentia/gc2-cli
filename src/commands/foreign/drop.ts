@@ -7,7 +7,7 @@
 
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
-import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../gc2Client'
 
 export default class Drop extends Command {
   static description = 'Drop all foreign tables in schema.'

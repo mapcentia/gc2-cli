@@ -1,7 +1,7 @@
 {
   "name": "@mapcentia/gc2-cli",
   "description": "GC2 CLI",
-  "version": "2026.11.0",
+  "version": "2026.11.1",
   "author": "Martin Høgh @mapcentia",
   "bin": {
     "gc2": "./bin/run"
@@ -10,8 +10,8 @@
     "url": "https://github.com/mapcentia/gc2-cli/issues"
   },
   "dependencies": {
-    "@centia-io/sdk": "^0.2.0",
     "@inquirer/prompts": "^8.4.1",
+    "@mapcentia/gc2-sdk": "^0.3.0",
     "@oclif/command": "^1.8.36",
     "@oclif/core": "^3.27.0",
     "@oclif/parser": "^3.8.17",

@@ -8,7 +8,7 @@
 import {input, select} from '@inquirer/prompts'
 import {Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
-import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../gc2Client'
 import {accessList, requestList, serviceList} from '../../util/lists'
 
 export default class Add extends Command {

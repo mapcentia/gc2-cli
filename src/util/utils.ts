@@ -11,7 +11,7 @@ let obj: User = config.all // User object or empty object
 
 export const CLI_SERVER_ADDRESS = 'http://127.0.0.1:5657'
 export const CLI_SERVER_ADDRESS_CALLBACK = `${CLI_SERVER_ADDRESS}/auth/callback`
-export const GC2_SERVER_ADDRESS = obj.host ?? 'https://api.centia.io'
+export const GC2_SERVER_ADDRESS = obj.host ?? 'https://api.gc2.io'
 
 export const generatePkceChallenge = (): {
   state: string;

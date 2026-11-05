@@ -10,7 +10,7 @@ import base64url from 'base64url'
 import chalk from 'chalk'
 import cli from 'cli-ux'
 import * as fs from 'fs'
-import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../centiaClient'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../gc2Client'
 import {outputFormatList} from '../util/lists'
 
 

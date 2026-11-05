@@ -1,5 +1,5 @@
 import {Command, Flags} from '@oclif/core'
-import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../gc2Client'
 
 export default class List extends Command {
   static description = 'List running seed jobs.'

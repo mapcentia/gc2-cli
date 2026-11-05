@@ -11,7 +11,7 @@ import args from '../../common/base_args'
 import {schemasList, tableList} from '../../util/lists'
 import setSchema from '../../util/set-schema'
 import {confirm} from '@inquirer/prompts'
-import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../gc2Client'
 
 
 let base_args = args

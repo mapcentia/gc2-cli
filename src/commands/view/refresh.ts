@@ -7,7 +7,7 @@
 
 import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
-import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../gc2Client'
 
 export default class Refresh extends Command {
   static description = 'Refresh all materialized views in schema.'

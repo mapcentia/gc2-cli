@@ -11,8 +11,8 @@ import args from '../../common/base_args'
 import {privileges} from '../../util/getters'
 import {privilegeList, schemasList, tableList, userList} from '../../util/lists'
 import setSchema from '../../util/set-schema'
-import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
-import type {PrivilegeLevel} from '@centia-io/sdk'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../gc2Client'
+import type {PrivilegeLevel} from '@mapcentia/gc2-sdk'
 
 let base_args = args
 let specific_args = {

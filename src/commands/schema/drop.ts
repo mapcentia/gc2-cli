@@ -9,7 +9,7 @@ import {Args, Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import {schemasList} from '../../util/lists'
 import {confirm} from '@inquirer/prompts'
-import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../gc2Client'
 
 export default class Drop extends Command {
   static description = 'Drop a schema.'

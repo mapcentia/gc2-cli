@@ -9,7 +9,7 @@ import {input} from '@inquirer/prompts'
 import {Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 
-import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../gc2Client'
 import args from '../../common/base_args'
 import {schemasList} from '../../util/lists'
 import setSchema from '../../util/set-schema'

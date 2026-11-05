@@ -14,7 +14,7 @@ import * as os from 'os'
 import * as path from 'path'
 import {v4 as uuidv4} from 'uuid'
 
-import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../centiaClient'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../gc2Client'
 import User from '../common/user'
 import {schemasList} from '../util/lists'
 import setSchema from '../util/set-schema'

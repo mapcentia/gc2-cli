@@ -1,7 +1,7 @@
 import {Command, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import cli from 'cli-ux'
-import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../centiaClient'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../gc2Client'
 
 export default class Grid extends Command {
   static description = 'Add a fishnet grid from an input polygon.'

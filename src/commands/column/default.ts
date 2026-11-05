@@ -12,7 +12,7 @@ import args from '../../common/base_args'
 import {tables} from '../../util/getters'
 import {columnList, schemasList, tableList} from '../../util/lists'
 import setSchema from '../../util/set-schema'
-import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../centiaClient'
+import {createCliCentiaAdminClient, logCentiaErrorAndExit} from '../../gc2Client'
 
 let base_args = args
 let specific_args = {
