@@ -12,6 +12,12 @@ $ npm install -g @mapcentia/gc2-cli
 
 The `centia` command keeps working for one release and prints a warning; use `gc2` instead.
 
+Because the package ships two binaries, `npx @mapcentia/gc2-cli` cannot pick one. Run it without installing as:
+
+```sh-session
+$ npx -p @mapcentia/gc2-cli gc2 --version
+```
+
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/gc2.svg)](https://npmjs.org/package/gc2)
 [![Downloads/week](https://img.shields.io/npm/dw/gc2.svg)](https://npmjs.org/package/gc2)
