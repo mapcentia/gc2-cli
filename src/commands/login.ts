@@ -34,8 +34,8 @@ const warn = chalk.yellow
 const err = chalk.red
 
 const LOGO = `
-  ${brand('█▀▀ █▀▀ █▄░█ ▀█▀ █ ▄▀█')}
-  ${brand('█▄▄ ██▄ █░▀█ ░█░ █ █▀█')}
+  ${brand('█▀▀ █▀▀ ▀▀█')}
+  ${brand('█▄█ █▄▄ █▄▄')}
 `
 
 const spinner = {
