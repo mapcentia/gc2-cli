@@ -1,7 +1,16 @@
 gc2-cli
 =======
 
-CLI tool for GC2
+CLI tool for GC2 (Geo Compute Cloud).
+
+Upgrading from `@centia-io/cli` or `@centia/cli`: both packages installed a global `centia` binary, which this package also provides as a deprecated alias. Remove the old package first, or npm refuses to link the binary:
+
+```sh-session
+$ npm rm -g @centia-io/cli @centia/cli
+$ npm install -g @mapcentia/gc2-cli
+```
+
+The `centia` command keeps working for one release and prints a warning; use `gc2` instead.
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/gc2.svg)](https://npmjs.org/package/gc2)
