@@ -16,7 +16,7 @@ import User from '../common/user'
 type Status = 'active' | 'expired' | 'none'
 
 export default class Whoami extends Command {
-  static description = 'Show the current Centia session: host, user, database, and status.'
+  static description = 'Show the current GC2 session: host, user, database, and status.'
   static flags = {
     help: Flags.help({char: 'h'}),
     json: Flags.boolean({description: 'Output as JSON.'}),

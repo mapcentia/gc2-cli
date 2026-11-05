@@ -51,7 +51,7 @@ const spinner = {
 }
 
 export default class Login extends Command {
-  static description = 'Sign in to Centia. Use `connect` to set the host first.'
+  static description = 'Sign in to GC2. Use `connect` to set the host first.'
   static flags = {
     help: Flags.help({char: 'h'}),
     password: Flags.string({char: 'p', description: 'Password'}),
