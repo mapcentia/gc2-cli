@@ -1,10 +1,11 @@
 {
   "name": "@mapcentia/gc2-cli",
-  "description": "GC2 CLI",
+  "description": "GC2 (Geo Compute Cloud) CLI",
   "version": "2026.11.1",
   "author": "Martin Høgh @mapcentia",
   "bin": {
-    "gc2": "./bin/run"
+    "gc2": "./bin/run",
+    "centia": "./bin/run-centia"
   },
   "bugs": {
     "url": "https://github.com/mapcentia/gc2-cli/issues"
@@ -153,9 +154,7 @@
     "prepack": "node scripts/prepack-guard.js && rm -rf lib && tsc -b && node scripts/whitelist-commands.js && oclif manifest && oclif readme",
     "postpack": "rm -f oclif.manifest.json",
     "release:gc2": "node scripts/use-profile.js gc2 && npm pack; node scripts/use-profile.js --restore",
-    "release:centia": "node scripts/use-profile.js centia && npm pack; node scripts/use-profile.js --restore",
     "publish:gc2": "node scripts/use-profile.js gc2 && npm publish --access public; node scripts/use-profile.js --restore",
-    "publish:centia": "node scripts/use-profile.js centia && npm publish --access public; node scripts/use-profile.js --restore",
     "test": " NODE_OPTIONS=\"--loader ts-node/esm\" nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif-dev readme && git add README.md"
   },

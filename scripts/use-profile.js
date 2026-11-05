@@ -3,7 +3,7 @@
  * Applies a publish profile on top of package.json.
  *
  * Usage:
- *   node scripts/use-profile.js <profile>   — apply profile (gc2 | centia)
+ *   node scripts/use-profile.js <profile>   — apply profile (gc2)
  *   node scripts/use-profile.js --restore   — restore original package.json
  *
  * The original package.json is saved as package.json.bak before any changes.
@@ -33,7 +33,7 @@ if (process.argv.includes('--restore')) {
 // ── Apply mode ────────────────────────────────────────────────────────
 const profileName = process.argv[2]
 if (!profileName) {
-  console.error('Usage: node scripts/use-profile.js <gc2|centia>')
+  console.error('Usage: node scripts/use-profile.js <gc2>')
   process.exit(1)
 }
 
